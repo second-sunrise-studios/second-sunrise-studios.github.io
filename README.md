@@ -3,7 +3,7 @@
 Esta es la web de Second Sunrise Studios. Es una sola página HTML que vive en GitHub
 y se publica automáticamente cuando se le hace `push`.
 
-**URL en vivo:** https://tomaspeirotti.github.io/second-sunrise-studios/
+**URL en vivo:** https://second-sunrise-studios.github.io/
 
 ---
 
@@ -85,8 +85,8 @@ Debería decir: `✓ Logged in to github.com account <tu-usuario>`.
 ### 3. Clonar este repositorio
 
 ```sh
-gh repo clone tomaspeirotti/second-sunrise-studios
-cd second-sunrise-studios
+gh repo clone second-sunrise-studios/second-sunrise-studios.github.io
+cd second-sunrise-studios.github.io
 ```
 
 Eso te baja una copia de la web en tu computadora.
