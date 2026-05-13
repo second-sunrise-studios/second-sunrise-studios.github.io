@@ -124,6 +124,17 @@
     box-shadow: 0 0 40px -8px rgba(255,122,0,0.45);
   }
 
+  /* Tutoring tile icons — keep brand marks visible at consistent size.
+     Filter forces black-on-transparent and white-on-transparent PNGs to
+     identical pure white so the row looks uniform. */
+  .tutoring-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    object-position: center;
+    filter: brightness(0) invert(1);
+  }
+
   /* Language switcher */
   .lang-btn {
     color: rgba(255,255,255,0.45);
@@ -585,7 +596,7 @@
 
       <!-- Tutoría · Dibujo / Pintura -->
       <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t1.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="12" cy="12" r="9"/>
             <circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none"/>
@@ -602,12 +613,8 @@
 
       <!-- Tutoría · Unreal Engine -->
       <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t2.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 4 V12 L17 15"/>
-            <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
-          </svg>
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
+          <img src="assets/unreal-engine-white.png" alt="Unreal Engine" class="tutoring-icon" />
         </div>
         <div>
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t2.title">Unreal Engine</div>
@@ -617,7 +624,7 @@
 
       <!-- Tutoría · Programación -->
       <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t3.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M8 7 L3 12 L8 17"/>
             <path d="M16 7 L21 12 L16 17"/>
@@ -632,7 +639,7 @@
 
       <!-- Tutoría · Photoshop -->
       <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t4.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <rect x="3" y="3" width="18" height="18" rx="3"/>
             <text x="12" y="16" text-anchor="middle" font-family="Satoshi, system-ui" font-size="10" font-weight="700" fill="currentColor" stroke="none">Ps</text>
@@ -646,11 +653,8 @@
 
       <!-- Tutoría · Blender -->
       <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t5.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M4 17 L12 6 L20 17 Z"/>
-            <circle cx="12" cy="14" r="2.5"/>
-          </svg>
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
+          <img src="assets/blender-black.png" alt="Blender" class="tutoring-icon" />
         </div>
         <div>
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t5.title">Blender</div>
@@ -660,13 +664,8 @@
 
       <!-- Tutoría · C++ -->
       <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t6.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <circle cx="11" cy="12" r="6.5"/>
-            <path d="M14.5 9.5 a4 4 0 0 0 0 5"/>
-            <path d="M18 10 H20 M19 9 V11"/>
-            <path d="M21 13 H23 M22 12 V14"/>
-          </svg>
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
+          <img src="assets/c++_black.svg" alt="C++" class="tutoring-icon" />
         </div>
         <div>
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t6.title">C++</div>
@@ -969,7 +968,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
       </a>
       <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 0 0-5.487 0 12.51 12.51 0 0 0-.617-1.249.077.077 0 0 0-.079-.037c-1.32.227-2.58.62-3.76 1.169a.07.07 0 0 0-.032.027C2.533 8.36 1.79 12.247 2.16 16.085a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.3 14.3 0 0 0 1.226-1.994.076.076 0 0 0-.041-.105 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.198.373.291a.077.077 0 0 1-.006.128c-.598.349-1.221.645-1.873.891a.077.077 0 0 0-.041.106c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-4.523-.838-8.376-3.548-11.69a.061.061 0 0 0-.031-.028zM8.02 13.75c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.418 0 1.334-.957 2.42-2.157 2.42zm7.975 0c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.176 1.095 2.157 2.418 0 1.334-.946 2.42-2.157 2.42z"/></svg>
+        <img src="assets/discord-white-icon.webp" alt="" class="w-[22px] h-[22px] object-contain" />
       </a>
     </div>
 
