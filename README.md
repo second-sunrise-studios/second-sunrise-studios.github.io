@@ -3,7 +3,7 @@
 Esta es la web de Second Sunrise Studios. Es una sola página HTML que vive en GitHub
 y se publica automáticamente cuando se le hace `push`.
 
-**URL en vivo:** _(se completa después de activar GitHub Pages)_
+**URL en vivo:** https://tomaspeirotti.github.io/second-sunrise-studios/
 
 ---
 
