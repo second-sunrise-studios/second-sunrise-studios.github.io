@@ -28,6 +28,16 @@
   };
 </script>
 <style>
+  @font-face {
+    font-family: 'ChargerSport';
+    src: url('assets/fonts/ChargerSport.otf') format('opentype');
+    font-weight: 400 900;
+    font-style: normal;
+    font-display: swap;
+    /* La fuente no incluye glifo de espacio (U+0020): excluimos ese caracter para que caiga al fallback. */
+    unicode-range: U+0021-FFFF;
+  }
+
   :root { color-scheme: dark; }
   html, body { background: #050B16; }
   body {
@@ -37,6 +47,7 @@
     overflow-x: hidden;
   }
   .font-display { font-family: 'Satoshi', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.025em; }
+  .font-brand { font-family: 'ChargerSport', 'Satoshi', system-ui, sans-serif; font-weight: 700; letter-spacing: 0; }
   .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 
   /* Persistent fixed background — twin-sun martian horizon, drawn with gradients */
@@ -299,8 +310,10 @@
   <div class="mx-auto max-w-7xl px-5 md:px-8">
     <div class="mt-4 rounded-2xl border border-white/10 bg-navy-900/40 backdrop-blur-xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]">
       <div class="flex items-center justify-between px-4 md:px-6 py-3">
-        <a href="#top" class="flex items-center gap-3 group">
-          <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="h-8 md:h-9 w-auto select-none" draggable="false" />
+        <a href="#top" class="flex items-center group" aria-label="Second Sunrise Studios — Inicio">
+          <span class="font-brand text-[18px] md:text-[20px] leading-none whitespace-nowrap">
+            <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span class="text-white">Studios</span>
+          </span>
         </a>
         <nav class="hidden md:flex items-center gap-8 text-[13px] text-white/75">
           <a href="#courses" class="hover:text-white transition">Cursos</a>
@@ -1025,9 +1038,10 @@
 
     <footer class="grid md:grid-cols-12 gap-8 items-start">
       <div class="md:col-span-5">
-        <a href="#top" class="flex items-center gap-3">
-          <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="h-9 w-auto select-none" draggable="false" />
-          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/55 border-l border-white/15 pl-3">Studios</span>
+        <a href="#top" class="flex items-center" aria-label="Second Sunrise Studios — Inicio">
+          <span class="font-brand text-[20px] leading-none whitespace-nowrap">
+            <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span class="text-white">Studios</span>
+          </span>
         </a>
         <p class="mt-4 text-white/50 text-[13px] max-w-sm leading-relaxed">
           Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.
