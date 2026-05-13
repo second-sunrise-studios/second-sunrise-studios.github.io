@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900,500,400&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: { 950: '#050B16', 900: '#0A1628', 800: '#0F2138', 700: '#16304F' },
+          sunrise: { DEFAULT: '#FF7A00', 400: '#FF8E2B', 600: '#E55F00', glow: '#FFB066' },
+          teal: { soft: '#3DD2C0' }
+        },
+        fontFamily: {
+          display: ['Satoshi', 'system-ui', 'sans-serif'],
+          body: ['Satoshi', 'Inter', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+<style>
+  :root { color-scheme: dark; }
+  html, body { background: #050B16; }
+  body {
+    font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+    color: #E8EEF7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .font-display { font-family: 'Satoshi', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.025em; }
+  .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* Persistent fixed background — twin-sun martian horizon, drawn with gradients */
+  .scene-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      /* atmospheric haze top */
+      radial-gradient(120% 60% at 50% 100%, rgba(255,122,0,0.18) 0%, rgba(255,122,0,0.08) 25%, transparent 55%),
+      /* secondary smaller sun */
+      radial-gradient(circle at 38% 62%, rgba(255,180,90,0.55) 0%, rgba(255,140,40,0.25) 1.4%, transparent 3%),
+      /* primary larger sun */
+      radial-gradient(circle at 58% 58%, rgba(255,200,120,0.85) 0%, rgba(255,140,40,0.45) 2.2%, transparent 5%),
+      /* sun glow halo */
+      radial-gradient(60% 35% at 52% 62%, rgba(255,140,40,0.35) 0%, rgba(255,90,20,0.12) 30%, transparent 70%),
+      /* horizon band */
+      linear-gradient(180deg, #050B16 0%, #0A1628 35%, #1B1A2A 58%, #3A1F1F 70%, #5C2A1A 78%, #2A1118 88%, #0A0612 100%),
+      #050B16;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  .scene-bg::before {
+    /* starfield */
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 12% 14%, rgba(255,255,255,0.6), transparent 50%),
+      radial-gradient(1px 1px at 82% 9%, rgba(255,255,255,0.5), transparent 50%),
+      radial-gradient(1.5px 1.5px at 27% 22%, rgba(255,255,255,0.7), transparent 50%),
+      radial-gradient(1px 1px at 65% 18%, rgba(255,255,255,0.45), transparent 50%),
+      radial-gradient(1px 1px at 45% 8%, rgba(255,255,255,0.55), transparent 50%),
+      radial-gradient(1px 1px at 91% 28%, rgba(255,255,255,0.4), transparent 50%),
+      radial-gradient(1.2px 1.2px at 8% 32%, rgba(180,210,255,0.6), transparent 50%),
+      radial-gradient(1px 1px at 73% 36%, rgba(255,255,255,0.35), transparent 50%),
+      radial-gradient(1px 1px at 36% 41%, rgba(255,255,255,0.4), transparent 50%),
+      radial-gradient(1px 1px at 95% 47%, rgba(255,255,255,0.3), transparent 50%);
+    opacity: 0.85;
+    mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 65%);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 65%);
+  }
+  .scene-bg::after {
+    /* ground texture / dust */
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(80% 30% at 50% 95%, rgba(255,90,20,0.18), transparent 70%),
+      linear-gradient(180deg, transparent 70%, rgba(0,0,0,0.55) 100%);
+    pointer-events: none;
+  }
+
+  /* Mountain silhouettes — pure CSS layered triangles */
+  .mountains {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: 0;
+    height: 36vh;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Vignette over everything for legibility */
+  .vignette {
+    position: fixed; inset: 0; z-index: 3;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(5,11,22,0.65) 0%, rgba(5,11,22,0.15) 18%, rgba(5,11,22,0) 35%, rgba(5,11,22,0) 60%, rgba(5,11,22,0.45) 88%, rgba(5,11,22,0.85) 100%),
+      radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0,0,0,0.55) 100%);
+  }
+
+  /* Content sits above scene */
+  .content { position: relative; z-index: 10; }
+
+  /* Section panel — translucent glassy plate over the persistent scene */
+  .panel {
+    background: linear-gradient(180deg, rgba(10,22,40,0.55), rgba(5,11,22,0.78));
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    border-top: 1px solid rgba(255,122,0,0.12);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .panel-dark {
+    background: linear-gradient(180deg, rgba(5,11,22,0.85), rgba(5,11,22,0.95));
+    backdrop-filter: blur(18px);
+  }
+
+  /* Glow + button styles */
+  .btn-primary {
+    background: linear-gradient(180deg, #FF8E2B 0%, #E55F00 100%);
+    box-shadow:
+      0 0 0 1px rgba(255,176,102,0.4) inset,
+      0 8px 30px -6px rgba(255,122,0,0.55),
+      0 0 60px -10px rgba(255,122,0,0.6);
+    transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgba(255,200,140,0.6) inset,
+      0 14px 40px -6px rgba(255,122,0,0.7),
+      0 0 90px -10px rgba(255,140,50,0.85);
+    filter: brightness(1.05);
+  }
+  .btn-ghost {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(8px);
+    transition: all .25s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,122,0,0.55);
+    box-shadow: 0 0 40px -8px rgba(255,122,0,0.45);
+  }
+
+  /* Hairline accents */
+  .hairline {
+    background: linear-gradient(90deg, transparent, rgba(255,122,0,0.6) 50%, transparent);
+    height: 1px;
+  }
+  .hairline-v {
+    background: linear-gradient(180deg, transparent, rgba(255,122,0,0.5) 50%, transparent);
+    width: 1px;
+  }
+
+  /* Scroll-reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-scale { opacity: 0; transform: scale(.96); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal-scale.in { opacity: 1; transform: none; }
+  .reveal-x { opacity: 0; transform: translateX(-32px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal-x.in { opacity: 1; transform: none; }
+  .reveal-stagger > * { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal-stagger.in > *:nth-child(1) { transition-delay: .05s; }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: .15s; }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: .25s; }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: .35s; }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: .45s; }
+  .reveal-stagger.in > * { opacity: 1; transform: none; }
+
+  /* Marquee */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .marquee-track { animation: marquee 38s linear infinite; }
+
+  /* Sun pulse */
+  @keyframes sunPulse {
+    0%,100% { opacity: 0.85; }
+    50%     { opacity: 1; }
+  }
+  .sun-pulse { animation: sunPulse 7s ease-in-out infinite; }
+
+  /* Card hover */
+  .game-card { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease, border-color .5s ease; }
+  .game-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,122,0,0.5);
+    box-shadow: 0 30px 80px -30px rgba(255,122,0,0.4), 0 0 0 1px rgba(255,122,0,0.25) inset;
+  }
+  .game-card:hover .game-thumb::after { opacity: 0.55; }
+  .game-thumb::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(255,90,20,0.25));
+    opacity: 0.25; transition: opacity .5s ease;
+  }
+
+  /* Tag chip */
+  .chip {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .35rem .7rem; border-radius: 999px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: #FFB066;
+    background: rgba(255,122,0,0.07);
+    border: 1px solid rgba(255,122,0,0.25);
+  }
+  .chip .dot {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: #FF7A00;
+    box-shadow: 0 0 10px #FF7A00;
+  }
+
+  /* Decorative crosshair */
+  .crosshair {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-left: 1px solid rgba(255,122,0,0.6);
+    border-top: 1px solid rgba(255,122,0,0.6);
+  }
+
+  /* Number ticker */
+  .stat-num { font-family: 'Satoshi', system-ui; font-weight: 700; letter-spacing: -0.04em; }
+
+  /* Inputs */
+  input.fld, textarea.fld {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  input.fld:focus, textarea.fld:focus {
+    outline: none;
+    border-color: rgba(255,122,0,0.7);
+    background: rgba(255,122,0,0.04);
+  }
+
+  /* Subtle scanlines on hero */
+  .scanlines::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 4px);
+    mix-blend-mode: overlay;
+  }
+
+  /* Logo lockup */
+  .logo-mark {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: #0A1628;
+    border: 1px solid rgba(255,122,0,0.4);
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px -8px rgba(255,122,0,0.5);
+  }
+
+</style>
+</head>
+<body class="font-body">
+
+<!-- ============ PERSISTENT BACKGROUND SCENE ============ -->
+<div class="scene-bg sun-pulse" aria-hidden="true"></div>
+
+<svg class="mountains" viewBox="0 0 1600 600" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="mtnFar" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#3a1f1f" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#0a0612" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="mtnMid" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#1f1622" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#06040a" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="mtnNear" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0a0510" stop-opacity="1"/>
+      <stop offset="1" stop-color="#000" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <!-- far range -->
+  <path d="M0,360 L120,300 L240,340 L360,260 L500,320 L640,240 L780,300 L920,250 L1080,310 L1220,260 L1360,300 L1500,250 L1600,290 L1600,600 L0,600 Z" fill="url(#mtnFar)"/>
+  <!-- mid range -->
+  <path d="M0,440 L80,400 L200,430 L320,370 L460,420 L600,360 L760,410 L900,370 L1060,420 L1200,380 L1340,420 L1480,380 L1600,410 L1600,600 L0,600 Z" fill="url(#mtnMid)"/>
+  <!-- near silhouette -->
+  <path d="M0,510 L160,490 L320,510 L520,475 L720,500 L920,485 L1120,510 L1320,490 L1520,505 L1600,495 L1600,600 L0,600 Z" fill="url(#mtnNear)"/>
+</svg>
+
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="content fixed top-0 inset-x-0 z-50 transition-all" id="nav">
+  <div class="mx-auto max-w-7xl px-5 md:px-8">
+    <div class="mt-4 rounded-2xl border border-white/10 bg-navy-900/40 backdrop-blur-xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]">
+      <div class="flex items-center justify-between px-4 md:px-6 py-3">
+        <a href="#top" class="flex items-center gap-3 group">
+          <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="h-8 md:h-9 w-auto select-none" draggable="false" />
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/55 hidden sm:inline border-l border-white/15 pl-3">Studios</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-[13px] text-white/75">
+          <a href="#courses" class="hover:text-white transition">Cursos</a>
+          <a href="#tutorias" class="hover:text-white transition">Tutorías</a>
+          <a href="#planes" class="hover:text-white transition">Planes</a>
+          <a href="#instructors" class="hover:text-white transition">Instructores</a>
+          <a href="#contact" class="hover:text-white transition">Contacto</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <a href="#planes" class="btn-primary text-[13px] font-semibold text-white px-4 py-2 rounded-lg">Empezar ahora</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="content" id="top">
+
+<!-- ============ HERO ============ -->
+<section class="relative min-h-[100svh] flex items-center scanlines">
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-1/3 left-8 hidden md:block crosshair"></div>
+    <div class="absolute top-1/3 right-8 hidden md:block crosshair" style="transform: scaleX(-1)"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-5 md:px-8 w-full pt-32 pb-40 text-center">
+    <div class="flex justify-center reveal">
+      <span class="chip"><span class="dot"></span>Escuela de Gamedev · Río Cuarto AR</span>
+    </div>
+
+    <h1 class="reveal mt-10 flex justify-center">
+      <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="w-full max-w-[420px] md:max-w-[640px] lg:max-w-[780px] h-auto select-none" draggable="false" />
+    </h1>
+
+    <p class="reveal mt-6 font-display text-[clamp(1rem,1.6vw,1.35rem)] text-white/85 max-w-2xl mx-auto">
+      Aprendé de forma personalizada y a tu ritmo.
+    </p>
+    <p class="reveal mt-3 text-[15px] md:text-base text-white/55 max-w-xl mx-auto leading-relaxed">
+      Enseñanza directa, sin relleno. Te acompañamos en tu camino para construir los proyectos que querés hacer.
+    </p>
+
+    <div class="reveal mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="#courses" class="btn-primary text-white font-semibold px-7 py-3.5 rounded-xl text-[15px] inline-flex items-center gap-2">
+        Explorar cursos
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#about" class="btn-ghost text-white font-medium px-7 py-3.5 rounded-xl text-[15px]">Conócenos</a>
+    </div>
+
+    <!-- HUD strip -->
+    <div class="reveal mt-20 mx-auto max-w-3xl flex items-center justify-between gap-4 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-white/40">
+      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-sunrise sun-pulse"></span>SYS · ONLINE</span>
+      <span class="hidden md:inline">LAT 33°07′S · LON 64°20′W</span>
+      <span>EST · MMXX</span>
+    </div>
+  </div>
+
+  <!-- scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 reveal">
+    <span class="font-mono text-[10px] uppercase tracking-widest">Scroll</span>
+    <div class="w-px h-10 bg-gradient-to-b from-sunrise to-transparent"></div>
+  </div>
+</section>
+
+<!-- ============ CURSOS ============ -->
+<section id="courses" class="relative panel-dark">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
+      <div>
+        <span class="chip"><span class="dot"></span>01 · Catálogo</span>
+        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+          Nuestros <span class="text-sunrise">cursos</span>.
+        </h2>
+      </div>
+      <p class="md:max-w-sm text-white/55 text-[15px]">
+        Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.
+      </p>
+    </div>
+
+    <div class="hairline mt-10"></div>
+
+    <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
+
+      <!-- Course 1 — Unreal Engine 5 -->
+      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="c1" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#0A1628"/><stop offset="0.6" stop-color="#3A1F1F"/><stop offset="1" stop-color="#0A0612"/>
+              </linearGradient>
+              <radialGradient id="c1s" cx="0.55" cy="0.5" r="0.4"><stop offset="0" stop-color="#FFB066" stop-opacity="0.85"/><stop offset="1" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#c1)"/>
+            <rect width="400" height="500" fill="url(#c1s)"/>
+            <circle cx="220" cy="260" r="55" fill="#FFB066" opacity="0.85"/>
+            <circle cx="170" cy="275" r="28" fill="#FF7A00" opacity="0.9"/>
+            <path d="M0,360 L100,335 L200,360 L300,330 L400,355 L400,500 L0,500 Z" fill="#0A0612"/>
+            <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,150,0.5)" font-size="9" letter-spacing="2">
+              <text x="20" y="30">[ COURSE · 01 ]</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Engine</span>
+            <span class="font-mono text-[10px] text-white/40">12 semanas</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-white text-2xl">Fundamentos de Unreal Engine 5</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+            De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.
+          </p>
+        </div>
+      </article>
+
+      <!-- Course 2 — Blender / 3D -->
+      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="c2" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#020410"/><stop offset="0.5" stop-color="#0F2138"/><stop offset="1" stop-color="#1A0A20"/>
+              </linearGradient>
+              <radialGradient id="c2s" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#3DD2C0" stop-opacity="0.45"/><stop offset="1" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#c2)"/>
+            <rect width="400" height="500" fill="url(#c2s)"/>
+            <g stroke="rgba(61,210,192,0.35)" fill="none">
+              <circle cx="200" cy="240" r="80"/>
+              <circle cx="200" cy="240" r="120"/>
+              <circle cx="200" cy="240" r="160"/>
+            </g>
+            <circle cx="200" cy="240" r="40" fill="#3DD2C0" opacity="0.5"/>
+            <g font-family="JetBrains Mono, monospace" fill="rgba(180,240,230,0.5)" font-size="9" letter-spacing="2">
+              <text x="20" y="30">[ COURSE · 02 ]</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-teal-soft">3D Art</span>
+            <span class="font-mono text-[10px] text-white/40">10 semanas</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-white text-2xl">Modelado 3D para videojuegos</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+            Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.
+          </p>
+        </div>
+      </article>
+
+      <!-- Course 3 — C++ -->
+      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="c3" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#1a0608"/><stop offset="0.5" stop-color="#5C1410"/><stop offset="1" stop-color="#0A0408"/>
+              </linearGradient>
+              <radialGradient id="c3s" cx="0.5" cy="0.55" r="0.4"><stop offset="0" stop-color="#FF4020" stop-opacity="0.7"/><stop offset="1" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#c3)"/>
+            <rect width="400" height="500" fill="url(#c3s)"/>
+            <circle cx="200" cy="290" r="60" fill="#FF4020" opacity="0.7"/>
+            <path d="M0,360 L80,330 L160,355 L240,310 L320,345 L400,320 L400,500 L0,500 Z" fill="#0a0408"/>
+            <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,180,0.5)" font-size="9" letter-spacing="2">
+              <text x="20" y="30">[ COURSE · 03 ]</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Code</span>
+            <span class="font-mono text-[10px] text-white/40">14 semanas</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-white text-2xl">Programación gameplay en C++</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+            Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.
+          </p>
+        </div>
+      </article>
+
+      <!-- Course 4 — Concept Art -->
+      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="c4" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#000"/><stop offset="0.5" stop-color="#0A0816"/><stop offset="1" stop-color="#1A0820"/>
+              </linearGradient>
+              <radialGradient id="c4s" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#5500AA" stop-opacity="0"/><stop offset="0.5" stop-color="#5500AA" stop-opacity="0.25"/><stop offset="1" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#c4)"/>
+            <rect width="400" height="500" fill="url(#c4s)"/>
+            <circle cx="200" cy="250" r="100" fill="#000" stroke="#FF7A00" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="200" cy="250" r="70" fill="none" stroke="rgba(255,122,0,0.4)"/>
+            <g font-family="JetBrains Mono, monospace" fill="rgba(200,180,255,0.5)" font-size="9" letter-spacing="2">
+              <text x="20" y="30">[ COURSE · 04 ]</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Art</span>
+            <span class="font-mono text-[10px] text-white/40">8 semanas</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-white text-2xl">Pintura digital y concept art</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+            Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.
+          </p>
+        </div>
+      </article>
+
+      <!-- Course 5 — Drawing / Anatomy -->
+      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="c5" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#0A1024"/><stop offset="0.55" stop-color="#2A1840"/><stop offset="1" stop-color="#08040F"/>
+              </linearGradient>
+              <radialGradient id="c5s" cx="0.5" cy="0.5" r="0.45"><stop offset="0" stop-color="#FFB066" stop-opacity="0.55"/><stop offset="1" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="400" height="500" fill="url(#c5)"/>
+            <rect width="400" height="500" fill="url(#c5s)"/>
+            <g stroke="rgba(255,176,102,0.55)" fill="none" stroke-width="1.4">
+              <path d="M200,140 Q260,200 250,280 Q240,360 200,400 Q160,360 150,280 Q140,200 200,140 Z"/>
+              <path d="M170,210 L230,210"/>
+              <circle cx="185" cy="220" r="4" fill="rgba(255,176,102,0.7)"/>
+              <circle cx="215" cy="220" r="4" fill="rgba(255,176,102,0.7)"/>
+              <path d="M190,260 Q200,275 210,260"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" fill="rgba(255,210,170,0.5)" font-size="9" letter-spacing="2">
+              <text x="20" y="30">[ COURSE · 05 ]</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Fundamentos</span>
+            <span class="font-mono text-[10px] text-white/40">10 semanas</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-white text-2xl">Dibujo y anatomía para juegos</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+            Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.
+          </p>
+        </div>
+      </article>
+
+      <!-- Course 6 — Level Design -->
+      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="c6" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#08101E"/><stop offset="0.5" stop-color="#16304F"/><stop offset="1" stop-color="#050B16"/>
+              </linearGradient>
+              <radialGradient id="c6s" cx="0.5" cy="0.55" r="0.35"><stop offset="0" stop-color="#FF7A00" stop-opacity="0.55"/><stop offset="1" stop-opacity="0"/></radialGradient>
+              <pattern id="c6grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(255,122,0,0.18)" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="400" height="500" fill="url(#c6)"/>
+            <rect width="400" height="500" fill="url(#c6grid)"/>
+            <rect width="400" height="500" fill="url(#c6s)"/>
+            <g fill="none" stroke="rgba(255,176,102,0.7)" stroke-width="1.5">
+              <rect x="110" y="180" width="90" height="90"/>
+              <rect x="220" y="220" width="70" height="70"/>
+              <path d="M155,260 L255,280"/>
+              <circle cx="155" cy="225" r="4" fill="rgba(255,176,102,0.7)"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,150,0.5)" font-size="9" letter-spacing="2">
+              <text x="20" y="30">[ COURSE · 06 ]</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Design</span>
+            <span class="font-mono text-[10px] text-white/40">9 semanas</span>
+          </div>
+          <h3 class="mt-3 font-display font-bold text-white text-2xl">Level design y narrativa ambiental</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+            Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ TUTORÍAS ============ -->
+<section id="tutorias" class="relative panel">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip"><span class="dot"></span>02 · Tutorías 1:1</span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+        Nuestras <span class="text-sunrise">tutorías</span> disponibles.
+      </h2>
+      <p class="mt-5 text-white/60 text-[15px]">
+        Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.
+      </p>
+    </div>
+
+    <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
+
+      <!-- Tutoría · Dibujo / Pintura -->
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="12" cy="7" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="16.5" cy="10" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-xl">Dibujo / Pintura</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Fundamentos y portfolio</div>
+        </div>
+      </div>
+
+      <!-- Tutoría · Unreal Engine -->
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 4 V12 L17 15"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-xl">Unreal Engine</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Blueprints y pipeline</div>
+        </div>
+      </div>
+
+      <!-- Tutoría · Programación -->
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M8 7 L3 12 L8 17"/>
+            <path d="M16 7 L21 12 L16 17"/>
+            <path d="M14 4 L10 20"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-xl">Programación</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Lógica y arquitectura</div>
+        </div>
+      </div>
+
+      <!-- Tutoría · Photoshop -->
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <text x="12" y="16" text-anchor="middle" font-family="Satoshi, system-ui" font-size="10" font-weight="700" fill="currentColor" stroke="none">Ps</text>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-xl">Photoshop</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Color y composición</div>
+        </div>
+      </div>
+
+      <!-- Tutoría · Blender -->
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M4 17 L12 6 L20 17 Z"/>
+            <circle cx="12" cy="14" r="2.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-xl">Blender</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Modelado y render</div>
+        </div>
+      </div>
+
+      <!-- Tutoría · C++ -->
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="11" cy="12" r="6.5"/>
+            <path d="M14.5 9.5 a4 4 0 0 0 0 5"/>
+            <path d="M18 10 H20 M19 9 V11"/>
+            <path d="M21 13 H23 M22 12 V14"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-xl">C++</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Gameplay programming</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ POR QUÉ NOSOTROS ============ -->
+<section id="about" class="relative panel-dark">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip"><span class="dot"></span>03 · Por qué nosotros</span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+        Cuatro razones para <span class="text-sunrise">amanecer</span> con nosotros.
+      </h2>
+      <p class="mt-5 text-white/60 text-[15px]">
+        Una metodología que aparece en cada clase, cada feedback y cada proyecto.
+      </p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 01</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
+            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="mt-8 font-display font-bold text-white text-xl">Enseñanza directa</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+          Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.
+        </p>
+      </div>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 02</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
+            <path d="M12 3v3M12 18v3M5 12H2M22 12h-3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+        </div>
+        <h3 class="mt-8 font-display font-bold text-white text-xl">Ritmo personalizado</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+          Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.
+        </p>
+      </div>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 03</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
+            <path d="M3 13a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+          </svg>
+        </div>
+        <h3 class="mt-8 font-display font-bold text-white text-xl">Proyectos reales</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+          Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.
+        </p>
+      </div>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 04</span>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
+            <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/>
+            <path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/>
+          </svg>
+        </div>
+        <h3 class="mt-8 font-display font-bold text-white text-xl">Comunidad activa</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+          Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.
+        </p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="mt-20 grid grid-cols-3 gap-6 max-w-2xl mx-auto reveal">
+      <div class="text-center">
+        <div class="stat-num text-white text-3xl md:text-5xl">+500</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2">Estudiantes</div>
+      </div>
+      <div class="text-center">
+        <div class="stat-num text-sunrise text-3xl md:text-5xl">12</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2">Instructores</div>
+      </div>
+      <div class="text-center">
+        <div class="stat-num text-white text-3xl md:text-5xl">2020</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2">Fundado</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANES ============ -->
+<section id="planes" class="relative panel">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip"><span class="dot"></span>04 · Planes</span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+        Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.
+      </h2>
+      <p class="mt-5 text-white/60 text-[15px]">
+        Acceso completo al catálogo. Cambiá o cancelá cuando quieras.
+      </p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
+
+      <!-- Mensual -->
+      <article class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70">Mensual</span>
+        </div>
+        <div class="mt-6">
+          <span class="stat-num text-white text-5xl md:text-6xl">$8</span>
+          <span class="font-mono text-[12px] text-white/40 ml-2">/ mes</span>
+        </div>
+        <p class="mt-3 text-[13px] text-white/55">Sin compromiso. Pagás mes a mes.</p>
+        <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Todo el catálogo de cursos</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Retos y proyectos prácticos</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Comunidad y soporte en Discord</li>
+        </ul>
+        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]">Comenzar ahora</a>
+        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Reembolso 7 días desde la compra</p>
+      </article>
+
+      <!-- Trimestral -->
+      <article class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70">Trimestral</span>
+          <span class="chip" style="font-size:10px; padding:.18rem .55rem;">10% off</span>
+        </div>
+        <div class="mt-6">
+          <span class="stat-num text-white text-5xl md:text-6xl">$21.60</span>
+          <span class="font-mono text-[12px] text-white/40 ml-2">/ trim.</span>
+        </div>
+        <p class="mt-3 text-[13px] text-white/55">Equivalente a $7.20 al mes. Pagás cada 3 meses.</p>
+        <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Todo lo del plan mensual</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Mejor precio que mes a mes</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Soporte prioritario</li>
+        </ul>
+        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]">Comenzar ahora</a>
+        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Reembolso 7 días desde la compra</p>
+      </article>
+
+      <!-- Anual (destacado) -->
+      <article class="rounded-2xl border border-sunrise/40 bg-gradient-to-br from-navy-900/80 to-navy-950/80 p-7 md:p-8 flex flex-col relative overflow-hidden shadow-[0_30px_80px_-30px_rgba(255,122,0,0.4)]">
+        <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-sunrise/30 blur-3xl pointer-events-none"></div>
+        <div class="relative flex items-center justify-between">
+          <span class="font-mono text-[11px] uppercase tracking-widest text-sunrise">Anual · Más popular</span>
+          <span class="chip" style="font-size:10px; padding:.18rem .55rem;">20% off</span>
+        </div>
+        <div class="relative mt-6">
+          <span class="stat-num text-white text-5xl md:text-6xl">$76.80</span>
+          <span class="font-mono text-[12px] text-white/40 ml-2">/ año</span>
+        </div>
+        <p class="relative mt-3 text-[13px] text-white/75">Equivalente a $6.40 al mes. <span class="text-sunrise">Ahorrás $19.20 al año.</span></p>
+        <ul class="relative mt-8 space-y-3 text-[13.5px] text-white/85 flex-1">
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Todo lo del plan trimestral</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> El mejor precio recurrente</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Acceso anticipado a nuevo contenido</li>
+        </ul>
+        <a href="#contact" class="btn-primary relative mt-8 inline-flex items-center justify-center text-white font-semibold px-5 py-3 rounded-xl text-[14px]">Comenzar ahora</a>
+        <p class="relative mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Reembolso 7 días desde la compra</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSTRUCTORES ============ -->
+<section id="instructors" class="relative panel-dark">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
+      <div>
+        <span class="chip"><span class="dot"></span>05 · Sobre nosotros</span>
+        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+          Los <span class="text-sunrise">instructores</span> detrás del amanecer.
+        </h2>
+      </div>
+      <p class="md:max-w-sm text-white/55 text-[15px]">
+        Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.
+      </p>
+    </div>
+
+    <div class="hairline mt-10"></div>
+
+    <div class="mt-12 grid sm:grid-cols-2 md:grid-cols-3 gap-5 reveal-stagger">
+
+      <!-- Instructor 1 -->
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden relative">
+          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i1" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#FF7A00" stop-opacity="0.5"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i1)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFB066" opacity="0.85">MV</text></svg>
+        </div>
+        <div class="mt-4">
+          <div class="font-display font-bold text-white text-[17px]">Martín Vega</div>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Director · UE5</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">10 años en estudios indie. Enseña Blueprints como si fuera un idioma.</p>
+        </div>
+      </div>
+
+      <!-- Instructor 2 -->
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i2" cx="0.55" cy="0.45" r="0.55"><stop offset="0" stop-color="#3DD2C0" stop-opacity="0.4"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i2)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#9BE8DC">SR</text></svg>
+        </div>
+        <div class="mt-4">
+          <div class="font-display font-bold text-white text-[17px]">Sofía Ríos</div>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">3D Art · Blender</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Modeladora con créditos en juegos AA. Especialista en topología y retopo.</p>
+        </div>
+      </div>
+
+      <!-- Instructor 3 -->
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i3" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#FFB066" stop-opacity="0.55"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i3)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFE0B8">JC</text></svg>
+        </div>
+        <div class="mt-4">
+          <div class="font-display font-bold text-white text-[17px]">Julián Cárdenas</div>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Programación · C++</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Gameplay engineer. Cree que el mejor código es el que se borra.</p>
+        </div>
+      </div>
+
+      <!-- Instructor 4 -->
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i4" cx="0.45" cy="0.5" r="0.55"><stop offset="0" stop-color="#FF7A00" stop-opacity="0.45"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i4)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFD9B5">EP</text></svg>
+        </div>
+        <div class="mt-4">
+          <div class="font-display font-bold text-white text-[17px]">Elena Paz</div>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Concept Art · Photoshop</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Ilustradora de personajes. Pinta atmósferas que cuentan historias.</p>
+        </div>
+      </div>
+
+      <!-- Instructor 5 -->
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i5" cx="0.5" cy="0.5" r="0.55"><stop offset="0" stop-color="#FFB066" stop-opacity="0.5"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i5)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFD9B5">LA</text></svg>
+        </div>
+        <div class="mt-4">
+          <div class="font-display font-bold text-white text-[17px]">Lucas Arce</div>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Dibujo · Anatomía</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">15 años dibujando. Le obsesiona el gesto y la línea de acción.</p>
+        </div>
+      </div>
+
+      <!-- Instructor 6 -->
+      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i6" cx="0.5" cy="0.5" r="0.55"><stop offset="0" stop-color="#3DD2C0" stop-opacity="0.4"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i6)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#9BE8DC">CM</text></svg>
+        </div>
+        <div class="mt-4">
+          <div class="font-display font-bold text-white text-[17px]">Camila Molina</div>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Level Design</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Diseña espacios que enseñan a jugarlos sin un solo tutorial.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACTO + FOOTER ============ -->
+<section id="contact" class="relative panel-dark">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 pt-28 md:pt-36 pb-12">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip"><span class="dot"></span>06 · Contacto</span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,5vw,4rem)] leading-[1]">
+        Contactanos.
+      </h2>
+      <p class="mt-6 text-white/60 text-[15px] leading-relaxed">
+        Dudas, propuestas o ganas de empezar. Escribínos por la vía que prefieras.
+      </p>
+    </div>
+
+    <!-- Redes sociales -->
+    <div class="mt-14 flex flex-wrap items-center justify-center gap-4 reveal">
+      <a href="#" aria-label="Facebook" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </a>
+      <a href="#" aria-label="Twitter / X" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
+      </a>
+      <a href="#" aria-label="TikTok" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 6.5a5.5 5.5 0 0 1-4-1.7v9.3a6 6 0 1 1-6-6c.3 0 .6 0 .9.1V11a2.9 2.9 0 1 0 2 2.7V2h2.7a5.5 5.5 0 0 0 4.4 4.5z"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2a2.8 2.8 0 0 0-2-2C18.7 4.5 12 4.5 12 4.5s-6.7 0-8.6.4a2.8 2.8 0 0 0-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2a2.8 2.8 0 0 0 2 2c1.9.4 8.6.4 8.6.4s6.7 0 8.6-.4a2.8 2.8 0 0 0 2-2C23 15.5 23 12 23 12zm-13.3 3.3V8.7l5.7 3.3-5.7 3.3z"/></svg>
+      </a>
+      <a href="#" aria-label="Telegram" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.4 2.8 11.6c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.9 5.7c.2.6.4.8.9.8.4 0 .6-.2.8-.5l2.6-2.5 4.9 3.6c.9.5 1.5.2 1.7-.8l3.2-15c.3-1.3-.5-1.9-1.4-1.6zm-3.9 4.2-8.8 7.9-.4 4.4 1.2-3.6 11.2-10.1c.5-.4 0-.6-.7-.2z"/></svg>
+      </a>
+      <a href="#" aria-label="WhatsApp" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+      </a>
+    </div>
+
+    <!-- Formulario -->
+    <form class="mt-14 max-w-2xl mx-auto reveal" onsubmit="event.preventDefault(); this.querySelector('button[type=submit]').textContent='Enviado ✓'; this.reset();">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Nombre</label>
+          <input class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40" type="text" required placeholder="Tu nombre" />
+        </div>
+        <div>
+          <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Email</label>
+          <input class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40" type="email" required placeholder="tu@correo.com" />
+        </div>
+      </div>
+      <div class="mt-4">
+        <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Asunto</label>
+        <input class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40" type="text" required placeholder="¿De qué querés hablar?" />
+      </div>
+      <div class="mt-4">
+        <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Mensaje</label>
+        <textarea class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40 min-h-[120px] resize-y" required placeholder="Contanos en qué podemos ayudarte..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary mt-6 rounded-xl px-6 py-3 font-semibold text-white text-[14px] w-full sm:w-auto">Enviar mensaje</button>
+    </form>
+
+    <div class="hairline my-20"></div>
+
+    <footer class="grid md:grid-cols-12 gap-8 items-start">
+      <div class="md:col-span-5">
+        <a href="#top" class="flex items-center gap-3">
+          <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="h-9 w-auto select-none" draggable="false" />
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/55 border-l border-white/15 pl-3">Studios</span>
+        </a>
+        <p class="mt-4 text-white/50 text-[13px] max-w-sm leading-relaxed">
+          Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.
+        </p>
+      </div>
+      <div class="md:col-span-2">
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40">Plataforma</div>
+        <ul class="mt-4 space-y-2 text-[13px] text-white/75">
+          <li><a href="#about" class="hover:text-sunrise transition">Por qué nosotros</a></li>
+          <li><a href="#instructors" class="hover:text-sunrise transition">Instructores</a></li>
+          <li><a href="#planes" class="hover:text-sunrise transition">Planes</a></li>
+        </ul>
+      </div>
+      <div class="md:col-span-2">
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40">Cursos</div>
+        <ul class="mt-4 space-y-2 text-[13px] text-white/75">
+          <li><a href="#courses" class="hover:text-sunrise transition">Unreal Engine 5</a></li>
+          <li><a href="#courses" class="hover:text-sunrise transition">Modelado 3D</a></li>
+          <li><a href="#courses" class="hover:text-sunrise transition">C++ Gameplay</a></li>
+          <li><a href="#courses" class="hover:text-sunrise transition">Concept Art</a></li>
+        </ul>
+      </div>
+      <div class="md:col-span-3">
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40">Comunidad</div>
+        <ul class="mt-4 grid grid-cols-2 gap-2">
+          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Discord</a></li>
+          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">YouTube</a></li>
+          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Instagram</a></li>
+          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Telegram</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <div class="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-widest text-white/40">
+      <span>© MMXXVI · Second Sunrise Studios · Río Cuarto, AR</span>
+      <span class="flex items-center gap-4">
+        <a href="#" class="hover:text-sunrise transition">Privacidad</a>
+        <a href="#" class="hover:text-sunrise transition">Términos</a>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise sun-pulse"></span>Build · 26.05</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // Navbar shrink on scroll
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 30) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+    lastY = y;
+  }, { passive: true });
+
+  // Reveal-on-scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-x, .reveal-scale, .reveal-stagger').forEach(el => io.observe(el));
+
+  // Smooth anchor scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) {
+        const t = document.querySelector(id);
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      }
+    });
+  });
+
+  // Subtle parallax on the persistent scene
+  const sceneBg = document.querySelector('.scene-bg');
+  const mountains = document.querySelector('.mountains');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (sceneBg) sceneBg.style.transform = `translateY(${y * 0.04}px)`;
+    if (mountains) mountains.style.transform = `translateY(${y * 0.02}px)`;
+  }, { passive: true });
+</script>
+</body>
+</html>
