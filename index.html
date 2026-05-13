@@ -164,6 +164,17 @@
     box-shadow: 0 0 40px -8px rgba(255,122,0,0.45);
   }
 
+  /* Language switcher */
+  .lang-btn {
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+  .lang-btn:hover { color: rgba(255,255,255,0.85); }
+  .lang-btn[aria-pressed="true"] { color: #FF8E2B; }
+
   /* Hairline accents */
   .hairline {
     background: linear-gradient(90deg, transparent, rgba(255,122,0,0.6) 50%, transparent);
@@ -316,14 +327,19 @@
           </span>
         </a>
         <nav class="hidden md:flex items-center gap-8 text-[13px] text-white/75">
-          <a href="#courses" class="hover:text-white transition">Cursos</a>
-          <a href="#tutorias" class="hover:text-white transition">Tutorías</a>
-          <a href="#planes" class="hover:text-white transition">Planes</a>
-          <a href="#instructors" class="hover:text-white transition">Instructores</a>
-          <a href="#contact" class="hover:text-white transition">Contacto</a>
+          <a href="#courses" class="hover:text-white transition" data-i18n="nav.courses">Cursos</a>
+          <a href="#tutorias" class="hover:text-white transition" data-i18n="nav.tutoring">Tutorías</a>
+          <a href="#planes" class="hover:text-white transition" data-i18n="nav.plans">Planes</a>
+          <a href="#instructors" class="hover:text-white transition" data-i18n="nav.instructors">Instructores</a>
+          <a href="#contact" class="hover:text-white transition" data-i18n="nav.contact">Contacto</a>
         </nav>
         <div class="flex items-center gap-3">
-          <a href="#planes" class="btn-primary text-[13px] font-semibold text-white px-4 py-2 rounded-lg">Empezar ahora</a>
+          <div class="hidden sm:flex items-center font-mono text-[11px] uppercase tracking-widest" role="group" aria-label="Language">
+            <button type="button" data-lang="es" class="lang-btn px-2 py-1 transition" aria-pressed="true">ES</button>
+            <span class="text-white/20" aria-hidden="true">/</span>
+            <button type="button" data-lang="en" class="lang-btn px-2 py-1 transition" aria-pressed="false">EN</button>
+          </div>
+          <a href="#planes" class="btn-primary text-[13px] font-semibold text-white px-4 py-2 rounded-lg" data-i18n="nav.cta">Empezar ahora</a>
         </div>
       </div>
     </div>
@@ -341,26 +357,26 @@
 
   <div class="mx-auto max-w-7xl px-5 md:px-8 w-full pt-32 pb-40 text-center">
     <div class="flex justify-center reveal">
-      <span class="chip"><span class="dot"></span>Escuela de Gamedev · Río Cuarto AR</span>
+      <span class="chip"><span class="dot"></span><span data-i18n="hero.chip">Escuela de Gamedev · Río Cuarto AR</span></span>
     </div>
 
     <h1 class="reveal mt-10 flex justify-center">
       <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="w-full max-w-[420px] md:max-w-[640px] lg:max-w-[780px] h-auto select-none" draggable="false" />
     </h1>
 
-    <p class="reveal mt-6 font-display text-[clamp(1rem,1.6vw,1.35rem)] text-white/85 max-w-2xl mx-auto">
+    <p class="reveal mt-6 font-display text-[clamp(1rem,1.6vw,1.35rem)] text-white/85 max-w-2xl mx-auto" data-i18n="hero.tagline">
       Aprendé de forma personalizada y a tu ritmo.
     </p>
-    <p class="reveal mt-3 text-[15px] md:text-base text-white/55 max-w-xl mx-auto leading-relaxed">
+    <p class="reveal mt-3 text-[15px] md:text-base text-white/55 max-w-xl mx-auto leading-relaxed" data-i18n="hero.description">
       Enseñanza directa, sin relleno. Te acompañamos en tu camino para construir los proyectos que querés hacer.
     </p>
 
     <div class="reveal mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
       <a href="#courses" class="btn-primary text-white font-semibold px-7 py-3.5 rounded-xl text-[15px] inline-flex items-center gap-2">
-        Explorar cursos
+        <span data-i18n="hero.cta_primary">Explorar cursos</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <a href="#about" class="btn-ghost text-white font-medium px-7 py-3.5 rounded-xl text-[15px]">Conócenos</a>
+      <a href="#about" class="btn-ghost text-white font-medium px-7 py-3.5 rounded-xl text-[15px]" data-i18n="hero.cta_secondary">Conócenos</a>
     </div>
 
     <!-- HUD strip -->
@@ -383,12 +399,12 @@
   <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
       <div>
-        <span class="chip"><span class="dot"></span>01 · Catálogo</span>
-        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+        <span class="chip"><span class="dot"></span><span data-i18n="courses.chip">01 · Catálogo</span></span>
+        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="courses.title">
           Nuestros <span class="text-sunrise">cursos</span>.
         </h2>
       </div>
-      <p class="md:max-w-sm text-white/55 text-[15px]">
+      <p class="md:max-w-sm text-white/55 text-[15px]" data-i18n="courses.subtitle">
         Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.
       </p>
     </div>
@@ -398,7 +414,7 @@
     <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
 
       <!-- Course 1 — Unreal Engine 5 -->
-      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c1.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
         <div class="game-thumb relative aspect-[4/5] overflow-hidden">
           <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -419,18 +435,18 @@
         </div>
         <div class="p-5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Engine</span>
-            <span class="font-mono text-[10px] text-white/40">12 semanas</span>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c1.tag">Engine</span>
+            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_12">12 semanas</span>
           </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl">Fundamentos de Unreal Engine 5</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c1.title">Fundamentos de Unreal Engine 5</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c1.desc">
             De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.
           </p>
         </div>
-      </article>
+      </a>
 
       <!-- Course 2 — Blender / 3D -->
-      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c2.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
         <div class="game-thumb relative aspect-[4/5] overflow-hidden">
           <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -454,18 +470,18 @@
         </div>
         <div class="p-5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-teal-soft">3D Art</span>
-            <span class="font-mono text-[10px] text-white/40">10 semanas</span>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-teal-soft" data-i18n="courses.c2.tag">3D Art</span>
+            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_10_a">10 semanas</span>
           </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl">Modelado 3D para videojuegos</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c2.title">Modelado 3D para videojuegos</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c2.desc">
             Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.
           </p>
         </div>
-      </article>
+      </a>
 
       <!-- Course 3 — C++ -->
-      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c3.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
         <div class="game-thumb relative aspect-[4/5] overflow-hidden">
           <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -485,18 +501,18 @@
         </div>
         <div class="p-5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Code</span>
-            <span class="font-mono text-[10px] text-white/40">14 semanas</span>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c3.tag">Code</span>
+            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_14">14 semanas</span>
           </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl">Programación gameplay en C++</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c3.title">Programación gameplay en C++</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c3.desc">
             Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.
           </p>
         </div>
-      </article>
+      </a>
 
       <!-- Course 4 — Concept Art -->
-      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c4.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
         <div class="game-thumb relative aspect-[4/5] overflow-hidden">
           <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -516,18 +532,18 @@
         </div>
         <div class="p-5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Art</span>
-            <span class="font-mono text-[10px] text-white/40">8 semanas</span>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c4.tag">Art</span>
+            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_8">8 semanas</span>
           </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl">Pintura digital y concept art</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c4.title">Pintura digital y concept art</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c4.desc">
             Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.
           </p>
         </div>
-      </article>
+      </a>
 
       <!-- Course 5 — Drawing / Anatomy -->
-      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c5.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
         <div class="game-thumb relative aspect-[4/5] overflow-hidden">
           <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -552,18 +568,18 @@
         </div>
         <div class="p-5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Fundamentos</span>
-            <span class="font-mono text-[10px] text-white/40">10 semanas</span>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c5.tag">Fundamentos</span>
+            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_10_b">10 semanas</span>
           </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl">Dibujo y anatomía para juegos</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c5.title">Dibujo y anatomía para juegos</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c5.desc">
             Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.
           </p>
         </div>
-      </article>
+      </a>
 
       <!-- Course 6 — Level Design -->
-      <article class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c6.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
         <div class="game-thumb relative aspect-[4/5] overflow-hidden">
           <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -591,15 +607,15 @@
         </div>
         <div class="p-5">
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise">Design</span>
-            <span class="font-mono text-[10px] text-white/40">9 semanas</span>
+            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c6.tag">Design</span>
+            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_9">9 semanas</span>
           </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl">Level design y narrativa ambiental</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed">
+          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c6.title">Level design y narrativa ambiental</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c6.desc">
             Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.
           </p>
         </div>
-      </article>
+      </a>
 
     </div>
   </div>
@@ -609,11 +625,11 @@
 <section id="tutorias" class="relative panel">
   <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
     <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span>02 · Tutorías 1:1</span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+      <span class="chip"><span class="dot"></span><span data-i18n="tutoring.chip">02 · Tutorías 1:1</span></span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="tutoring.title">
         Nuestras <span class="text-sunrise">tutorías</span> disponibles.
       </h2>
-      <p class="mt-5 text-white/60 text-[15px]">
+      <p class="mt-5 text-white/60 text-[15px]" data-i18n="tutoring.subtitle">
         Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.
       </p>
     </div>
@@ -621,7 +637,7 @@
     <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
 
       <!-- Tutoría · Dibujo / Pintura -->
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t1.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="12" cy="12" r="9"/>
@@ -632,13 +648,13 @@
           </svg>
         </div>
         <div>
-          <div class="font-display font-bold text-white text-xl">Dibujo / Pintura</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Fundamentos y portfolio</div>
+          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t1.title">Dibujo / Pintura</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t1.sub">Fundamentos y portfolio</div>
         </div>
-      </div>
+      </a>
 
       <!-- Tutoría · Unreal Engine -->
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t2.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="12" cy="12" r="9"/>
@@ -647,13 +663,13 @@
           </svg>
         </div>
         <div>
-          <div class="font-display font-bold text-white text-xl">Unreal Engine</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Blueprints y pipeline</div>
+          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t2.title">Unreal Engine</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t2.sub">Blueprints y pipeline</div>
         </div>
-      </div>
+      </a>
 
       <!-- Tutoría · Programación -->
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t3.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M8 7 L3 12 L8 17"/>
@@ -662,13 +678,13 @@
           </svg>
         </div>
         <div>
-          <div class="font-display font-bold text-white text-xl">Programación</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Lógica y arquitectura</div>
+          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t3.title">Programación</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t3.sub">Lógica y arquitectura</div>
         </div>
-      </div>
+      </a>
 
       <!-- Tutoría · Photoshop -->
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t4.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <rect x="3" y="3" width="18" height="18" rx="3"/>
@@ -676,13 +692,13 @@
           </svg>
         </div>
         <div>
-          <div class="font-display font-bold text-white text-xl">Photoshop</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Color y composición</div>
+          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t4.title">Photoshop</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t4.sub">Color y composición</div>
         </div>
-      </div>
+      </a>
 
       <!-- Tutoría · Blender -->
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t5.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M4 17 L12 6 L20 17 Z"/>
@@ -690,13 +706,13 @@
           </svg>
         </div>
         <div>
-          <div class="font-display font-bold text-white text-xl">Blender</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Modelado y render</div>
+          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t5.title">Blender</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t5.sub">Modelado y render</div>
         </div>
-      </div>
+      </a>
 
       <!-- Tutoría · C++ -->
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t6.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-sunrise flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="11" cy="12" r="6.5"/>
@@ -706,10 +722,10 @@
           </svg>
         </div>
         <div>
-          <div class="font-display font-bold text-white text-xl">C++</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45">Gameplay programming</div>
+          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t6.title">C++</div>
+          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t6.sub">Gameplay programming</div>
         </div>
-      </div>
+      </a>
 
     </div>
   </div>
@@ -719,11 +735,11 @@
 <section id="about" class="relative panel-dark">
   <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
     <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span>03 · Por qué nosotros</span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+      <span class="chip"><span class="dot"></span><span data-i18n="why.chip">03 · Por qué nosotros</span></span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="why.title">
         Cuatro razones para <span class="text-sunrise">amanecer</span> con nosotros.
       </h2>
-      <p class="mt-5 text-white/60 text-[15px]">
+      <p class="mt-5 text-white/60 text-[15px]" data-i18n="why.subtitle">
         Una metodología que aparece en cada clase, cada feedback y cada proyecto.
       </p>
     </div>
@@ -736,8 +752,8 @@
             <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>
           </svg>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl">Enseñanza directa</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f1.title">Enseñanza directa</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f1.desc">
           Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.
         </p>
       </div>
@@ -749,8 +765,8 @@
             <circle cx="12" cy="12" r="4"/>
           </svg>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl">Ritmo personalizado</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f2.title">Ritmo personalizado</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f2.desc">
           Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.
         </p>
       </div>
@@ -761,8 +777,8 @@
             <path d="M3 13a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
           </svg>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl">Proyectos reales</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f3.title">Proyectos reales</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f3.desc">
           Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.
         </p>
       </div>
@@ -774,8 +790,8 @@
             <path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/>
           </svg>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl">Comunidad activa</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed">
+        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f4.title">Comunidad activa</h3>
+        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f4.desc">
           Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.
         </p>
       </div>
@@ -785,15 +801,15 @@
     <div class="mt-20 grid grid-cols-3 gap-6 max-w-2xl mx-auto reveal">
       <div class="text-center">
         <div class="stat-num text-white text-3xl md:text-5xl">+500</div>
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2">Estudiantes</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.students">Estudiantes</div>
       </div>
       <div class="text-center">
         <div class="stat-num text-sunrise text-3xl md:text-5xl">12</div>
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2">Instructores</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.instructors">Instructores</div>
       </div>
       <div class="text-center">
         <div class="stat-num text-white text-3xl md:text-5xl">2020</div>
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2">Fundado</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.founded">Fundado</div>
       </div>
     </div>
   </div>
@@ -803,11 +819,11 @@
 <section id="planes" class="relative panel">
   <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
     <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span>04 · Planes</span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+      <span class="chip"><span class="dot"></span><span data-i18n="plans.chip">04 · Planes</span></span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="plans.title">
         Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.
       </h2>
-      <p class="mt-5 text-white/60 text-[15px]">
+      <p class="mt-5 text-white/60 text-[15px]" data-i18n="plans.subtitle">
         Acceso completo al catálogo. Cambiá o cancelá cuando quieras.
       </p>
     </div>
@@ -817,61 +833,61 @@
       <!-- Mensual -->
       <article class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
         <div class="flex items-center justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70">Mensual</span>
+          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70" data-i18n="plans.monthly.label">Mensual</span>
         </div>
         <div class="mt-6">
           <span class="stat-num text-white text-5xl md:text-6xl">$8</span>
-          <span class="font-mono text-[12px] text-white/40 ml-2">/ mes</span>
+          <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.monthly.period">/ mes</span>
         </div>
-        <p class="mt-3 text-[13px] text-white/55">Sin compromiso. Pagás mes a mes.</p>
+        <p class="mt-3 text-[13px] text-white/55" data-i18n="plans.monthly.desc">Sin compromiso. Pagás mes a mes.</p>
         <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Todo el catálogo de cursos</li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Retos y proyectos prácticos</li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Comunidad y soporte en Discord</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.monthly.f1">Todo el catálogo de cursos</span></li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.monthly.f2">Retos y proyectos prácticos</span></li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.monthly.f3">Comunidad y soporte en Discord</span></li>
         </ul>
-        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]">Comenzar ahora</a>
-        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Reembolso 7 días desde la compra</p>
+        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]" data-i18n="plans.cta">Comenzar ahora</a>
+        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="plans.refund">Reembolso 7 días desde la compra</p>
       </article>
 
       <!-- Trimestral -->
       <article class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
         <div class="flex items-center justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70">Trimestral</span>
+          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70" data-i18n="plans.quarterly.label">Trimestral</span>
           <span class="chip" style="font-size:10px; padding:.18rem .55rem;">10% off</span>
         </div>
         <div class="mt-6">
           <span class="stat-num text-white text-5xl md:text-6xl">$21.60</span>
-          <span class="font-mono text-[12px] text-white/40 ml-2">/ trim.</span>
+          <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.quarterly.period">/ trim.</span>
         </div>
-        <p class="mt-3 text-[13px] text-white/55">Equivalente a $7.20 al mes. Pagás cada 3 meses.</p>
+        <p class="mt-3 text-[13px] text-white/55" data-i18n="plans.quarterly.desc">Equivalente a $7.20 al mes. Pagás cada 3 meses.</p>
         <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Todo lo del plan mensual</li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Mejor precio que mes a mes</li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Soporte prioritario</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.quarterly.f1">Todo lo del plan mensual</span></li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.quarterly.f2">Mejor precio que mes a mes</span></li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.quarterly.f3">Soporte prioritario</span></li>
         </ul>
-        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]">Comenzar ahora</a>
-        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Reembolso 7 días desde la compra</p>
+        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]" data-i18n="plans.cta">Comenzar ahora</a>
+        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="plans.refund">Reembolso 7 días desde la compra</p>
       </article>
 
       <!-- Anual (destacado) -->
       <article class="rounded-2xl border border-sunrise/40 bg-gradient-to-br from-navy-900/80 to-navy-950/80 p-7 md:p-8 flex flex-col relative overflow-hidden shadow-[0_30px_80px_-30px_rgba(255,122,0,0.4)]">
         <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-sunrise/30 blur-3xl pointer-events-none"></div>
         <div class="relative flex items-center justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-sunrise">Anual · Más popular</span>
+          <span class="font-mono text-[11px] uppercase tracking-widest text-sunrise" data-i18n="plans.annual.label">Anual · Más popular</span>
           <span class="chip" style="font-size:10px; padding:.18rem .55rem;">20% off</span>
         </div>
         <div class="relative mt-6">
           <span class="stat-num text-white text-5xl md:text-6xl">$76.80</span>
-          <span class="font-mono text-[12px] text-white/40 ml-2">/ año</span>
+          <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.annual.period">/ año</span>
         </div>
-        <p class="relative mt-3 text-[13px] text-white/75">Equivalente a $6.40 al mes. <span class="text-sunrise">Ahorrás $19.20 al año.</span></p>
+        <p class="relative mt-3 text-[13px] text-white/75" data-i18n-html="plans.annual.desc">Equivalente a $6.40 al mes. <span class="text-sunrise">Ahorrás $19.20 al año.</span></p>
         <ul class="relative mt-8 space-y-3 text-[13.5px] text-white/85 flex-1">
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Todo lo del plan trimestral</li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> El mejor precio recurrente</li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> Acceso anticipado a nuevo contenido</li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.annual.f1">Todo lo del plan trimestral</span></li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.annual.f2">El mejor precio recurrente</span></li>
+          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.annual.f3">Acceso anticipado a nuevo contenido</span></li>
         </ul>
-        <a href="#contact" class="btn-primary relative mt-8 inline-flex items-center justify-center text-white font-semibold px-5 py-3 rounded-xl text-[14px]">Comenzar ahora</a>
-        <p class="relative mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Reembolso 7 días desde la compra</p>
+        <a href="#contact" class="btn-primary relative mt-8 inline-flex items-center justify-center text-white font-semibold px-5 py-3 rounded-xl text-[14px]" data-i18n="plans.cta">Comenzar ahora</a>
+        <p class="relative mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="plans.refund">Reembolso 7 días desde la compra</p>
       </article>
 
     </div>
@@ -883,12 +899,12 @@
   <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
       <div>
-        <span class="chip"><span class="dot"></span>05 · Sobre nosotros</span>
-        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]">
+        <span class="chip"><span class="dot"></span><span data-i18n="instructors.chip">05 · Sobre nosotros</span></span>
+        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="instructors.title">
           Los <span class="text-sunrise">instructores</span> detrás del amanecer.
         </h2>
       </div>
-      <p class="md:max-w-sm text-white/55 text-[15px]">
+      <p class="md:max-w-sm text-white/55 text-[15px]" data-i18n="instructors.subtitle">
         Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.
       </p>
     </div>
@@ -904,8 +920,8 @@
         </div>
         <div class="mt-4">
           <div class="font-display font-bold text-white text-[17px]">Martín Vega</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Director · UE5</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">10 años en estudios indie. Enseña Blueprints como si fuera un idioma.</p>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i1.role">Director · UE5</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i1.bio">10 años en estudios indie. Enseña Blueprints como si fuera un idioma.</p>
         </div>
       </div>
 
@@ -916,8 +932,8 @@
         </div>
         <div class="mt-4">
           <div class="font-display font-bold text-white text-[17px]">Sofía Ríos</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">3D Art · Blender</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Modeladora con créditos en juegos AA. Especialista en topología y retopo.</p>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i2.role">3D Art · Blender</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i2.bio">Modeladora con créditos en juegos AA. Especialista en topología y retopo.</p>
         </div>
       </div>
 
@@ -928,8 +944,8 @@
         </div>
         <div class="mt-4">
           <div class="font-display font-bold text-white text-[17px]">Julián Cárdenas</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Programación · C++</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Gameplay engineer. Cree que el mejor código es el que se borra.</p>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i3.role">Programación · C++</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i3.bio">Gameplay engineer. Cree que el mejor código es el que se borra.</p>
         </div>
       </div>
 
@@ -940,8 +956,8 @@
         </div>
         <div class="mt-4">
           <div class="font-display font-bold text-white text-[17px]">Elena Paz</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Concept Art · Photoshop</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Ilustradora de personajes. Pinta atmósferas que cuentan historias.</p>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i4.role">Concept Art · Photoshop</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i4.bio">Ilustradora de personajes. Pinta atmósferas que cuentan historias.</p>
         </div>
       </div>
 
@@ -952,8 +968,8 @@
         </div>
         <div class="mt-4">
           <div class="font-display font-bold text-white text-[17px]">Lucas Arce</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Dibujo · Anatomía</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">15 años dibujando. Le obsesiona el gesto y la línea de acción.</p>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i5.role">Dibujo · Anatomía</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i5.bio">15 años dibujando. Le obsesiona el gesto y la línea de acción.</p>
         </div>
       </div>
 
@@ -964,8 +980,8 @@
         </div>
         <div class="mt-4">
           <div class="font-display font-bold text-white text-[17px]">Camila Molina</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1">Level Design</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed">Diseña espacios que enseñan a jugarlos sin un solo tutorial.</p>
+          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i6.role">Level Design</div>
+          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i6.bio">Diseña espacios que enseñan a jugarlos sin un solo tutorial.</p>
         </div>
       </div>
 
@@ -977,62 +993,38 @@
 <section id="contact" class="relative panel-dark">
   <div class="mx-auto max-w-7xl px-5 md:px-8 pt-28 md:pt-36 pb-12">
     <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span>06 · Contacto</span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,5vw,4rem)] leading-[1]">
+      <span class="chip"><span class="dot"></span><span data-i18n="contact.chip">06 · Contacto</span></span>
+      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,5vw,4rem)] leading-[1]" data-i18n="contact.title">
         Contactanos.
       </h2>
-      <p class="mt-6 text-white/60 text-[15px] leading-relaxed">
+      <p class="mt-6 text-white/60 text-[15px] leading-relaxed" data-i18n="contact.subtitle">
         Dudas, propuestas o ganas de empezar. Escribínos por la vía que prefieras.
       </p>
     </div>
 
-    <!-- Redes sociales -->
-    <div class="mt-14 flex flex-wrap items-center justify-center gap-4 reveal">
-      <a href="#" aria-label="Facebook" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>
-      </a>
-      <a href="#" aria-label="Instagram" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-      </a>
-      <a href="#" aria-label="Twitter / X" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
-      </a>
-      <a href="#" aria-label="TikTok" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 6.5a5.5 5.5 0 0 1-4-1.7v9.3a6 6 0 1 1-6-6c.3 0 .6 0 .9.1V11a2.9 2.9 0 1 0 2 2.7V2h2.7a5.5 5.5 0 0 0 4.4 4.5z"/></svg>
-      </a>
-      <a href="#" aria-label="YouTube" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.2a2.8 2.8 0 0 0-2-2C18.7 4.5 12 4.5 12 4.5s-6.7 0-8.6.4a2.8 2.8 0 0 0-2 2C1 8.5 1 12 1 12s0 3.5.4 5.2a2.8 2.8 0 0 0 2 2c1.9.4 8.6.4 8.6.4s6.7 0 8.6-.4a2.8 2.8 0 0 0 2-2C23 15.5 23 12 23 12zm-13.3 3.3V8.7l5.7 3.3-5.7 3.3z"/></svg>
-      </a>
-      <a href="#" aria-label="Telegram" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.4 2.8 11.6c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.9 5.7c.2.6.4.8.9.8.4 0 .6-.2.8-.5l2.6-2.5 4.9 3.6c.9.5 1.5.2 1.7-.8l3.2-15c.3-1.3-.5-1.9-1.4-1.6zm-3.9 4.2-8.8 7.9-.4 4.4 1.2-3.6 11.2-10.1c.5-.4 0-.6-.7-.2z"/></svg>
-      </a>
-      <a href="#" aria-label="WhatsApp" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+    <!-- WhatsApp CTA -->
+    <div class="mt-12 flex justify-center reveal">
+      <a href="https://wa.me/5493585484891" target="_blank" rel="noopener noreferrer" class="btn-primary inline-flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-xl text-[15px]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+        <span data-i18n="contact.whatsapp_cta">Escribínos por WhatsApp</span>
       </a>
     </div>
 
-    <!-- Formulario -->
-    <form class="mt-14 max-w-2xl mx-auto reveal" onsubmit="event.preventDefault(); this.querySelector('button[type=submit]').textContent='Enviado ✓'; this.reset();">
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Nombre</label>
-          <input class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40" type="text" required placeholder="Tu nombre" />
-        </div>
-        <div>
-          <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Email</label>
-          <input class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40" type="email" required placeholder="tu@correo.com" />
-        </div>
-      </div>
-      <div class="mt-4">
-        <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Asunto</label>
-        <input class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40" type="text" required placeholder="¿De qué querés hablar?" />
-      </div>
-      <div class="mt-4">
-        <label class="font-mono text-[10px] uppercase tracking-widest text-white/40">Mensaje</label>
-        <textarea class="fld mt-2 w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/40 min-h-[120px] resize-y" required placeholder="Contanos en qué podemos ayudarte..."></textarea>
-      </div>
-      <button type="submit" class="btn-primary mt-6 rounded-xl px-6 py-3 font-semibold text-white text-[14px] w-full sm:w-auto">Enviar mensaje</button>
-    </form>
+    <!-- Redes sociales -->
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4 reveal">
+      <a href="mailto:secondsunrisestudio@gmail.com" aria-label="Email" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+      </a>
+      <a href="https://instagram.com/secondsunstdio" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </a>
+      <a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" aria-label="X" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
+      </a>
+      <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 0 0-5.487 0 12.51 12.51 0 0 0-.617-1.249.077.077 0 0 0-.079-.037c-1.32.227-2.58.62-3.76 1.169a.07.07 0 0 0-.032.027C2.533 8.36 1.79 12.247 2.16 16.085a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.3 14.3 0 0 0 1.226-1.994.076.076 0 0 0-.041-.105 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.198.373.291a.077.077 0 0 1-.006.128c-.598.349-1.221.645-1.873.891a.077.077 0 0 0-.041.106c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-4.523-.838-8.376-3.548-11.69a.061.061 0 0 0-.031-.028zM8.02 13.75c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.418 0 1.334-.957 2.42-2.157 2.42zm7.975 0c-1.183 0-2.156-1.085-2.156-2.419 0-1.333.955-2.418 2.156-2.418 1.21 0 2.176 1.095 2.157 2.418 0 1.334-.946 2.42-2.157 2.42z"/></svg>
+      </a>
+    </div>
 
     <div class="hairline my-20"></div>
 
@@ -1043,34 +1035,34 @@
             <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span class="text-white">Studios</span>
           </span>
         </a>
-        <p class="mt-4 text-white/50 text-[13px] max-w-sm leading-relaxed">
+        <p class="mt-4 text-white/50 text-[13px] max-w-sm leading-relaxed" data-i18n="footer.desc">
           Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.
         </p>
       </div>
       <div class="md:col-span-2">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40">Plataforma</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.platform">Plataforma</div>
         <ul class="mt-4 space-y-2 text-[13px] text-white/75">
-          <li><a href="#about" class="hover:text-sunrise transition">Por qué nosotros</a></li>
-          <li><a href="#instructors" class="hover:text-sunrise transition">Instructores</a></li>
-          <li><a href="#planes" class="hover:text-sunrise transition">Planes</a></li>
+          <li><a href="#about" class="hover:text-sunrise transition" data-i18n="footer.why_us">Por qué nosotros</a></li>
+          <li><a href="#instructors" class="hover:text-sunrise transition" data-i18n="footer.instructors">Instructores</a></li>
+          <li><a href="#planes" class="hover:text-sunrise transition" data-i18n="footer.plans">Planes</a></li>
         </ul>
       </div>
       <div class="md:col-span-2">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40">Cursos</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.courses_title">Cursos</div>
         <ul class="mt-4 space-y-2 text-[13px] text-white/75">
           <li><a href="#courses" class="hover:text-sunrise transition">Unreal Engine 5</a></li>
-          <li><a href="#courses" class="hover:text-sunrise transition">Modelado 3D</a></li>
+          <li><a href="#courses" class="hover:text-sunrise transition" data-i18n="footer.course_3d">Modelado 3D</a></li>
           <li><a href="#courses" class="hover:text-sunrise transition">C++ Gameplay</a></li>
           <li><a href="#courses" class="hover:text-sunrise transition">Concept Art</a></li>
         </ul>
       </div>
       <div class="md:col-span-3">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40">Comunidad</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.community">Comunidad</div>
         <ul class="mt-4 grid grid-cols-2 gap-2">
-          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Discord</a></li>
-          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">YouTube</a></li>
-          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Instagram</a></li>
-          <li><a href="#" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Telegram</a></li>
+          <li><a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Discord</a></li>
+          <li><a href="https://instagram.com/secondsunstdio" target="_blank" rel="noopener noreferrer" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Instagram</a></li>
+          <li><a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">X</a></li>
+          <li><a href="mailto:secondsunrisestudio@gmail.com" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Email</a></li>
         </ul>
       </div>
     </footer>
@@ -1078,8 +1070,8 @@
     <div class="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-widest text-white/40">
       <span>© MMXXVI · Second Sunrise Studios · Río Cuarto, AR</span>
       <span class="flex items-center gap-4">
-        <a href="#" class="hover:text-sunrise transition">Privacidad</a>
-        <a href="#" class="hover:text-sunrise transition">Términos</a>
+        <a href="#" class="hover:text-sunrise transition" data-i18n="footer.privacy">Privacidad</a>
+        <a href="#" class="hover:text-sunrise transition" data-i18n="footer.terms">Términos</a>
         <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise sun-pulse"></span>Build · 26.05</span>
       </span>
     </div>
@@ -1114,10 +1106,9 @@
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const id = a.getAttribute('href');
-      if (id.length > 1) {
-        const t = document.querySelector(id);
-        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      }
+      if (!id || !id.startsWith('#') || id.length <= 1) return;
+      const t = document.querySelector(id);
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
 
@@ -1129,6 +1120,313 @@
     if (sceneBg) sceneBg.style.transform = `translateY(${y * 0.04}px)`;
     if (mountains) mountains.style.transform = `translateY(${y * 0.02}px)`;
   }, { passive: true });
+
+  // i18n
+  const TRANSLATIONS = {
+    es: {
+      'title': 'Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo',
+      'nav.courses': 'Cursos',
+      'nav.tutoring': 'Tutorías',
+      'nav.plans': 'Planes',
+      'nav.instructors': 'Instructores',
+      'nav.contact': 'Contacto',
+      'nav.cta': 'Empezar ahora',
+      'hero.chip': 'Escuela de Gamedev · Río Cuarto AR',
+      'hero.tagline': 'Aprendé de forma personalizada y a tu ritmo.',
+      'hero.description': 'Enseñanza directa, sin relleno. Te acompañamos en tu camino para construir los proyectos que querés hacer.',
+      'hero.cta_primary': 'Explorar cursos',
+      'hero.cta_secondary': 'Conócenos',
+      'courses.chip': '01 · Catálogo',
+      'courses.title': 'Nuestros <span class="text-sunrise">cursos</span>.',
+      'courses.subtitle': 'Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.',
+      'courses.weeks_12': '12 semanas',
+      'courses.weeks_10_a': '10 semanas',
+      'courses.weeks_10_b': '10 semanas',
+      'courses.weeks_14': '14 semanas',
+      'courses.weeks_8': '8 semanas',
+      'courses.weeks_9': '9 semanas',
+      'courses.c1.tag': 'Engine',
+      'courses.c1.title': 'Fundamentos de Unreal Engine 5',
+      'courses.c1.desc': 'De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.',
+      'courses.c2.tag': '3D Art',
+      'courses.c2.title': 'Modelado 3D para videojuegos',
+      'courses.c2.desc': 'Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.',
+      'courses.c3.tag': 'Code',
+      'courses.c3.title': 'Programación gameplay en C++',
+      'courses.c3.desc': 'Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.',
+      'courses.c4.tag': 'Art',
+      'courses.c4.title': 'Pintura digital y concept art',
+      'courses.c4.desc': 'Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.',
+      'courses.c5.tag': 'Fundamentos',
+      'courses.c5.title': 'Dibujo y anatomía para juegos',
+      'courses.c5.desc': 'Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.',
+      'courses.c6.tag': 'Design',
+      'courses.c6.title': 'Level design y narrativa ambiental',
+      'courses.c6.desc': 'Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.',
+      'tutoring.chip': '02 · Tutorías 1:1',
+      'tutoring.title': 'Nuestras <span class="text-sunrise">tutorías</span> disponibles.',
+      'tutoring.subtitle': 'Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.',
+      'tutoring.t1.title': 'Dibujo / Pintura',
+      'tutoring.t1.sub': 'Fundamentos y portfolio',
+      'tutoring.t2.title': 'Unreal Engine',
+      'tutoring.t2.sub': 'Blueprints y pipeline',
+      'tutoring.t3.title': 'Programación',
+      'tutoring.t3.sub': 'Lógica y arquitectura',
+      'tutoring.t4.title': 'Photoshop',
+      'tutoring.t4.sub': 'Color y composición',
+      'tutoring.t5.title': 'Blender',
+      'tutoring.t5.sub': 'Modelado y render',
+      'tutoring.t6.title': 'C++',
+      'tutoring.t6.sub': 'Gameplay programming',
+      'why.chip': '03 · Por qué nosotros',
+      'why.title': 'Cuatro razones para <span class="text-sunrise">amanecer</span> con nosotros.',
+      'why.subtitle': 'Una metodología que aparece en cada clase, cada feedback y cada proyecto.',
+      'why.f1.title': 'Enseñanza directa',
+      'why.f1.desc': 'Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.',
+      'why.f2.title': 'Ritmo personalizado',
+      'why.f2.desc': 'Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.',
+      'why.f3.title': 'Proyectos reales',
+      'why.f3.desc': 'Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.',
+      'why.f4.title': 'Comunidad activa',
+      'why.f4.desc': 'Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.',
+      'stats.students': 'Estudiantes',
+      'stats.instructors': 'Instructores',
+      'stats.founded': 'Fundado',
+      'plans.chip': '04 · Planes',
+      'plans.title': 'Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.',
+      'plans.subtitle': 'Acceso completo al catálogo. Cambiá o cancelá cuando quieras.',
+      'plans.cta': 'Comenzar ahora',
+      'plans.refund': 'Reembolso 7 días desde la compra',
+      'plans.monthly.label': 'Mensual',
+      'plans.monthly.period': '/ mes',
+      'plans.monthly.desc': 'Sin compromiso. Pagás mes a mes.',
+      'plans.monthly.f1': 'Todo el catálogo de cursos',
+      'plans.monthly.f2': 'Retos y proyectos prácticos',
+      'plans.monthly.f3': 'Comunidad y soporte en Discord',
+      'plans.quarterly.label': 'Trimestral',
+      'plans.quarterly.period': '/ trim.',
+      'plans.quarterly.desc': 'Equivalente a $7.20 al mes. Pagás cada 3 meses.',
+      'plans.quarterly.f1': 'Todo lo del plan mensual',
+      'plans.quarterly.f2': 'Mejor precio que mes a mes',
+      'plans.quarterly.f3': 'Soporte prioritario',
+      'plans.annual.label': 'Anual · Más popular',
+      'plans.annual.period': '/ año',
+      'plans.annual.desc': 'Equivalente a $6.40 al mes. <span class="text-sunrise">Ahorrás $19.20 al año.</span>',
+      'plans.annual.f1': 'Todo lo del plan trimestral',
+      'plans.annual.f2': 'El mejor precio recurrente',
+      'plans.annual.f3': 'Acceso anticipado a nuevo contenido',
+      'instructors.chip': '05 · Sobre nosotros',
+      'instructors.title': 'Los <span class="text-sunrise">instructores</span> detrás del amanecer.',
+      'instructors.subtitle': 'Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.',
+      'instructors.i1.role': 'Director · UE5',
+      'instructors.i1.bio': '10 años en estudios indie. Enseña Blueprints como si fuera un idioma.',
+      'instructors.i2.role': '3D Art · Blender',
+      'instructors.i2.bio': 'Modeladora con créditos en juegos AA. Especialista en topología y retopo.',
+      'instructors.i3.role': 'Programación · C++',
+      'instructors.i3.bio': 'Gameplay engineer. Cree que el mejor código es el que se borra.',
+      'instructors.i4.role': 'Concept Art · Photoshop',
+      'instructors.i4.bio': 'Ilustradora de personajes. Pinta atmósferas que cuentan historias.',
+      'instructors.i5.role': 'Dibujo · Anatomía',
+      'instructors.i5.bio': '15 años dibujando. Le obsesiona el gesto y la línea de acción.',
+      'instructors.i6.role': 'Level Design',
+      'instructors.i6.bio': 'Diseña espacios que enseñan a jugarlos sin un solo tutorial.',
+      'contact.chip': '06 · Contacto',
+      'contact.title': 'Contactanos.',
+      'contact.subtitle': 'Dudas, propuestas o ganas de empezar. Escribínos por WhatsApp o seguinos en nuestras redes.',
+      'contact.whatsapp_cta': 'Escribínos por WhatsApp',
+      'footer.desc': 'Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.',
+      'footer.platform': 'Plataforma',
+      'footer.why_us': 'Por qué nosotros',
+      'footer.instructors': 'Instructores',
+      'footer.plans': 'Planes',
+      'footer.courses_title': 'Cursos',
+      'footer.course_3d': 'Modelado 3D',
+      'footer.community': 'Comunidad',
+      'footer.privacy': 'Privacidad',
+      'footer.terms': 'Términos',
+      'wa.course_template': '¡Hola! Me interesa el curso «{title}». ¿Me podrían dar más información?',
+      'wa.tutoring_template': '¡Hola! Me interesa la tutoría de «{title}». ¿Me podrían dar más información?'
+    },
+    en: {
+      'title': 'Second Sunrise Studios — Learn gamedev and digital art at your own pace',
+      'nav.courses': 'Courses',
+      'nav.tutoring': 'Tutoring',
+      'nav.plans': 'Plans',
+      'nav.instructors': 'Instructors',
+      'nav.contact': 'Contact',
+      'nav.cta': 'Get started',
+      'hero.chip': 'Gamedev School · Río Cuarto AR',
+      'hero.tagline': 'Learn in a personalized way, at your own pace.',
+      'hero.description': 'Direct teaching, no filler. We walk with you on your way to building the projects you actually want to make.',
+      'hero.cta_primary': 'Explore courses',
+      'hero.cta_secondary': 'About us',
+      'courses.chip': '01 · Catalog',
+      'courses.title': 'Our <span class="text-sunrise">courses</span>.',
+      'courses.subtitle': 'Six programs designed to take you from zero to portfolio. Each course, a different horizon.',
+      'courses.weeks_12': '12 weeks',
+      'courses.weeks_10_a': '10 weeks',
+      'courses.weeks_10_b': '10 weeks',
+      'courses.weeks_14': '14 weeks',
+      'courses.weeks_8': '8 weeks',
+      'courses.weeks_9': '9 weeks',
+      'courses.c1.tag': 'Engine',
+      'courses.c1.title': 'Unreal Engine 5 Fundamentals',
+      'courses.c1.desc': 'From zero to your first playable scene. Blueprints, Lumen, Nanite and a professional workflow.',
+      'courses.c2.tag': '3D Art',
+      'courses.c2.title': '3D modeling for video games',
+      'courses.c2.desc': 'Low-poly and high-poly modeling in Blender, retopo, UVs and engine-ready texturing.',
+      'courses.c3.tag': 'Code',
+      'courses.c3.title': 'Gameplay programming in C++',
+      'courses.c3.desc': 'Combat systems, basic AI and gameplay architecture with modern C++ on UE5.',
+      'courses.c4.tag': 'Art',
+      'courses.c4.title': 'Digital painting and concept art',
+      'courses.c4.desc': 'Lighting, color and composition in Photoshop. From thumbnail to final keyframe.',
+      'courses.c5.tag': 'Fundamentals',
+      'courses.c5.title': 'Drawing and anatomy for games',
+      'courses.c5.desc': 'Human figure construction, gesture and proportions applied to video game characters.',
+      'courses.c6.tag': 'Design',
+      'courses.c6.title': 'Level design and environmental storytelling',
+      'courses.c6.desc': 'Pacing, rhythm and storytelling without dialogue. Designing worlds that teach you how to play them.',
+      'tutoring.chip': '02 · 1:1 Tutoring',
+      'tutoring.title': 'Our available <span class="text-sunrise">tutoring</span> sessions.',
+      'tutoring.subtitle': 'One-on-one sessions with expert instructors. Move your project forward with real feedback.',
+      'tutoring.t1.title': 'Drawing / Painting',
+      'tutoring.t1.sub': 'Fundamentals and portfolio',
+      'tutoring.t2.title': 'Unreal Engine',
+      'tutoring.t2.sub': 'Blueprints and pipeline',
+      'tutoring.t3.title': 'Programming',
+      'tutoring.t3.sub': 'Logic and architecture',
+      'tutoring.t4.title': 'Photoshop',
+      'tutoring.t4.sub': 'Color and composition',
+      'tutoring.t5.title': 'Blender',
+      'tutoring.t5.sub': 'Modeling and render',
+      'tutoring.t6.title': 'C++',
+      'tutoring.t6.sub': 'Gameplay programming',
+      'why.chip': '03 · Why us',
+      'why.title': 'Four reasons to <span class="text-sunrise">rise</span> with us.',
+      'why.subtitle': 'A methodology that shows up in every class, every piece of feedback and every project.',
+      'why.f1.title': 'Direct teaching',
+      'why.f1.desc': 'No filler or endless theory. Every class is designed for you to produce something tangible from day one.',
+      'why.f2.title': 'Personalized pace',
+      'why.f2.desc': 'You move forward when you can, not when a calendar dictates. 1:1 tutoring for the moments you need a push.',
+      'why.f3.title': 'Real projects',
+      'why.f3.desc': 'You finish each course with portfolio pieces, not forgettable exercises. The sunrise always returns.',
+      'why.f4.title': 'Active community',
+      'why.f4.desc': 'Open Discord, devlogs among students and group reviews. Learning alone is slower.',
+      'stats.students': 'Students',
+      'stats.instructors': 'Instructors',
+      'stats.founded': 'Founded',
+      'plans.chip': '04 · Plans',
+      'plans.title': 'Pick the <span class="text-sunrise">plan</span> that fits you.',
+      'plans.subtitle': 'Full catalog access. Change or cancel whenever you want.',
+      'plans.cta': 'Get started',
+      'plans.refund': '7-day refund from purchase',
+      'plans.monthly.label': 'Monthly',
+      'plans.monthly.period': '/ mo',
+      'plans.monthly.desc': 'No commitment. Pay month to month.',
+      'plans.monthly.f1': 'Full course catalog',
+      'plans.monthly.f2': 'Challenges and hands-on projects',
+      'plans.monthly.f3': 'Discord community and support',
+      'plans.quarterly.label': 'Quarterly',
+      'plans.quarterly.period': '/ qtr',
+      'plans.quarterly.desc': 'Equivalent to $7.20 a month. Pay every 3 months.',
+      'plans.quarterly.f1': 'Everything in the monthly plan',
+      'plans.quarterly.f2': 'Better price than monthly',
+      'plans.quarterly.f3': 'Priority support',
+      'plans.annual.label': 'Annual · Most popular',
+      'plans.annual.period': '/ yr',
+      'plans.annual.desc': 'Equivalent to $6.40 a month. <span class="text-sunrise">Save $19.20 a year.</span>',
+      'plans.annual.f1': 'Everything in the quarterly plan',
+      'plans.annual.f2': 'The best recurring price',
+      'plans.annual.f3': 'Early access to new content',
+      'instructors.chip': '05 · About us',
+      'instructors.title': 'The <span class="text-sunrise">instructors</span> behind the sunrise.',
+      'instructors.subtitle': 'Six professionals who live what they teach. Each one brings years of industry to every class.',
+      'instructors.i1.role': 'Director · UE5',
+      'instructors.i1.bio': '10 years in indie studios. Teaches Blueprints like a language.',
+      'instructors.i2.role': '3D Art · Blender',
+      'instructors.i2.bio': 'Modeler with credits on AA games. Specialist in topology and retopo.',
+      'instructors.i3.role': 'Programming · C++',
+      'instructors.i3.bio': 'Gameplay engineer. Believes the best code is the code you delete.',
+      'instructors.i4.role': 'Concept Art · Photoshop',
+      'instructors.i4.bio': 'Character illustrator. Paints atmospheres that tell stories.',
+      'instructors.i5.role': 'Drawing · Anatomy',
+      'instructors.i5.bio': '15 years drawing. Obsessed with gesture and line of action.',
+      'instructors.i6.role': 'Level Design',
+      'instructors.i6.bio': 'Designs spaces that teach you how to play without a single tutorial.',
+      'contact.chip': '06 · Contact',
+      'contact.title': 'Get in touch.',
+      'contact.subtitle': 'Questions, proposals or just ready to start. Message us on WhatsApp or follow us on social.',
+      'contact.whatsapp_cta': 'Message us on WhatsApp',
+      'footer.desc': 'Online school of gamedev and digital art. Learn at your own pace what an indie studio actually uses every day.',
+      'footer.platform': 'Platform',
+      'footer.why_us': 'Why us',
+      'footer.instructors': 'Instructors',
+      'footer.plans': 'Plans',
+      'footer.courses_title': 'Courses',
+      'footer.course_3d': '3D Modeling',
+      'footer.community': 'Community',
+      'footer.privacy': 'Privacy',
+      'footer.terms': 'Terms',
+      'wa.course_template': 'Hi! I\'m interested in the «{title}» course. Could you share more info?',
+      'wa.tutoring_template': 'Hi! I\'m interested in «{title}» tutoring. Could you share more info?'
+    }
+  };
+
+  const WHATSAPP_NUMBER = '5493585484891';
+
+  const STORAGE_KEY = 'sss.lang';
+  const SUPPORTED = ['es', 'en'];
+
+  function resolveInitialLang() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && SUPPORTED.includes(saved)) return saved;
+    const browser = (navigator.language || 'es').slice(0, 2).toLowerCase();
+    return SUPPORTED.includes(browser) ? browser : 'es';
+  }
+
+  function applyLang(lang) {
+    const dict = TRANSLATIONS[lang];
+    if (!dict) return;
+
+    document.documentElement.lang = lang;
+    if (dict['title']) document.title = dict['title'];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key] != null) el.setAttribute('placeholder', dict[key]);
+    });
+
+    document.querySelectorAll('[data-wa-type][data-wa-key]').forEach(el => {
+      const type = el.getAttribute('data-wa-type');
+      const titleKey = el.getAttribute('data-wa-key');
+      const template = dict['wa.' + type + '_template'];
+      const title = dict[titleKey];
+      if (!template || !title) return;
+      const message = template.replace('{title}', title);
+      el.setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));
+    });
+
+    localStorage.setItem(STORAGE_KEY, lang);
+  }
+
+  applyLang(resolveInitialLang());
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
 </script>
 </body>
 </html>
