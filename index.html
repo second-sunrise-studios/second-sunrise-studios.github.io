@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<meta name="theme-color" content="#050B16" />
 <title>Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,64 +52,22 @@
   .font-brand { font-family: 'ChargerSport', 'Satoshi', system-ui, sans-serif; font-weight: 700; letter-spacing: 0; }
   .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 
-  /* Persistent fixed background — twin-sun martian horizon, drawn with gradients */
+  /* Persistent fixed background — image + looping video */
   .scene-bg {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background:
-      /* atmospheric haze top */
-      radial-gradient(120% 60% at 50% 100%, rgba(255,122,0,0.18) 0%, rgba(255,122,0,0.08) 25%, transparent 55%),
-      /* secondary smaller sun */
-      radial-gradient(circle at 38% 62%, rgba(255,180,90,0.55) 0%, rgba(255,140,40,0.25) 1.4%, transparent 3%),
-      /* primary larger sun */
-      radial-gradient(circle at 58% 58%, rgba(255,200,120,0.85) 0%, rgba(255,140,40,0.45) 2.2%, transparent 5%),
-      /* sun glow halo */
-      radial-gradient(60% 35% at 52% 62%, rgba(255,140,40,0.35) 0%, rgba(255,90,20,0.12) 30%, transparent 70%),
-      /* horizon band */
-      linear-gradient(180deg, #050B16 0%, #0A1628 35%, #1B1A2A 58%, #3A1F1F 70%, #5C2A1A 78%, #2A1118 88%, #0A0612 100%),
-      #050B16;
-    background-size: cover;
-    background-attachment: fixed;
+    background: #050B16;
+    overflow: hidden;
   }
-  .scene-bg::before {
-    /* starfield */
-    content: "";
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(1px 1px at 12% 14%, rgba(255,255,255,0.6), transparent 50%),
-      radial-gradient(1px 1px at 82% 9%, rgba(255,255,255,0.5), transparent 50%),
-      radial-gradient(1.5px 1.5px at 27% 22%, rgba(255,255,255,0.7), transparent 50%),
-      radial-gradient(1px 1px at 65% 18%, rgba(255,255,255,0.45), transparent 50%),
-      radial-gradient(1px 1px at 45% 8%, rgba(255,255,255,0.55), transparent 50%),
-      radial-gradient(1px 1px at 91% 28%, rgba(255,255,255,0.4), transparent 50%),
-      radial-gradient(1.2px 1.2px at 8% 32%, rgba(180,210,255,0.6), transparent 50%),
-      radial-gradient(1px 1px at 73% 36%, rgba(255,255,255,0.35), transparent 50%),
-      radial-gradient(1px 1px at 36% 41%, rgba(255,255,255,0.4), transparent 50%),
-      radial-gradient(1px 1px at 95% 47%, rgba(255,255,255,0.3), transparent 50%);
-    opacity: 0.85;
-    mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 65%);
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 65%);
-  }
-  .scene-bg::after {
-    /* ground texture / dust */
-    content: "";
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(80% 30% at 50% 95%, rgba(255,90,20,0.18), transparent 70%),
-      linear-gradient(180deg, transparent 70%, rgba(0,0,0,0.55) 100%);
-    pointer-events: none;
-  }
-
-  /* Mountain silhouettes — pure CSS layered triangles */
-  .mountains {
-    position: fixed;
-    left: 0; right: 0;
-    bottom: 0;
-    height: 36vh;
-    z-index: 1;
-    pointer-events: none;
+  .scene-bg__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   /* Vignette over everything for legibility */
@@ -289,30 +249,17 @@
 <body class="font-body">
 
 <!-- ============ PERSISTENT BACKGROUND SCENE ============ -->
-<div class="scene-bg sun-pulse" aria-hidden="true"></div>
-
-<svg class="mountains" viewBox="0 0 1600 600" preserveAspectRatio="none" aria-hidden="true">
-  <defs>
-    <linearGradient id="mtnFar" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#3a1f1f" stop-opacity="0.85"/>
-      <stop offset="1" stop-color="#0a0612" stop-opacity="1"/>
-    </linearGradient>
-    <linearGradient id="mtnMid" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#1f1622" stop-opacity="0.95"/>
-      <stop offset="1" stop-color="#06040a" stop-opacity="1"/>
-    </linearGradient>
-    <linearGradient id="mtnNear" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#0a0510" stop-opacity="1"/>
-      <stop offset="1" stop-color="#000" stop-opacity="1"/>
-    </linearGradient>
-  </defs>
-  <!-- far range -->
-  <path d="M0,360 L120,300 L240,340 L360,260 L500,320 L640,240 L780,300 L920,250 L1080,310 L1220,260 L1360,300 L1500,250 L1600,290 L1600,600 L0,600 Z" fill="url(#mtnFar)"/>
-  <!-- mid range -->
-  <path d="M0,440 L80,400 L200,430 L320,370 L460,420 L600,360 L760,410 L900,370 L1060,420 L1200,380 L1340,420 L1480,380 L1600,410 L1600,600 L0,600 Z" fill="url(#mtnMid)"/>
-  <!-- near silhouette -->
-  <path d="M0,510 L160,490 L320,510 L520,475 L720,500 L920,485 L1120,510 L1320,490 L1520,505 L1600,495 L1600,600 L0,600 Z" fill="url(#mtnNear)"/>
-</svg>
+<div class="scene-bg" aria-hidden="true">
+  <video
+    id="bgVideo"
+    class="scene-bg__media"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+  ></video>
+</div>
 
 <div class="vignette" aria-hidden="true"></div>
 
@@ -1114,12 +1061,19 @@
 
   // Subtle parallax on the persistent scene
   const sceneBg = document.querySelector('.scene-bg');
-  const mountains = document.querySelector('.mountains');
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     if (sceneBg) sceneBg.style.transform = `translateY(${y * 0.04}px)`;
-    if (mountains) mountains.style.transform = `translateY(${y * 0.02}px)`;
   }, { passive: true });
+
+  // Background media — pick web or mobile asset based on viewport
+  const bgVideo = document.getElementById('bgVideo');
+  if (bgVideo) {
+    const variant = window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'web';
+    bgVideo.poster = `assets/image-background-${variant}.jpg`;
+    bgVideo.src = `assets/video-background-${variant}.mp4`;
+    bgVideo.play().catch(() => { /* autoplay may be blocked; poster still shows */ });
+  }
 
   // i18n
   const TRANSLATIONS = {

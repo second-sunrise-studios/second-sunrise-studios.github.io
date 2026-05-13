@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#FFD9B5"/>
+      <stop offset="0.45" stop-color="#FF8E2B"/>
+      <stop offset="1" stop-color="#E55F00"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.7" r="0.5">
+      <stop offset="0" stop-color="#FF7A00" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FF7A00" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="aboveHorizon">
+      <rect x="0" y="0" width="32" height="22"/>
+    </clipPath>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#050B16"/>
+  <rect x="0" y="14" width="32" height="14" fill="url(#glow)"/>
+  <g clip-path="url(#aboveHorizon)">
+    <circle cx="16" cy="22" r="9" fill="url(#sun)"/>
+    <circle cx="10" cy="22.5" r="3" fill="#FFB066" opacity="0.9"/>
+  </g>
+  <rect x="3" y="22" width="26" height="0.9" rx="0.45" fill="#FF7A00" opacity="0.85"/>
+</svg>
