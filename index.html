@@ -314,19 +314,15 @@
   </div>
 
   <div class="mx-auto max-w-7xl px-5 md:px-8 w-full pt-32 pb-40 text-center">
-    <div class="flex justify-center reveal">
-      <span class="chip"><span class="dot"></span><span data-i18n="hero.chip">Escuela de Gamedev · Río Cuarto AR</span></span>
-    </div>
-
-    <h1 class="reveal mt-10 flex justify-center">
-      <img src="assets/logo-horizontal.png" alt="Second Sunrise Studios" class="w-full max-w-[420px] md:max-w-[640px] lg:max-w-[780px] h-auto select-none" draggable="false" />
+    <h1 class="reveal mt-10 font-display font-bold text-white text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] max-w-4xl mx-auto" data-i18n-html="hero.tagline">
+      Aprendé de forma <span class="text-sunrise">personalizada</span> y a tu ritmo.
     </h1>
 
-    <p class="reveal mt-6 font-display text-[clamp(1rem,1.6vw,1.35rem)] text-white/85 max-w-2xl mx-auto" data-i18n="hero.tagline">
-      Aprendé de forma personalizada y a tu ritmo.
+    <p class="reveal mt-6 text-[18px] md:text-xl text-white font-medium max-w-2xl mx-auto" data-i18n="hero.description_lead">
+      Enseñanza directa, sin relleno.
     </p>
-    <p class="reveal mt-3 text-[15px] md:text-base text-white/55 max-w-xl mx-auto leading-relaxed" data-i18n="hero.description">
-      Enseñanza directa, sin relleno. Te acompañamos en tu camino para construir los proyectos que querés hacer.
+    <p class="reveal mt-3 text-[16px] md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.description_tail">
+      Te acompañamos en tu camino para construir los proyectos que querés hacer.
     </p>
 
     <div class="reveal mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -595,7 +591,7 @@
     <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
 
       <!-- Tutoría · Dibujo / Pintura -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t1.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t1.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="12" cy="12" r="9"/>
@@ -609,10 +605,10 @@
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t1.title">Dibujo / Pintura</div>
           <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t1.sub">Fundamentos y portfolio</div>
         </div>
-      </a>
+      </button>
 
       <!-- Tutoría · Unreal Engine -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t2.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t2.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
           <img src="assets/unreal-engine-white.png" alt="Unreal Engine" class="tutoring-icon" />
         </div>
@@ -620,10 +616,10 @@
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t2.title">Unreal Engine</div>
           <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t2.sub">Blueprints y pipeline</div>
         </div>
-      </a>
+      </button>
 
       <!-- Tutoría · Programación -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t3.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t3.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M8 7 L3 12 L8 17"/>
@@ -635,10 +631,10 @@
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t3.title">Programación</div>
           <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t3.sub">Lógica y arquitectura</div>
         </div>
-      </a>
+      </button>
 
       <!-- Tutoría · Photoshop -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t4.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t4.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <rect x="3" y="3" width="18" height="18" rx="3"/>
@@ -649,10 +645,10 @@
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t4.title">Photoshop</div>
           <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t4.sub">Color y composición</div>
         </div>
-      </a>
+      </button>
 
       <!-- Tutoría · Blender -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t5.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t5.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
           <img src="assets/blender-black.png" alt="Blender" class="tutoring-icon" />
         </div>
@@ -660,10 +656,10 @@
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t5.title">Blender</div>
           <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t5.sub">Modelado y render</div>
         </div>
-      </a>
+      </button>
 
       <!-- Tutoría · C++ -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="tutoring" data-wa-key="tutoring.t6.title" class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t6.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
         <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
           <img src="assets/c++_black.svg" alt="C++" class="tutoring-icon" />
         </div>
@@ -671,7 +667,7 @@
           <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t6.title">C++</div>
           <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t6.sub">Gameplay programming</div>
         </div>
-      </a>
+      </button>
 
     </div>
   </div>
@@ -683,7 +679,7 @@
     <div class="text-center max-w-2xl mx-auto reveal">
       <span class="chip"><span class="dot"></span><span data-i18n="why.chip">03 · Por qué nosotros</span></span>
       <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="why.title">
-        Cuatro razones para <span class="text-sunrise">amanecer</span> con nosotros.
+        Razones para <span class="text-sunrise">elegirnos</span>.
       </h2>
       <p class="mt-5 text-white/60 text-[15px]" data-i18n="why.subtitle">
         Una metodología que aparece en cada clase, cada feedback y cada proyecto.
@@ -691,55 +687,51 @@
     </div>
 
     <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 01</span>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
-            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>
-          </svg>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
+          <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>
+        </svg>
+        <div>
+          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f1.title">Enseñanza directa</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f1.desc">
+            Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.
+          </p>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f1.title">Enseñanza directa</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f1.desc">
-          Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.
-        </p>
       </div>
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 02</span>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
-            <path d="M12 3v3M12 18v3M5 12H2M22 12h-3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/>
-            <circle cx="12" cy="12" r="4"/>
-          </svg>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <div>
+          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f2.title">Ritmo personalizado</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f2.desc">
+            Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.
+          </p>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f2.title">Ritmo personalizado</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f2.desc">
-          Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.
-        </p>
       </div>
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 03</span>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
-            <path d="M3 13a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
-          </svg>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        <div>
+          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f3.title">Proyectos reales</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f3.desc">
+            Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.
+          </p>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f3.title">Proyectos reales</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f3.desc">
-          Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.
-        </p>
       </div>
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group">
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[10px] tracking-widest text-sunrise">/ 04</span>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise">
-            <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/>
-            <path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/>
-          </svg>
+      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
+          <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/>
+          <path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/>
+        </svg>
+        <div>
+          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f4.title">Comunidad activa</h3>
+          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f4.desc">
+            Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.
+          </p>
         </div>
-        <h3 class="mt-8 font-display font-bold text-white text-xl" data-i18n="why.f4.title">Comunidad activa</h3>
-        <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f4.desc">
-          Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.
-        </p>
       </div>
     </div>
 
@@ -770,7 +762,7 @@
         Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.
       </h2>
       <p class="mt-5 text-white/60 text-[15px]" data-i18n="plans.subtitle">
-        Acceso completo al catálogo. Cambiá o cancelá cuando quieras.
+        Cambiá o cancelá cuando quieras.
       </p>
     </div>
 
@@ -1024,6 +1016,34 @@
   </div>
 </section>
 
+<!-- Modal Tutorías -->
+<div id="tutoring-modal" class="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+  <div class="absolute inset-0 bg-navy-950/80 backdrop-blur-sm" id="tutoring-modal-bg"></div>
+  <div class="relative bg-navy-900 border border-white/10 rounded-2xl p-6 md:p-8 w-full max-w-sm shadow-2xl transform scale-95 opacity-0 transition-all duration-300" id="tutoring-modal-content">
+    <button type="button" class="absolute top-4 right-4 text-white/50 hover:text-white" id="tutoring-modal-close">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h3 class="font-display font-bold text-white text-xl mb-6 text-center" data-i18n="modal.title">Contactanos por</h3>
+    <div class="flex items-center justify-center gap-4">
+      <a id="modal-em" href="#" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+      </a>
+      <a id="modal-wa" href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+      </a>
+      <a id="modal-ig" href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </a>
+      <a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
+      </a>
+      <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+        <img src="assets/discord-white-icon.webp" alt="" class="w-[22px] h-[22px] object-contain" />
+      </a>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -1085,8 +1105,9 @@
       'nav.contact': 'Contacto',
       'nav.cta': 'Empezar ahora',
       'hero.chip': 'Escuela de Gamedev · Río Cuarto AR',
-      'hero.tagline': 'Aprendé de forma personalizada y a tu ritmo.',
-      'hero.description': 'Enseñanza directa, sin relleno. Te acompañamos en tu camino para construir los proyectos que querés hacer.',
+      'hero.tagline': 'Aprendé de forma <span class="text-sunrise">personalizada</span> y a tu ritmo.',
+      'hero.description_lead': 'Enseñanza directa, sin relleno.',
+      'hero.description_tail': 'Te acompañamos en tu camino para construir los proyectos que querés hacer.',
       'hero.cta_primary': 'Explorar cursos',
       'hero.cta_secondary': 'Conócenos',
       'courses.chip': '01 · Catálogo',
@@ -1132,7 +1153,7 @@
       'tutoring.t6.title': 'C++',
       'tutoring.t6.sub': 'Gameplay programming',
       'why.chip': '03 · Por qué nosotros',
-      'why.title': 'Cuatro razones para <span class="text-sunrise">amanecer</span> con nosotros.',
+      'why.title': 'Razones para <span class="text-sunrise">elegirnos</span>.',
       'why.subtitle': 'Una metodología que aparece en cada clase, cada feedback y cada proyecto.',
       'why.f1.title': 'Enseñanza directa',
       'why.f1.desc': 'Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.',
@@ -1147,7 +1168,7 @@
       'stats.founded': 'Fundado',
       'plans.chip': '04 · Planes',
       'plans.title': 'Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.',
-      'plans.subtitle': 'Acceso completo al catálogo. Cambiá o cancelá cuando quieras.',
+      'plans.subtitle': 'Cambiá o cancelá cuando quieras.',
       'plans.cta': 'Comenzar ahora',
       'plans.refund': 'Reembolso 7 días desde la compra',
       'plans.monthly.label': 'Mensual',
@@ -1198,7 +1219,8 @@
       'footer.privacy': 'Privacidad',
       'footer.terms': 'Términos',
       'wa.course_template': '¡Hola! Me interesa el curso «{title}». ¿Me podrían dar más información?',
-      'wa.tutoring_template': '¡Hola! Me interesa la tutoría de «{title}». ¿Me podrían dar más información?'
+      'wa.tutoring_template': '¡Hola! Me interesa la tutoría de «{title}». ¿Me podrían dar más información?',
+      'modal.title': 'Contactanos por'
     },
     en: {
       'title': 'Second Sunrise Studios — Learn gamedev and digital art at your own pace',
@@ -1209,8 +1231,9 @@
       'nav.contact': 'Contact',
       'nav.cta': 'Get started',
       'hero.chip': 'Gamedev School · Río Cuarto AR',
-      'hero.tagline': 'Learn in a personalized way, at your own pace.',
-      'hero.description': 'Direct teaching, no filler. We walk with you on your way to building the projects you actually want to make.',
+      'hero.tagline': 'Learn in a <span class="text-sunrise">personalized</span> way, at your own pace.',
+      'hero.description_lead': 'Direct teaching, no filler.',
+      'hero.description_tail': 'We walk with you on your way to building the projects you actually want to make.',
       'hero.cta_primary': 'Explore courses',
       'hero.cta_secondary': 'About us',
       'courses.chip': '01 · Catalog',
@@ -1256,7 +1279,7 @@
       'tutoring.t6.title': 'C++',
       'tutoring.t6.sub': 'Gameplay programming',
       'why.chip': '03 · Why us',
-      'why.title': 'Four reasons to <span class="text-sunrise">rise</span> with us.',
+      'why.title': 'Reasons to <span class="text-sunrise">choose</span> us.',
       'why.subtitle': 'A methodology that shows up in every class, every piece of feedback and every project.',
       'why.f1.title': 'Direct teaching',
       'why.f1.desc': 'No filler or endless theory. Every class is designed for you to produce something tangible from day one.',
@@ -1271,7 +1294,7 @@
       'stats.founded': 'Founded',
       'plans.chip': '04 · Plans',
       'plans.title': 'Pick the <span class="text-sunrise">plan</span> that fits you.',
-      'plans.subtitle': 'Full catalog access. Change or cancel whenever you want.',
+      'plans.subtitle': 'Change or cancel whenever you want.',
       'plans.cta': 'Get started',
       'plans.refund': '7-day refund from purchase',
       'plans.monthly.label': 'Monthly',
@@ -1322,7 +1345,8 @@
       'footer.privacy': 'Privacy',
       'footer.terms': 'Terms',
       'wa.course_template': 'Hi! I\'m interested in the «{title}» course. Could you share more info?',
-      'wa.tutoring_template': 'Hi! I\'m interested in «{title}» tutoring. Could you share more info?'
+      'wa.tutoring_template': 'Hi! I\'m interested in «{title}» tutoring. Could you share more info?',
+      'modal.title': 'Contact us via'
     }
   };
 
@@ -1365,7 +1389,14 @@
       const title = dict[titleKey];
       if (!template || !title) return;
       const message = template.replace('{title}', title);
-      el.setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+      
+      if (type === 'tutoring') {
+        el.setAttribute('data-wa-message', message);
+        el.setAttribute('data-wa-title', title);
+        el.removeAttribute('href');
+      } else {
+        el.setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+      }
     });
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -1380,6 +1411,39 @@
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => applyLang(btn.dataset.lang));
   });
+
+  // Tutoring modal
+  const tModal = document.getElementById('tutoring-modal');
+  const tModalBg = document.getElementById('tutoring-modal-bg');
+  const tModalContent = document.getElementById('tutoring-modal-content');
+  const tModalClose = document.getElementById('tutoring-modal-close');
+  
+  function openTutoringModal(title, message) {
+    const lang = document.documentElement.lang || 'es';
+    const subject = lang === 'es' ? `Consulta sobre: ${title}` : `Inquiry about: ${title}`;
+    
+    document.getElementById('modal-wa').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    document.getElementById('modal-em').href = `mailto:secondsunrisestudio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    document.getElementById('modal-ig').href = `https://ig.me/m/secondsunstdio?text=${encodeURIComponent(message)}`;
+    
+    tModal.classList.remove('pointer-events-none', 'opacity-0');
+    tModal.classList.add('pointer-events-auto');
+    setTimeout(() => {
+      tModalContent.classList.remove('scale-95', 'opacity-0');
+    }, 10);
+  }
+
+  function closeTutoringModal() {
+    tModalContent.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+      tModal.classList.add('opacity-0');
+      tModal.classList.remove('pointer-events-auto');
+      tModal.classList.add('pointer-events-none');
+    }, 300);
+  }
+
+  if (tModalBg) tModalBg.addEventListener('click', closeTutoringModal);
+  if (tModalClose) tModalClose.addEventListener('click', closeTutoringModal);
 </script>
 </body>
 </html>
