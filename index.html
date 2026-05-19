@@ -1,1449 +1,1919 @@
 <!doctype html>
 <html lang="es">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-<meta name="theme-color" content="#050B16" />
-<title>Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900,500,400&display=swap" rel="stylesheet">
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          navy: { 950: '#050B16', 900: '#0A1628', 800: '#0F2138', 700: '#16304F' },
-          sunrise: { DEFAULT: '#FF7A00', 400: '#FF8E2B', 600: '#E55F00', glow: '#FFB066' },
-          teal: { soft: '#3DD2C0' }
-        },
-        fontFamily: {
-          display: ['Satoshi', 'system-ui', 'sans-serif'],
-          body: ['Satoshi', 'Inter', 'system-ui', 'sans-serif'],
-          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <meta name="theme-color" content="#050B16" />
+  <title>Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900,500,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950: '#050B16', 900: '#0A1628', 800: '#0F2138', 700: '#16304F' },
+            sunrise: { DEFAULT: '#FF7A00', 400: '#FF8E2B', 600: '#E55F00', glow: '#FFB066' },
+            teal: { soft: '#3DD2C0' }
+          },
+          fontFamily: {
+            display: ['Satoshi', 'system-ui', 'sans-serif'],
+            body: ['Satoshi', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+          }
         }
       }
+    };
+  </script>
+  <style>
+    @font-face {
+      font-family: 'ChargerSport';
+      src: url('assets/fonts/ChargerSport.otf') format('opentype');
+      font-weight: 400 900;
+      font-style: normal;
+      font-display: swap;
+      /* La fuente no incluye glifo de espacio (U+0020): excluimos ese caracter para que caiga al fallback. */
+      unicode-range: U+0021-FFFF;
     }
-  };
-</script>
-<style>
-  @font-face {
-    font-family: 'ChargerSport';
-    src: url('assets/fonts/ChargerSport.otf') format('opentype');
-    font-weight: 400 900;
-    font-style: normal;
-    font-display: swap;
-    /* La fuente no incluye glifo de espacio (U+0020): excluimos ese caracter para que caiga al fallback. */
-    unicode-range: U+0021-FFFF;
-  }
 
-  :root { color-scheme: dark; }
-  html, body { background: #050B16; }
-  body {
-    font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
-    color: #E8EEF7;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-  .font-display { font-family: 'Satoshi', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.025em; }
-  .font-brand { font-family: 'ChargerSport', 'Satoshi', system-ui, sans-serif; font-weight: 700; letter-spacing: 0; }
-  .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    :root {
+      color-scheme: dark;
+    }
 
-  /* Persistent fixed background — image + looping video */
-  .scene-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: #050B16;
-    overflow: hidden;
-  }
-  .scene-bg__media {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
+    html,
+    body {
+      background: #050B16;
+    }
 
-  /* Vignette over everything for legibility */
-  .vignette {
-    position: fixed; inset: 0; z-index: 3;
-    pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(5,11,22,0.65) 0%, rgba(5,11,22,0.15) 18%, rgba(5,11,22,0) 35%, rgba(5,11,22,0) 60%, rgba(5,11,22,0.45) 88%, rgba(5,11,22,0.85) 100%),
-      radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0,0,0,0.55) 100%);
-  }
+    body {
+      font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+      color: #E8EEF7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-  /* Content sits above scene */
-  .content { position: relative; z-index: 10; }
+    .font-display {
+      font-family: 'Satoshi', system-ui, sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
 
-  /* Section panel — translucent glassy plate over the persistent scene */
-  .panel {
-    background: linear-gradient(180deg, rgba(10,22,40,0.55), rgba(5,11,22,0.78));
-    backdrop-filter: blur(14px) saturate(1.1);
-    -webkit-backdrop-filter: blur(14px) saturate(1.1);
-    border-top: 1px solid rgba(255,122,0,0.12);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-  .panel-dark {
-    background: linear-gradient(180deg, rgba(5,11,22,0.85), rgba(5,11,22,0.95));
-    backdrop-filter: blur(18px);
-  }
+    .font-brand {
+      font-family: 'ChargerSport', 'Satoshi', system-ui, sans-serif;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
 
-  /* Glow + button styles */
-  .btn-primary {
-    background: linear-gradient(180deg, #FF8E2B 0%, #E55F00 100%);
-    box-shadow:
-      0 0 0 1px rgba(255,176,102,0.4) inset,
-      0 8px 30px -6px rgba(255,122,0,0.55),
-      0 0 60px -10px rgba(255,122,0,0.6);
-    transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 0 0 1px rgba(255,200,140,0.6) inset,
-      0 14px 40px -6px rgba(255,122,0,0.7),
-      0 0 90px -10px rgba(255,140,50,0.85);
-    filter: brightness(1.05);
-  }
-  .btn-ghost {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(8px);
-    transition: all .25s ease;
-  }
-  .btn-ghost:hover {
-    background: rgba(255,255,255,0.07);
-    border-color: rgba(255,122,0,0.55);
-    box-shadow: 0 0 40px -8px rgba(255,122,0,0.45);
-  }
+    .font-mono {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
 
-  /* Tutoring tile icons — keep brand marks visible at consistent size.
+    /* Persistent fixed background — image + looping video */
+    .scene-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: #050B16;
+      overflow: hidden;
+    }
+
+    .scene-bg__media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Vignette over everything for legibility */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(5, 11, 22, 0.65) 0%, rgba(5, 11, 22, 0.15) 18%, rgba(5, 11, 22, 0) 35%, rgba(5, 11, 22, 0) 60%, rgba(5, 11, 22, 0.45) 88%, rgba(5, 11, 22, 0.85) 100%),
+        radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+    }
+
+    /* Content sits above scene */
+    .content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Section panel — translucent glassy plate over the persistent scene */
+    .panel {
+      background: linear-gradient(180deg, rgba(10, 22, 40, 0.55), rgba(5, 11, 22, 0.78));
+      backdrop-filter: blur(14px) saturate(1.1);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1);
+      border-top: 1px solid rgba(255, 122, 0, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .panel-dark {
+      background: linear-gradient(180deg, rgba(5, 11, 22, 0.85), rgba(5, 11, 22, 0.95));
+      backdrop-filter: blur(18px);
+    }
+
+    /* Glow + button styles */
+    .btn-primary {
+      background: linear-gradient(180deg, #FF8E2B 0%, #E55F00 100%);
+      box-shadow:
+        0 0 0 1px rgba(255, 176, 102, 0.4) inset,
+        0 8px 30px -6px rgba(255, 122, 0, 0.55),
+        0 0 60px -10px rgba(255, 122, 0, 0.6);
+      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 1px rgba(255, 200, 140, 0.6) inset,
+        0 14px 40px -6px rgba(255, 122, 0, 0.7),
+        0 0 90px -10px rgba(255, 140, 50, 0.85);
+      filter: brightness(1.05);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      transition: all .25s ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 122, 0, 0.55);
+      box-shadow: 0 0 40px -8px rgba(255, 122, 0, 0.45);
+    }
+
+    /* Tutoring tile icons — keep brand marks visible at consistent size.
      Filter forces black-on-transparent and white-on-transparent PNGs to
      identical pure white so the row looks uniform. */
-  .tutoring-icon {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
-    object-position: center;
-    filter: brightness(0) invert(1);
-  }
+    .tutoring-icon {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      object-position: center;
+      filter: brightness(0) invert(1);
+    }
 
-  /* Language switcher */
-  .lang-btn {
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 0.2em;
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-  }
-  .lang-btn:hover { color: rgba(255,255,255,0.85); }
-  .lang-btn[aria-pressed="true"] { color: #FF8E2B; }
+    /* Language switcher */
+    .lang-btn {
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+    }
 
-  /* Hairline accents */
-  .hairline {
-    background: linear-gradient(90deg, transparent, rgba(255,122,0,0.6) 50%, transparent);
-    height: 1px;
-  }
-  .hairline-v {
-    background: linear-gradient(180deg, transparent, rgba(255,122,0,0.5) 50%, transparent);
-    width: 1px;
-  }
+    .lang-btn:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
 
-  /* Scroll-reveal */
-  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
-  .reveal.in { opacity: 1; transform: none; }
-  .reveal-scale { opacity: 0; transform: scale(.96); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
-  .reveal-scale.in { opacity: 1; transform: none; }
-  .reveal-x { opacity: 0; transform: translateX(-32px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
-  .reveal-x.in { opacity: 1; transform: none; }
-  .reveal-stagger > * { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
-  .reveal-stagger.in > *:nth-child(1) { transition-delay: .05s; }
-  .reveal-stagger.in > *:nth-child(2) { transition-delay: .15s; }
-  .reveal-stagger.in > *:nth-child(3) { transition-delay: .25s; }
-  .reveal-stagger.in > *:nth-child(4) { transition-delay: .35s; }
-  .reveal-stagger.in > *:nth-child(5) { transition-delay: .45s; }
-  .reveal-stagger.in > * { opacity: 1; transform: none; }
+    .lang-btn[aria-pressed="true"] {
+      color: #FF8E2B;
+    }
 
-  /* Marquee */
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-  .marquee-track { animation: marquee 38s linear infinite; }
+    /* Hairline accents */
+    .hairline {
+      background: linear-gradient(90deg, transparent, rgba(255, 122, 0, 0.6) 50%, transparent);
+      height: 1px;
+    }
 
-  /* Sun pulse */
-  @keyframes sunPulse {
-    0%,100% { opacity: 0.85; }
-    50%     { opacity: 1; }
-  }
-  .sun-pulse { animation: sunPulse 7s ease-in-out infinite; }
+    .hairline-v {
+      background: linear-gradient(180deg, transparent, rgba(255, 122, 0, 0.5) 50%, transparent);
+      width: 1px;
+    }
 
-  /* Card hover */
-  .game-card { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease, border-color .5s ease; }
-  .game-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255,122,0,0.5);
-    box-shadow: 0 30px 80px -30px rgba(255,122,0,0.4), 0 0 0 1px rgba(255,122,0,0.25) inset;
-  }
-  .game-card:hover .game-thumb::after { opacity: 0.55; }
-  .game-thumb::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 30%, rgba(255,90,20,0.25));
-    opacity: 0.25; transition: opacity .5s ease;
-  }
+    /* Scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .9s cubic-bezier(.2, .7, .2, 1), transform .9s cubic-bezier(.2, .7, .2, 1);
+    }
 
-  /* Tag chip */
-  .chip {
-    display: inline-flex; align-items: center; gap: .5rem;
-    padding: .35rem .7rem; border-radius: 999px;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-    color: #FFB066;
-    background: rgba(255,122,0,0.07);
-    border: 1px solid rgba(255,122,0,0.25);
-  }
-  .chip .dot {
-    width: 6px; height: 6px; border-radius: 999px;
-    background: #FF7A00;
-    box-shadow: 0 0 10px #FF7A00;
-  }
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
 
-  /* Decorative crosshair */
-  .crosshair {
-    position: absolute;
-    width: 14px; height: 14px;
-    border-left: 1px solid rgba(255,122,0,0.6);
-    border-top: 1px solid rgba(255,122,0,0.6);
-  }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(.96);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
+    }
 
-  /* Number ticker */
-  .stat-num { font-family: 'Satoshi', system-ui; font-weight: 700; letter-spacing: -0.04em; }
+    .reveal-scale.in {
+      opacity: 1;
+      transform: none;
+    }
 
-  /* Inputs */
-  input.fld, textarea.fld {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.12);
-    transition: border-color .2s ease, background .2s ease;
-  }
-  input.fld:focus, textarea.fld:focus {
-    outline: none;
-    border-color: rgba(255,122,0,0.7);
-    background: rgba(255,122,0,0.04);
-  }
+    .reveal-x {
+      opacity: 0;
+      transform: translateX(-32px);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
+    }
 
-  /* Subtle scanlines on hero */
-  .scanlines::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 4px);
-    mix-blend-mode: overlay;
-  }
+    .reveal-x.in {
+      opacity: 1;
+      transform: none;
+    }
 
-  /* Logo lockup */
-  .logo-mark {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    background: #0A1628;
-    border: 1px solid rgba(255,122,0,0.4);
-    display: inline-flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 30px -8px rgba(255,122,0,0.5);
-  }
+    .reveal-stagger>* {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s ease, transform .8s cubic-bezier(.2, .7, .2, 1);
+    }
 
-</style>
+    .reveal-stagger.in>*:nth-child(1) {
+      transition-delay: .05s;
+    }
+
+    .reveal-stagger.in>*:nth-child(2) {
+      transition-delay: .15s;
+    }
+
+    .reveal-stagger.in>*:nth-child(3) {
+      transition-delay: .25s;
+    }
+
+    .reveal-stagger.in>*:nth-child(4) {
+      transition-delay: .35s;
+    }
+
+    .reveal-stagger.in>*:nth-child(5) {
+      transition-delay: .45s;
+    }
+
+    .reveal-stagger.in>* {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Marquee */
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .marquee-track {
+      animation: marquee 38s linear infinite;
+    }
+
+    /* Sun pulse */
+    @keyframes sunPulse {
+
+      0%,
+      100% {
+        opacity: 0.85;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .sun-pulse {
+      animation: sunPulse 7s ease-in-out infinite;
+    }
+
+    /* Card hover */
+    .game-card {
+      transition: transform .5s cubic-bezier(.2, .7, .2, 1), box-shadow .5s ease, border-color .5s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 122, 0, 0.5);
+      box-shadow: 0 30px 80px -30px rgba(255, 122, 0, 0.4), 0 0 0 1px rgba(255, 122, 0, 0.25) inset;
+    }
+
+    .game-card:hover .game-thumb::after {
+      opacity: 0.55;
+    }
+
+    .game-thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(255, 90, 20, 0.25));
+      opacity: 0.25;
+      transition: opacity .5s ease;
+    }
+
+    /* Tag chip */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #FFB066;
+      background: rgba(255, 122, 0, 0.07);
+      border: 1px solid rgba(255, 122, 0, 0.25);
+    }
+
+    .chip .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #FF7A00;
+      box-shadow: 0 0 10px #FF7A00;
+    }
+
+    /* Decorative crosshair */
+    .crosshair {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-left: 1px solid rgba(255, 122, 0, 0.6);
+      border-top: 1px solid rgba(255, 122, 0, 0.6);
+    }
+
+    /* Number ticker */
+    .stat-num {
+      font-family: 'Satoshi', system-ui;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    /* Inputs */
+    input.fld,
+    textarea.fld {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    input.fld:focus,
+    textarea.fld:focus {
+      outline: none;
+      border-color: rgba(255, 122, 0, 0.7);
+      background: rgba(255, 122, 0, 0.04);
+    }
+
+    /* Subtle scanlines on hero */
+    .scanlines::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 4px);
+      mix-blend-mode: overlay;
+    }
+
+    /* Logo lockup */
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #0A1628;
+      border: 1px solid rgba(255, 122, 0, 0.4);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px -8px rgba(255, 122, 0, 0.5);
+    }
+  </style>
 </head>
+
 <body class="font-body">
 
-<!-- ============ PERSISTENT BACKGROUND SCENE ============ -->
-<div class="scene-bg" aria-hidden="true">
-  <video
-    id="bgVideo"
-    class="scene-bg__media"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-  ></video>
-</div>
+  <!-- ============ PERSISTENT BACKGROUND SCENE ============ -->
+  <div class="scene-bg" aria-hidden="true">
+    <video id="bgVideo" class="scene-bg__media" autoplay muted loop playsinline preload="auto"></video>
+  </div>
 
-<div class="vignette" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
 
-<!-- ============ NAVBAR ============ -->
-<header class="content fixed top-0 inset-x-0 z-50 transition-all" id="nav">
-  <div class="mx-auto max-w-7xl px-5 md:px-8">
-    <div class="mt-4 rounded-2xl border border-white/10 bg-navy-900/40 backdrop-blur-xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]">
-      <div class="flex items-center justify-between px-4 md:px-6 py-3">
-        <a href="#top" class="flex items-center group" aria-label="Second Sunrise Studios — Inicio">
-          <span class="font-brand text-[18px] md:text-[20px] leading-none whitespace-nowrap">
-            <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span class="text-white">Studios</span>
-          </span>
-        </a>
-        <nav class="hidden md:flex items-center gap-8 text-[13px] text-white/75">
-          <a href="#courses" class="hover:text-white transition" data-i18n="nav.courses">Cursos</a>
-          <a href="#tutorias" class="hover:text-white transition" data-i18n="nav.tutoring">Tutorías</a>
-          <a href="#planes" class="hover:text-white transition" data-i18n="nav.plans">Planes</a>
-          <a href="#instructors" class="hover:text-white transition" data-i18n="nav.instructors">Instructores</a>
-          <a href="#contact" class="hover:text-white transition" data-i18n="nav.contact">Contacto</a>
-        </nav>
-        <div class="flex items-center gap-3">
-          <div class="hidden sm:flex items-center font-mono text-[11px] uppercase tracking-widest" role="group" aria-label="Language">
-            <button type="button" data-lang="es" class="lang-btn px-2 py-1 transition" aria-pressed="true">ES</button>
-            <span class="text-white/20" aria-hidden="true">/</span>
-            <button type="button" data-lang="en" class="lang-btn px-2 py-1 transition" aria-pressed="false">EN</button>
+  <!-- ============ NAVBAR ============ -->
+  <header class="content fixed top-0 inset-x-0 z-50 transition-all" id="nav">
+    <div class="mx-auto max-w-7xl px-5 md:px-8">
+      <div
+        class="mt-4 rounded-2xl border border-white/10 bg-navy-900/40 backdrop-blur-xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]">
+        <div class="flex items-center justify-between px-4 md:px-6 py-3">
+          <a href="#top" class="flex items-center group" aria-label="Second Sunrise Studios — Inicio">
+            <span class="font-brand text-[18px] md:text-[20px] leading-none whitespace-nowrap">
+              <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span
+                class="text-white">Studios</span>
+            </span>
+          </a>
+          <nav class="hidden md:flex items-center gap-8 text-[13px] text-white/75">
+            <a href="#courses" class="hover:text-white transition" data-i18n="nav.courses">Cursos</a>
+            <a href="#tutorias" class="hover:text-white transition" data-i18n="nav.tutoring">Tutorías</a>
+            <a href="#planes" class="hover:text-white transition" data-i18n="nav.plans">Planes</a>
+            <a href="#instructors" class="hover:text-white transition" data-i18n="nav.instructors">Instructores</a>
+            <a href="#contact" class="hover:text-white transition" data-i18n="nav.contact">Contacto</a>
+          </nav>
+          <div class="flex items-center gap-3">
+            <div class="hidden sm:flex items-center font-mono text-[11px] uppercase tracking-widest" role="group"
+              aria-label="Language">
+              <button type="button" data-lang="es" class="lang-btn px-2 py-1 transition" aria-pressed="true">ES</button>
+              <span class="text-white/20" aria-hidden="true">/</span>
+              <button type="button" data-lang="en" class="lang-btn px-2 py-1 transition"
+                aria-pressed="false">EN</button>
+            </div>
+            <a href="#planes" class="btn-primary text-[13px] font-semibold text-white px-4 py-2 rounded-lg"
+              data-i18n="nav.cta">Empezar ahora</a>
           </div>
-          <a href="#planes" class="btn-primary text-[13px] font-semibold text-white px-4 py-2 rounded-lg" data-i18n="nav.cta">Empezar ahora</a>
         </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="content" id="top">
+  <main class="content" id="top">
 
-<!-- ============ HERO ============ -->
-<section class="relative min-h-[100svh] flex items-center scanlines">
-  <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-1/3 left-8 hidden md:block crosshair"></div>
-    <div class="absolute top-1/3 right-8 hidden md:block crosshair" style="transform: scaleX(-1)"></div>
-  </div>
-
-  <div class="mx-auto max-w-7xl px-5 md:px-8 w-full pt-32 pb-40 text-center">
-    <h1 class="reveal mt-10 font-display font-bold text-white text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] max-w-4xl mx-auto" data-i18n-html="hero.tagline">
-      Aprendé de forma <span class="text-sunrise">personalizada</span> y a tu ritmo.
-    </h1>
-
-    <p class="reveal mt-6 text-[18px] md:text-xl text-white font-medium max-w-2xl mx-auto" data-i18n="hero.description_lead">
-      Enseñanza directa, sin relleno.
-    </p>
-    <p class="reveal mt-3 text-[16px] md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.description_tail">
-      Te acompañamos en tu camino para construir los proyectos que querés hacer.
-    </p>
-
-    <div class="reveal mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="#courses" class="btn-primary text-white font-semibold px-7 py-3.5 rounded-xl text-[15px] inline-flex items-center gap-2">
-        <span data-i18n="hero.cta_primary">Explorar cursos</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#about" class="btn-ghost text-white font-medium px-7 py-3.5 rounded-xl text-[15px]" data-i18n="hero.cta_secondary">Conócenos</a>
-    </div>
-
-    <!-- HUD strip -->
-    <div class="reveal mt-20 mx-auto max-w-3xl flex items-center justify-between gap-4 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-white/40">
-      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-sunrise sun-pulse"></span>SYS · ONLINE</span>
-      <span class="hidden md:inline">LAT 33°07′S · LON 64°20′W</span>
-      <span>EST · MMXX</span>
-    </div>
-  </div>
-
-  <!-- scroll indicator -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 reveal">
-    <span class="font-mono text-[10px] uppercase tracking-widest">Scroll</span>
-    <div class="w-px h-10 bg-gradient-to-b from-sunrise to-transparent"></div>
-  </div>
-</section>
-
-<!-- ============ CURSOS ============ -->
-<section id="courses" class="relative panel-dark">
-  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
-      <div>
-        <span class="chip"><span class="dot"></span><span data-i18n="courses.chip">01 · Catálogo</span></span>
-        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="courses.title">
-          Nuestros <span class="text-sunrise">cursos</span>.
-        </h2>
-      </div>
-      <p class="md:max-w-sm text-white/55 text-[15px]" data-i18n="courses.subtitle">
-        Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.
-      </p>
-    </div>
-
-    <div class="hairline mt-10"></div>
-
-    <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
-
-      <!-- Course 1 — Unreal Engine 5 -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c1.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
-        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
-          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="c1" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#0A1628"/><stop offset="0.6" stop-color="#3A1F1F"/><stop offset="1" stop-color="#0A0612"/>
-              </linearGradient>
-              <radialGradient id="c1s" cx="0.55" cy="0.5" r="0.4"><stop offset="0" stop-color="#FFB066" stop-opacity="0.85"/><stop offset="1" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="500" fill="url(#c1)"/>
-            <rect width="400" height="500" fill="url(#c1s)"/>
-            <circle cx="220" cy="260" r="55" fill="#FFB066" opacity="0.85"/>
-            <circle cx="170" cy="275" r="28" fill="#FF7A00" opacity="0.9"/>
-            <path d="M0,360 L100,335 L200,360 L300,330 L400,355 L400,500 L0,500 Z" fill="#0A0612"/>
-            <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,150,0.5)" font-size="9" letter-spacing="2">
-              <text x="20" y="30">[ COURSE · 01 ]</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c1.tag">Engine</span>
-            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_12">12 semanas</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c1.title">Fundamentos de Unreal Engine 5</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c1.desc">
-            De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.
-          </p>
-        </div>
-      </a>
-
-      <!-- Course 2 — Blender / 3D -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c2.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
-        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
-          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="c2" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#020410"/><stop offset="0.5" stop-color="#0F2138"/><stop offset="1" stop-color="#1A0A20"/>
-              </linearGradient>
-              <radialGradient id="c2s" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#3DD2C0" stop-opacity="0.45"/><stop offset="1" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="500" fill="url(#c2)"/>
-            <rect width="400" height="500" fill="url(#c2s)"/>
-            <g stroke="rgba(61,210,192,0.35)" fill="none">
-              <circle cx="200" cy="240" r="80"/>
-              <circle cx="200" cy="240" r="120"/>
-              <circle cx="200" cy="240" r="160"/>
-            </g>
-            <circle cx="200" cy="240" r="40" fill="#3DD2C0" opacity="0.5"/>
-            <g font-family="JetBrains Mono, monospace" fill="rgba(180,240,230,0.5)" font-size="9" letter-spacing="2">
-              <text x="20" y="30">[ COURSE · 02 ]</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-teal-soft" data-i18n="courses.c2.tag">3D Art</span>
-            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_10_a">10 semanas</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c2.title">Modelado 3D para videojuegos</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c2.desc">
-            Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.
-          </p>
-        </div>
-      </a>
-
-      <!-- Course 3 — C++ -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c3.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
-        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
-          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="c3" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#1a0608"/><stop offset="0.5" stop-color="#5C1410"/><stop offset="1" stop-color="#0A0408"/>
-              </linearGradient>
-              <radialGradient id="c3s" cx="0.5" cy="0.55" r="0.4"><stop offset="0" stop-color="#FF4020" stop-opacity="0.7"/><stop offset="1" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="500" fill="url(#c3)"/>
-            <rect width="400" height="500" fill="url(#c3s)"/>
-            <circle cx="200" cy="290" r="60" fill="#FF4020" opacity="0.7"/>
-            <path d="M0,360 L80,330 L160,355 L240,310 L320,345 L400,320 L400,500 L0,500 Z" fill="#0a0408"/>
-            <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,180,0.5)" font-size="9" letter-spacing="2">
-              <text x="20" y="30">[ COURSE · 03 ]</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c3.tag">Code</span>
-            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_14">14 semanas</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c3.title">Programación gameplay en C++</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c3.desc">
-            Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.
-          </p>
-        </div>
-      </a>
-
-      <!-- Course 4 — Concept Art -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c4.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
-        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
-          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="c4" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#000"/><stop offset="0.5" stop-color="#0A0816"/><stop offset="1" stop-color="#1A0820"/>
-              </linearGradient>
-              <radialGradient id="c4s" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#5500AA" stop-opacity="0"/><stop offset="0.5" stop-color="#5500AA" stop-opacity="0.25"/><stop offset="1" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="500" fill="url(#c4)"/>
-            <rect width="400" height="500" fill="url(#c4s)"/>
-            <circle cx="200" cy="250" r="100" fill="#000" stroke="#FF7A00" stroke-width="1.5" opacity="0.85"/>
-            <circle cx="200" cy="250" r="70" fill="none" stroke="rgba(255,122,0,0.4)"/>
-            <g font-family="JetBrains Mono, monospace" fill="rgba(200,180,255,0.5)" font-size="9" letter-spacing="2">
-              <text x="20" y="30">[ COURSE · 04 ]</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c4.tag">Art</span>
-            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_8">8 semanas</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c4.title">Pintura digital y concept art</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c4.desc">
-            Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.
-          </p>
-        </div>
-      </a>
-
-      <!-- Course 5 — Drawing / Anatomy -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c5.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
-        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
-          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="c5" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#0A1024"/><stop offset="0.55" stop-color="#2A1840"/><stop offset="1" stop-color="#08040F"/>
-              </linearGradient>
-              <radialGradient id="c5s" cx="0.5" cy="0.5" r="0.45"><stop offset="0" stop-color="#FFB066" stop-opacity="0.55"/><stop offset="1" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="500" fill="url(#c5)"/>
-            <rect width="400" height="500" fill="url(#c5s)"/>
-            <g stroke="rgba(255,176,102,0.55)" fill="none" stroke-width="1.4">
-              <path d="M200,140 Q260,200 250,280 Q240,360 200,400 Q160,360 150,280 Q140,200 200,140 Z"/>
-              <path d="M170,210 L230,210"/>
-              <circle cx="185" cy="220" r="4" fill="rgba(255,176,102,0.7)"/>
-              <circle cx="215" cy="220" r="4" fill="rgba(255,176,102,0.7)"/>
-              <path d="M190,260 Q200,275 210,260"/>
-            </g>
-            <g font-family="JetBrains Mono, monospace" fill="rgba(255,210,170,0.5)" font-size="9" letter-spacing="2">
-              <text x="20" y="30">[ COURSE · 05 ]</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c5.tag">Fundamentos</span>
-            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_10_b">10 semanas</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c5.title">Dibujo y anatomía para juegos</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c5.desc">
-            Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.
-          </p>
-        </div>
-      </a>
-
-      <!-- Course 6 — Level Design -->
-      <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c6.title" class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
-        <div class="game-thumb relative aspect-[4/5] overflow-hidden">
-          <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="c6" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#08101E"/><stop offset="0.5" stop-color="#16304F"/><stop offset="1" stop-color="#050B16"/>
-              </linearGradient>
-              <radialGradient id="c6s" cx="0.5" cy="0.55" r="0.35"><stop offset="0" stop-color="#FF7A00" stop-opacity="0.55"/><stop offset="1" stop-opacity="0"/></radialGradient>
-              <pattern id="c6grid" width="32" height="32" patternUnits="userSpaceOnUse">
-                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(255,122,0,0.18)" stroke-width="1"/>
-              </pattern>
-            </defs>
-            <rect width="400" height="500" fill="url(#c6)"/>
-            <rect width="400" height="500" fill="url(#c6grid)"/>
-            <rect width="400" height="500" fill="url(#c6s)"/>
-            <g fill="none" stroke="rgba(255,176,102,0.7)" stroke-width="1.5">
-              <rect x="110" y="180" width="90" height="90"/>
-              <rect x="220" y="220" width="70" height="70"/>
-              <path d="M155,260 L255,280"/>
-              <circle cx="155" cy="225" r="4" fill="rgba(255,176,102,0.7)"/>
-            </g>
-            <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,150,0.5)" font-size="9" letter-spacing="2">
-              <text x="20" y="30">[ COURSE · 06 ]</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise" data-i18n="courses.c6.tag">Design</span>
-            <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_9">9 semanas</span>
-          </div>
-          <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c6.title">Level design y narrativa ambiental</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c6.desc">
-            Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.
-          </p>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ TUTORÍAS ============ -->
-<section id="tutorias" class="relative panel">
-  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span><span data-i18n="tutoring.chip">02 · Tutorías 1:1</span></span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="tutoring.title">
-        Nuestras <span class="text-sunrise">tutorías</span> disponibles.
-      </h2>
-      <p class="mt-5 text-white/60 text-[15px]" data-i18n="tutoring.subtitle">
-        Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.
-      </p>
-    </div>
-
-    <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
-
-      <!-- Tutoría · Dibujo / Pintura -->
-      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t1.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <circle cx="12" cy="12" r="9"/>
-            <circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="12" cy="7" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="16.5" cy="10" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-          </svg>
-        </div>
-        <div>
-          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t1.title">Dibujo / Pintura</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t1.sub">Fundamentos y portfolio</div>
-        </div>
-      </button>
-
-      <!-- Tutoría · Unreal Engine -->
-      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t2.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
-          <img src="assets/unreal-engine-white.png" alt="Unreal Engine" class="tutoring-icon" />
-        </div>
-        <div>
-          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t2.title">Unreal Engine</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t2.sub">Blueprints y pipeline</div>
-        </div>
-      </button>
-
-      <!-- Tutoría · Programación -->
-      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t3.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M8 7 L3 12 L8 17"/>
-            <path d="M16 7 L21 12 L16 17"/>
-            <path d="M14 4 L10 20"/>
-          </svg>
-        </div>
-        <div>
-          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t3.title">Programación</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t3.sub">Lógica y arquitectura</div>
-        </div>
-      </button>
-
-      <!-- Tutoría · Photoshop -->
-      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t4.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <rect x="3" y="3" width="18" height="18" rx="3"/>
-            <text x="12" y="16" text-anchor="middle" font-family="Satoshi, system-ui" font-size="10" font-weight="700" fill="currentColor" stroke="none">Ps</text>
-          </svg>
-        </div>
-        <div>
-          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t4.title">Photoshop</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t4.sub">Color y composición</div>
-        </div>
-      </button>
-
-      <!-- Tutoría · Blender -->
-      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t5.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
-          <img src="assets/blender-black.png" alt="Blender" class="tutoring-icon" />
-        </div>
-        <div>
-          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t5.title">Blender</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t5.sub">Modelado y render</div>
-        </div>
-      </button>
-
-      <!-- Tutoría · C++ -->
-      <button type="button" onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));" data-wa-type="tutoring" data-wa-key="tutoring.t6.title" class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
-        <div class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
-          <img src="assets/c++_black.svg" alt="C++" class="tutoring-icon" />
-        </div>
-        <div>
-          <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t6.title">C++</div>
-          <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45" data-i18n="tutoring.t6.sub">Gameplay programming</div>
-        </div>
-      </button>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ POR QUÉ NOSOTROS ============ -->
-<section id="about" class="relative panel-dark">
-  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span><span data-i18n="why.chip">03 · Por qué nosotros</span></span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="why.title">
-        Razones para <span class="text-sunrise">elegirnos</span>.
-      </h2>
-      <p class="mt-5 text-white/60 text-[15px]" data-i18n="why.subtitle">
-        Una metodología que aparece en cada clase, cada feedback y cada proyecto.
-      </p>
-    </div>
-
-    <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
-          <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>
-        </svg>
-        <div>
-          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f1.title">Enseñanza directa</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f1.desc">
-            Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.
-          </p>
-        </div>
-      </div>
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 6v6l4 2"/>
-        </svg>
-        <div>
-          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f2.title">Ritmo personalizado</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f2.desc">
-            Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.
-          </p>
-        </div>
-      </div>
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-        </svg>
-        <div>
-          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f3.title">Proyectos reales</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f3.desc">
-            Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.
-          </p>
-        </div>
-      </div>
-      <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-sunrise flex-shrink-0 mt-0.5">
-          <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/>
-          <path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/>
-        </svg>
-        <div>
-          <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f4.title">Comunidad activa</h3>
-          <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f4.desc">
-            Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="mt-20 grid grid-cols-3 gap-6 max-w-2xl mx-auto reveal">
-      <div class="text-center">
-        <div class="stat-num text-white text-3xl md:text-5xl">+500</div>
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.students">Estudiantes</div>
-      </div>
-      <div class="text-center">
-        <div class="stat-num text-sunrise text-3xl md:text-5xl">12</div>
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.instructors">Instructores</div>
-      </div>
-      <div class="text-center">
-        <div class="stat-num text-white text-3xl md:text-5xl">2020</div>
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.founded">Fundado</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PLANES ============ -->
-<section id="planes" class="relative panel">
-  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span><span data-i18n="plans.chip">04 · Planes</span></span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="plans.title">
-        Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.
-      </h2>
-      <p class="mt-5 text-white/60 text-[15px]" data-i18n="plans.subtitle">
-        Cambiá o cancelá cuando quieras.
-      </p>
-    </div>
-
-    <div class="mt-16 grid md:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
-
-      <!-- Mensual -->
-      <article class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70" data-i18n="plans.monthly.label">Mensual</span>
-        </div>
-        <div class="mt-6">
-          <span class="stat-num text-white text-5xl md:text-6xl">$8</span>
-          <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.monthly.period">/ mes</span>
-        </div>
-        <p class="mt-3 text-[13px] text-white/55" data-i18n="plans.monthly.desc">Sin compromiso. Pagás mes a mes.</p>
-        <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.monthly.f1">Todo el catálogo de cursos</span></li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.monthly.f2">Retos y proyectos prácticos</span></li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.monthly.f3">Comunidad y soporte en Discord</span></li>
-        </ul>
-        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]" data-i18n="plans.cta">Comenzar ahora</a>
-        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="plans.refund">Reembolso 7 días desde la compra</p>
-      </article>
-
-      <!-- Trimestral -->
-      <article class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-white/70" data-i18n="plans.quarterly.label">Trimestral</span>
-          <span class="chip" style="font-size:10px; padding:.18rem .55rem;">10% off</span>
-        </div>
-        <div class="mt-6">
-          <span class="stat-num text-white text-5xl md:text-6xl">$21.60</span>
-          <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.quarterly.period">/ trim.</span>
-        </div>
-        <p class="mt-3 text-[13px] text-white/55" data-i18n="plans.quarterly.desc">Equivalente a $7.20 al mes. Pagás cada 3 meses.</p>
-        <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.quarterly.f1">Todo lo del plan mensual</span></li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.quarterly.f2">Mejor precio que mes a mes</span></li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.quarterly.f3">Soporte prioritario</span></li>
-        </ul>
-        <a href="#contact" class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]" data-i18n="plans.cta">Comenzar ahora</a>
-        <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="plans.refund">Reembolso 7 días desde la compra</p>
-      </article>
-
-      <!-- Anual (destacado) -->
-      <article class="rounded-2xl border border-sunrise/40 bg-gradient-to-br from-navy-900/80 to-navy-950/80 p-7 md:p-8 flex flex-col relative overflow-hidden shadow-[0_30px_80px_-30px_rgba(255,122,0,0.4)]">
-        <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-sunrise/30 blur-3xl pointer-events-none"></div>
-        <div class="relative flex items-center justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-widest text-sunrise" data-i18n="plans.annual.label">Anual · Más popular</span>
-          <span class="chip" style="font-size:10px; padding:.18rem .55rem;">20% off</span>
-        </div>
-        <div class="relative mt-6">
-          <span class="stat-num text-white text-5xl md:text-6xl">$76.80</span>
-          <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.annual.period">/ año</span>
-        </div>
-        <p class="relative mt-3 text-[13px] text-white/75" data-i18n-html="plans.annual.desc">Equivalente a $6.40 al mes. <span class="text-sunrise">Ahorrás $19.20 al año.</span></p>
-        <ul class="relative mt-8 space-y-3 text-[13.5px] text-white/85 flex-1">
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.annual.f1">Todo lo del plan trimestral</span></li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.annual.f2">El mejor precio recurrente</span></li>
-          <li class="flex items-start gap-3"><span class="text-sunrise mt-1">●</span> <span data-i18n="plans.annual.f3">Acceso anticipado a nuevo contenido</span></li>
-        </ul>
-        <a href="#contact" class="btn-primary relative mt-8 inline-flex items-center justify-center text-white font-semibold px-5 py-3 rounded-xl text-[14px]" data-i18n="plans.cta">Comenzar ahora</a>
-        <p class="relative mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="plans.refund">Reembolso 7 días desde la compra</p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ INSTRUCTORES ============ -->
-<section id="instructors" class="relative panel-dark">
-  <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
-      <div>
-        <span class="chip"><span class="dot"></span><span data-i18n="instructors.chip">05 · Sobre nosotros</span></span>
-        <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]" data-i18n-html="instructors.title">
-          Los <span class="text-sunrise">instructores</span> detrás del amanecer.
-        </h2>
-      </div>
-      <p class="md:max-w-sm text-white/55 text-[15px]" data-i18n="instructors.subtitle">
-        Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.
-      </p>
-    </div>
-
-    <div class="hairline mt-10"></div>
-
-    <div class="mt-12 grid sm:grid-cols-2 md:grid-cols-3 gap-5 reveal-stagger">
-
-      <!-- Instructor 1 -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
-        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden relative">
-          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i1" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#FF7A00" stop-opacity="0.5"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i1)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFB066" opacity="0.85">MV</text></svg>
-        </div>
-        <div class="mt-4">
-          <div class="font-display font-bold text-white text-[17px]">Martín Vega</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i1.role">Director · UE5</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i1.bio">10 años en estudios indie. Enseña Blueprints como si fuera un idioma.</p>
-        </div>
+    <!-- ============ HERO ============ -->
+    <section class="relative min-h-[100svh] flex items-center scanlines">
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-1/3 left-8 hidden md:block crosshair"></div>
+        <div class="absolute top-1/3 right-8 hidden md:block crosshair" style="transform: scaleX(-1)"></div>
       </div>
 
-      <!-- Instructor 2 -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
-        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
-          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i2" cx="0.55" cy="0.45" r="0.55"><stop offset="0" stop-color="#3DD2C0" stop-opacity="0.4"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i2)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#9BE8DC">SR</text></svg>
-        </div>
-        <div class="mt-4">
-          <div class="font-display font-bold text-white text-[17px]">Sofía Ríos</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i2.role">3D Art · Blender</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i2.bio">Modeladora con créditos en juegos AA. Especialista en topología y retopo.</p>
-        </div>
-      </div>
+      <div class="mx-auto max-w-7xl px-5 md:px-8 w-full pt-32 pb-40 text-center">
+        <h1
+          class="reveal mt-10 font-display font-bold text-white text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] max-w-4xl mx-auto"
+          data-i18n-html="hero.tagline">
+          Aprendé de forma <span class="text-sunrise">personalizada</span> y a tu ritmo.
+        </h1>
 
-      <!-- Instructor 3 -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
-        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
-          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i3" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#FFB066" stop-opacity="0.55"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i3)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFE0B8">JC</text></svg>
-        </div>
-        <div class="mt-4">
-          <div class="font-display font-bold text-white text-[17px]">Julián Cárdenas</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i3.role">Programación · C++</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i3.bio">Gameplay engineer. Cree que el mejor código es el que se borra.</p>
-        </div>
-      </div>
-
-      <!-- Instructor 4 -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
-        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
-          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i4" cx="0.45" cy="0.5" r="0.55"><stop offset="0" stop-color="#FF7A00" stop-opacity="0.45"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i4)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFD9B5">EP</text></svg>
-        </div>
-        <div class="mt-4">
-          <div class="font-display font-bold text-white text-[17px]">Elena Paz</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i4.role">Concept Art · Photoshop</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i4.bio">Ilustradora de personajes. Pinta atmósferas que cuentan historias.</p>
-        </div>
-      </div>
-
-      <!-- Instructor 5 -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
-        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
-          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i5" cx="0.5" cy="0.5" r="0.55"><stop offset="0" stop-color="#FFB066" stop-opacity="0.5"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i5)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#FFD9B5">LA</text></svg>
-        </div>
-        <div class="mt-4">
-          <div class="font-display font-bold text-white text-[17px]">Lucas Arce</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i5.role">Dibujo · Anatomía</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i5.bio">15 años dibujando. Le obsesiona el gesto y la línea de acción.</p>
-        </div>
-      </div>
-
-      <!-- Instructor 6 -->
-      <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
-        <div class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
-          <svg viewBox="0 0 200 200" class="w-full h-full"><defs><radialGradient id="i6" cx="0.5" cy="0.5" r="0.55"><stop offset="0" stop-color="#3DD2C0" stop-opacity="0.4"/><stop offset="1" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#i6)"/><text x="100" y="115" text-anchor="middle" font-family="Satoshi" font-weight="700" font-size="64" fill="#9BE8DC">CM</text></svg>
-        </div>
-        <div class="mt-4">
-          <div class="font-display font-bold text-white text-[17px]">Camila Molina</div>
-          <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1" data-i18n="instructors.i6.role">Level Design</div>
-          <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i6.bio">Diseña espacios que enseñan a jugarlos sin un solo tutorial.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ CONTACTO + FOOTER ============ -->
-<section id="contact" class="relative panel-dark">
-  <div class="mx-auto max-w-7xl px-5 md:px-8 pt-28 md:pt-36 pb-12">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <span class="chip"><span class="dot"></span><span data-i18n="contact.chip">06 · Contacto</span></span>
-      <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,5vw,4rem)] leading-[1]" data-i18n="contact.title">
-        Contactanos.
-      </h2>
-      <p class="mt-6 text-white/60 text-[15px] leading-relaxed" data-i18n="contact.subtitle">
-        Dudas, propuestas o ganas de empezar. Escribínos por la vía que prefieras.
-      </p>
-    </div>
-
-    <!-- WhatsApp CTA -->
-    <div class="mt-12 flex justify-center reveal">
-      <a href="https://wa.me/5493585484891" target="_blank" rel="noopener noreferrer" class="btn-primary inline-flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-xl text-[15px]">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
-        <span data-i18n="contact.whatsapp_cta">Escribínos por WhatsApp</span>
-      </a>
-    </div>
-
-    <!-- Redes sociales -->
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-4 reveal">
-      <a href="mailto:secondsunrisestudio@gmail.com" aria-label="Email" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-      </a>
-      <a href="https://instagram.com/secondsunstdio" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-      </a>
-      <a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" aria-label="X" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
-      </a>
-      <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <img src="assets/discord-white-icon.webp" alt="" class="w-[22px] h-[22px] object-contain" />
-      </a>
-    </div>
-
-    <div class="hairline my-20"></div>
-
-    <footer class="grid md:grid-cols-12 gap-8 items-start">
-      <div class="md:col-span-5">
-        <a href="#top" class="flex items-center" aria-label="Second Sunrise Studios — Inicio">
-          <span class="font-brand text-[20px] leading-none whitespace-nowrap">
-            <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span class="text-white">Studios</span>
-          </span>
-        </a>
-        <p class="mt-4 text-white/50 text-[13px] max-w-sm leading-relaxed" data-i18n="footer.desc">
-          Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.
+        <p class="reveal mt-6 text-[18px] md:text-xl text-white font-medium max-w-2xl mx-auto"
+          data-i18n="hero.description_lead">
+          Enseñanza directa, sin relleno.
         </p>
-      </div>
-      <div class="md:col-span-2">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.platform">Plataforma</div>
-        <ul class="mt-4 space-y-2 text-[13px] text-white/75">
-          <li><a href="#about" class="hover:text-sunrise transition" data-i18n="footer.why_us">Por qué nosotros</a></li>
-          <li><a href="#instructors" class="hover:text-sunrise transition" data-i18n="footer.instructors">Instructores</a></li>
-          <li><a href="#planes" class="hover:text-sunrise transition" data-i18n="footer.plans">Planes</a></li>
-        </ul>
-      </div>
-      <div class="md:col-span-2">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.courses_title">Cursos</div>
-        <ul class="mt-4 space-y-2 text-[13px] text-white/75">
-          <li><a href="#courses" class="hover:text-sunrise transition">Unreal Engine 5</a></li>
-          <li><a href="#courses" class="hover:text-sunrise transition" data-i18n="footer.course_3d">Modelado 3D</a></li>
-          <li><a href="#courses" class="hover:text-sunrise transition">C++ Gameplay</a></li>
-          <li><a href="#courses" class="hover:text-sunrise transition">Concept Art</a></li>
-        </ul>
-      </div>
-      <div class="md:col-span-3">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.community">Comunidad</div>
-        <ul class="mt-4 grid grid-cols-2 gap-2">
-          <li><a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Discord</a></li>
-          <li><a href="https://instagram.com/secondsunstdio" target="_blank" rel="noopener noreferrer" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Instagram</a></li>
-          <li><a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">X</a></li>
-          <li><a href="mailto:secondsunrisestudio@gmail.com" class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Email</a></li>
-        </ul>
-      </div>
-    </footer>
+        <p class="reveal mt-3 text-[16px] md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
+          data-i18n="hero.description_tail">
+          Te acompañamos en tu camino para construir los proyectos que querés hacer.
+        </p>
 
-    <div class="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-widest text-white/40">
-      <span>© MMXXVI · Second Sunrise Studios · Río Cuarto, AR</span>
-      <span class="flex items-center gap-4">
-        <a href="#" class="hover:text-sunrise transition" data-i18n="footer.privacy">Privacidad</a>
-        <a href="#" class="hover:text-sunrise transition" data-i18n="footer.terms">Términos</a>
-        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sunrise sun-pulse"></span>Build · 26.05</span>
-      </span>
+        <div class="reveal mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="#courses"
+            class="btn-primary text-white font-semibold px-7 py-3.5 rounded-xl text-[15px] inline-flex items-center gap-2">
+            <span data-i18n="hero.cta_primary">Explorar cursos</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+          <a href="#about" class="btn-ghost text-white font-medium px-7 py-3.5 rounded-xl text-[15px]"
+            data-i18n="hero.cta_secondary">Conócenos</a>
+        </div>
+
+        <!-- HUD strip -->
+        <div
+          class="reveal mt-20 mx-auto max-w-3xl flex items-center justify-between gap-4 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-white/40">
+          <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-sunrise sun-pulse"></span>SYS ·
+            ONLINE</span>
+          <span class="hidden md:inline">LAT 33°07′S · LON 64°20′W</span>
+          <span>EST · MMXX</span>
+        </div>
+      </div>
+
+      <!-- scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 reveal">
+        <span class="font-mono text-[10px] uppercase tracking-widest">Scroll</span>
+        <div class="w-px h-10 bg-gradient-to-b from-sunrise to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- ============ CURSOS ============ -->
+    <section id="courses" class="relative panel-dark">
+      <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
+          <div>
+            <span class="chip"><span class="dot"></span><span data-i18n="courses.chip">01 · Catálogo</span></span>
+            <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]"
+              data-i18n-html="courses.title">
+              Nuestros <span class="text-sunrise">cursos</span>.
+            </h2>
+          </div>
+          <p class="md:max-w-sm text-white/55 text-[15px]" data-i18n="courses.subtitle">
+            Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.
+          </p>
+        </div>
+
+        <div class="hairline mt-10"></div>
+
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
+
+          <!-- Course 1 — Unreal Engine 5 -->
+          <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c1.title"
+            class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
+            <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+              <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="c1" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#0A1628" />
+                    <stop offset="0.6" stop-color="#3A1F1F" />
+                    <stop offset="1" stop-color="#0A0612" />
+                  </linearGradient>
+                  <radialGradient id="c1s" cx="0.55" cy="0.5" r="0.4">
+                    <stop offset="0" stop-color="#FFB066" stop-opacity="0.85" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="400" height="500" fill="url(#c1)" />
+                <rect width="400" height="500" fill="url(#c1s)" />
+                <circle cx="220" cy="260" r="55" fill="#FFB066" opacity="0.85" />
+                <circle cx="170" cy="275" r="28" fill="#FF7A00" opacity="0.9" />
+                <path d="M0,360 L100,335 L200,360 L300,330 L400,355 L400,500 L0,500 Z" fill="#0A0612" />
+                <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,150,0.5)" font-size="9"
+                  letter-spacing="2">
+                  <text x="20" y="30">[ COURSE · 01 ]</text>
+                </g>
+              </svg>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise"
+                  data-i18n="courses.c1.tag">Engine</span>
+                <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_12">12 semanas</span>
+              </div>
+              <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c1.title">Fundamentos de
+                Unreal Engine 5</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c1.desc">
+                De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.
+              </p>
+            </div>
+          </a>
+
+          <!-- Course 2 — Blender / 3D -->
+          <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c2.title"
+            class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
+            <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+              <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="c2" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#020410" />
+                    <stop offset="0.5" stop-color="#0F2138" />
+                    <stop offset="1" stop-color="#1A0A20" />
+                  </linearGradient>
+                  <radialGradient id="c2s" cx="0.5" cy="0.45" r="0.5">
+                    <stop offset="0" stop-color="#3DD2C0" stop-opacity="0.45" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="400" height="500" fill="url(#c2)" />
+                <rect width="400" height="500" fill="url(#c2s)" />
+                <g stroke="rgba(61,210,192,0.35)" fill="none">
+                  <circle cx="200" cy="240" r="80" />
+                  <circle cx="200" cy="240" r="120" />
+                  <circle cx="200" cy="240" r="160" />
+                </g>
+                <circle cx="200" cy="240" r="40" fill="#3DD2C0" opacity="0.5" />
+                <g font-family="JetBrains Mono, monospace" fill="rgba(180,240,230,0.5)" font-size="9"
+                  letter-spacing="2">
+                  <text x="20" y="30">[ COURSE · 02 ]</text>
+                </g>
+              </svg>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-teal-soft"
+                  data-i18n="courses.c2.tag">3D Art</span>
+                <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_10_a">10 semanas</span>
+              </div>
+              <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c2.title">Modelado 3D para
+                videojuegos</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c2.desc">
+                Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.
+              </p>
+            </div>
+          </a>
+
+          <!-- Course 3 — C++ -->
+          <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c3.title"
+            class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
+            <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+              <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="c3" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#1a0608" />
+                    <stop offset="0.5" stop-color="#5C1410" />
+                    <stop offset="1" stop-color="#0A0408" />
+                  </linearGradient>
+                  <radialGradient id="c3s" cx="0.5" cy="0.55" r="0.4">
+                    <stop offset="0" stop-color="#FF4020" stop-opacity="0.7" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="400" height="500" fill="url(#c3)" />
+                <rect width="400" height="500" fill="url(#c3s)" />
+                <circle cx="200" cy="290" r="60" fill="#FF4020" opacity="0.7" />
+                <path d="M0,360 L80,330 L160,355 L240,310 L320,345 L400,320 L400,500 L0,500 Z" fill="#0a0408" />
+                <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,180,0.5)" font-size="9"
+                  letter-spacing="2">
+                  <text x="20" y="30">[ COURSE · 03 ]</text>
+                </g>
+              </svg>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise"
+                  data-i18n="courses.c3.tag">Code</span>
+                <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_14">14 semanas</span>
+              </div>
+              <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c3.title">Programación
+                gameplay en C++</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c3.desc">
+                Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.
+              </p>
+            </div>
+          </a>
+
+          <!-- Course 4 — Concept Art -->
+          <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c4.title"
+            class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
+            <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+              <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="c4" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#000" />
+                    <stop offset="0.5" stop-color="#0A0816" />
+                    <stop offset="1" stop-color="#1A0820" />
+                  </linearGradient>
+                  <radialGradient id="c4s" cx="0.5" cy="0.5" r="0.6">
+                    <stop offset="0" stop-color="#5500AA" stop-opacity="0" />
+                    <stop offset="0.5" stop-color="#5500AA" stop-opacity="0.25" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="400" height="500" fill="url(#c4)" />
+                <rect width="400" height="500" fill="url(#c4s)" />
+                <circle cx="200" cy="250" r="100" fill="#000" stroke="#FF7A00" stroke-width="1.5" opacity="0.85" />
+                <circle cx="200" cy="250" r="70" fill="none" stroke="rgba(255,122,0,0.4)" />
+                <g font-family="JetBrains Mono, monospace" fill="rgba(200,180,255,0.5)" font-size="9"
+                  letter-spacing="2">
+                  <text x="20" y="30">[ COURSE · 04 ]</text>
+                </g>
+              </svg>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise"
+                  data-i18n="courses.c4.tag">Art</span>
+                <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_8">8 semanas</span>
+              </div>
+              <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c4.title">Pintura digital y
+                concept art</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c4.desc">
+                Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.
+              </p>
+            </div>
+          </a>
+
+          <!-- Course 5 — Drawing / Anatomy -->
+          <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c5.title"
+            class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
+            <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+              <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="c5" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#0A1024" />
+                    <stop offset="0.55" stop-color="#2A1840" />
+                    <stop offset="1" stop-color="#08040F" />
+                  </linearGradient>
+                  <radialGradient id="c5s" cx="0.5" cy="0.5" r="0.45">
+                    <stop offset="0" stop-color="#FFB066" stop-opacity="0.55" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="400" height="500" fill="url(#c5)" />
+                <rect width="400" height="500" fill="url(#c5s)" />
+                <g stroke="rgba(255,176,102,0.55)" fill="none" stroke-width="1.4">
+                  <path d="M200,140 Q260,200 250,280 Q240,360 200,400 Q160,360 150,280 Q140,200 200,140 Z" />
+                  <path d="M170,210 L230,210" />
+                  <circle cx="185" cy="220" r="4" fill="rgba(255,176,102,0.7)" />
+                  <circle cx="215" cy="220" r="4" fill="rgba(255,176,102,0.7)" />
+                  <path d="M190,260 Q200,275 210,260" />
+                </g>
+                <g font-family="JetBrains Mono, monospace" fill="rgba(255,210,170,0.5)" font-size="9"
+                  letter-spacing="2">
+                  <text x="20" y="30">[ COURSE · 05 ]</text>
+                </g>
+              </svg>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise"
+                  data-i18n="courses.c5.tag">Fundamentos</span>
+                <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_10_b">10 semanas</span>
+              </div>
+              <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c5.title">Dibujo y anatomía
+                para juegos</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c5.desc">
+                Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.
+              </p>
+            </div>
+          </a>
+
+          <!-- Course 6 — Level Design -->
+          <a href="#" target="_blank" rel="noopener noreferrer" data-wa-type="course" data-wa-key="courses.c6.title"
+            class="game-card group relative rounded-2xl overflow-hidden border border-white/10 bg-navy-900/50 block cursor-pointer">
+            <div class="game-thumb relative aspect-[4/5] overflow-hidden">
+              <svg viewBox="0 0 400 500" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="c6" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#08101E" />
+                    <stop offset="0.5" stop-color="#16304F" />
+                    <stop offset="1" stop-color="#050B16" />
+                  </linearGradient>
+                  <radialGradient id="c6s" cx="0.5" cy="0.55" r="0.35">
+                    <stop offset="0" stop-color="#FF7A00" stop-opacity="0.55" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                  <pattern id="c6grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                    <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(255,122,0,0.18)" stroke-width="1" />
+                  </pattern>
+                </defs>
+                <rect width="400" height="500" fill="url(#c6)" />
+                <rect width="400" height="500" fill="url(#c6grid)" />
+                <rect width="400" height="500" fill="url(#c6s)" />
+                <g fill="none" stroke="rgba(255,176,102,0.7)" stroke-width="1.5">
+                  <rect x="110" y="180" width="90" height="90" />
+                  <rect x="220" y="220" width="70" height="70" />
+                  <path d="M155,260 L255,280" />
+                  <circle cx="155" cy="225" r="4" fill="rgba(255,176,102,0.7)" />
+                </g>
+                <g font-family="JetBrains Mono, monospace" fill="rgba(255,200,150,0.5)" font-size="9"
+                  letter-spacing="2">
+                  <text x="20" y="30">[ COURSE · 06 ]</text>
+                </g>
+              </svg>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-sunrise"
+                  data-i18n="courses.c6.tag">Design</span>
+                <span class="font-mono text-[10px] text-white/40" data-i18n="courses.weeks_9">9 semanas</span>
+              </div>
+              <h3 class="mt-3 font-display font-bold text-white text-2xl" data-i18n="courses.c6.title">Level design y
+                narrativa ambiental</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="courses.c6.desc">
+                Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.
+              </p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TUTORÍAS ============ -->
+    <section id="tutorias" class="relative panel">
+      <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="chip"><span class="dot"></span><span data-i18n="tutoring.chip">02 · Tutorías 1:1</span></span>
+          <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]"
+            data-i18n-html="tutoring.title">
+            Nuestras <span class="text-sunrise">tutorías</span> disponibles.
+          </h2>
+          <p class="mt-5 text-white/60 text-[15px]" data-i18n="tutoring.subtitle">
+            Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.
+          </p>
+        </div>
+
+        <div
+          class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
+
+          <!-- Tutoría · Dibujo / Pintura -->
+          <button type="button"
+            onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));"
+            data-wa-type="tutoring" data-wa-key="tutoring.t1.title"
+            class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+            <div
+              class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="7.5" cy="10" r="1.2" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="7" r="1.2" fill="currentColor" stroke="none" />
+                <circle cx="16.5" cy="10" r="1.2" fill="currentColor" stroke="none" />
+                <circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none" />
+              </svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t1.title">Dibujo / Pintura
+              </div>
+              <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45"
+                data-i18n="tutoring.t1.sub">Fundamentos y portfolio</div>
+            </div>
+          </button>
+
+          <!-- Tutoría · Unreal Engine -->
+          <button type="button"
+            onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));"
+            data-wa-type="tutoring" data-wa-key="tutoring.t2.title"
+            class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+            <div
+              class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
+              <img src="assets/unreal-engine-white.png" alt="Unreal Engine" class="tutoring-icon" />
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t2.title">Unreal Engine</div>
+              <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45"
+                data-i18n="tutoring.t2.sub">Blueprints y pipeline</div>
+            </div>
+          </button>
+
+          <!-- Tutoría · Programación -->
+          <button type="button"
+            onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));"
+            data-wa-type="tutoring" data-wa-key="tutoring.t3.title"
+            class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+            <div
+              class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M8 7 L3 12 L8 17" />
+                <path d="M16 7 L21 12 L16 17" />
+                <path d="M14 4 L10 20" />
+              </svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t3.title">Programación</div>
+              <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45"
+                data-i18n="tutoring.t3.sub">Lógica y arquitectura</div>
+            </div>
+          </button>
+
+          <!-- Tutoría · Photoshop -->
+          <button type="button"
+            onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));"
+            data-wa-type="tutoring" data-wa-key="tutoring.t4.title"
+            class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+            <div
+              class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center text-white flex-shrink-0">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <text x="12" y="16" text-anchor="middle" font-family="Satoshi, system-ui" font-size="10"
+                  font-weight="700" fill="currentColor" stroke="none">Ps</text>
+              </svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t4.title">Photoshop</div>
+              <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45"
+                data-i18n="tutoring.t4.sub">Color y composición</div>
+            </div>
+          </button>
+
+          <!-- Tutoría · Blender -->
+          <button type="button"
+            onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));"
+            data-wa-type="tutoring" data-wa-key="tutoring.t5.title"
+            class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+            <div
+              class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
+              <img src="assets/blender-black.png" alt="Blender" class="tutoring-icon" />
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t5.title">Blender</div>
+              <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45"
+                data-i18n="tutoring.t5.sub">Modelado y render</div>
+            </div>
+          </button>
+
+          <!-- Tutoría · C++ -->
+          <button type="button"
+            onclick="openTutoringModal(this.getAttribute('data-wa-title'), this.getAttribute('data-wa-message'));"
+            data-wa-type="tutoring" data-wa-key="tutoring.t6.title"
+            class="w-full text-left bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition flex items-center gap-5 cursor-pointer">
+            <div
+              class="w-14 h-14 rounded-xl border border-sunrise/30 bg-sunrise/5 flex items-center justify-center flex-shrink-0">
+              <img src="assets/c++_black.svg" alt="C++" class="tutoring-icon" />
+            </div>
+            <div>
+              <div class="font-display font-bold text-white text-xl" data-i18n="tutoring.t6.title">C++</div>
+              <div class="mt-1 font-mono text-[11px] uppercase tracking-widest text-white/45"
+                data-i18n="tutoring.t6.sub">Gameplay programming</div>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ POR QUÉ NOSOTROS ============ -->
+    <section id="about" class="relative panel-dark">
+      <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="chip"><span class="dot"></span><span data-i18n="why.chip">03 · Por qué nosotros</span></span>
+          <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]"
+            data-i18n-html="why.title">
+            Razones para <span class="text-sunrise">elegirnos</span>.
+          </h2>
+          <p class="mt-5 text-white/60 text-[15px]" data-i18n="why.subtitle">
+            Una metodología que aparece en cada clase, cada feedback y cada proyecto.
+          </p>
+        </div>
+
+        <div
+          class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10 reveal-stagger">
+          <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+              class="text-sunrise flex-shrink-0 mt-0.5">
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+            </svg>
+            <div>
+              <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f1.title">Enseñanza directa</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f1.desc">
+                Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer
+                día.
+              </p>
+            </div>
+          </div>
+          <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+              class="text-sunrise flex-shrink-0 mt-0.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            <div>
+              <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f2.title">Ritmo personalizado</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f2.desc">
+                Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que
+                necesitás un empujón.
+              </p>
+            </div>
+          </div>
+          <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+              class="text-sunrise flex-shrink-0 mt-0.5">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+            <div>
+              <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f3.title">Proyectos reales</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f3.desc">
+                Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre
+                vuelve.
+              </p>
+            </div>
+          </div>
+          <div class="bg-navy-900/70 p-7 md:p-8 hover:bg-navy-800/60 transition group flex gap-4 items-start">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+              class="text-sunrise flex-shrink-0 mt-0.5">
+              <circle cx="9" cy="8" r="3" />
+              <circle cx="17" cy="9" r="2.4" />
+              <path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4" />
+            </svg>
+            <div>
+              <h3 class="font-display font-bold text-white text-xl" data-i18n="why.f4.title">Comunidad activa</h3>
+              <p class="mt-2 text-[13.5px] text-white/55 leading-relaxed" data-i18n="why.f4.desc">
+                Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="mt-20 grid grid-cols-3 gap-6 max-w-2xl mx-auto reveal">
+          <div class="text-center">
+            <div class="stat-num text-white text-3xl md:text-5xl">+500</div>
+            <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.students">
+              Estudiantes</div>
+          </div>
+          <div class="text-center">
+            <div class="stat-num text-sunrise text-3xl md:text-5xl">12</div>
+            <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2"
+              data-i18n="stats.instructors">Instructores</div>
+          </div>
+          <div class="text-center">
+            <div class="stat-num text-white text-3xl md:text-5xl">2020</div>
+            <div class="font-mono text-[10px] uppercase tracking-widest text-white/45 mt-2" data-i18n="stats.founded">
+              Fundado</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PLANES ============ -->
+    <section id="planes" class="relative panel">
+      <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="chip"><span class="dot"></span><span data-i18n="plans.chip">04 · Planes</span></span>
+          <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]"
+            data-i18n-html="plans.title">
+            Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.
+          </h2>
+        </div>
+
+        <div class="mt-16 grid md:grid-cols-3 gap-5 md:gap-6 reveal-stagger">
+
+          <!-- 30 Minutos -->
+          <article
+            class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] uppercase tracking-widest text-white/70" data-i18n="plans.p1.label">30
+                Minutos</span>
+            </div>
+            <h3 class="mt-4 font-display font-bold text-white text-xl leading-tight md:min-h-[56px]"
+              data-i18n="plans.p1.title">Sesión de resolución de problemas</h3>
+            <div class="mt-5">
+              <span class="stat-num text-white text-5xl md:text-6xl">$19</span>
+              <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.p1.period">/ 30 min</span>
+            </div>
+            <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed flex-none md:min-h-[80px]"
+              data-i18n="plans.p1.desc">Ideal para estudiantes que necesitan ayuda rápida y enfocada con un problema
+              específico.</p>
+            <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p1.f1">Sesión intensiva de 30 min</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p1.f2">Problemas técnicos</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p1.f3">Trabas en proyectos</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p1.f4">Clarificación de conceptos</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p1.f5">Asesoramiento artístico</span></li>
+            </ul>
+            <a href="#contact"
+              class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]"
+              data-i18n="plans.cta">Comenzar ahora</a>
+            <p class="mt-4 text-center font-mono text-[10px] uppercase tracking-widest text-white/40 leading-relaxed"
+              data-i18n="plans.p1.footer">Una gran opción para asistencia enfocada y resolución inmediata.</p>
+          </article>
+
+          <!-- 4 Sesiones -->
+          <article
+            class="rounded-2xl border border-white/10 bg-navy-900/50 p-7 md:p-8 flex flex-col hover:border-sunrise/40 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] uppercase tracking-widest text-white/70" data-i18n="plans.p2.label">4
+                Sesiones</span>
+            </div>
+            <h3 class="mt-4 font-display font-bold text-white text-xl leading-tight md:min-h-[56px]"
+              data-i18n="plans.p2.title">Paquete de aprendizaje guiado</h3>
+            <div class="mt-5">
+              <span class="stat-num text-white text-5xl md:text-6xl">$110</span>
+              <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.p2.period">/ 4 sesiones</span>
+            </div>
+            <p class="mt-3 text-[13.5px] text-white/55 leading-relaxed flex-none md:min-h-[80px]"
+              data-i18n="plans.p2.desc">Diseñado para estudiantes que quieren aprender un tema específico de manera
+              estructurada, adaptado a su nivel actual y objetivos.</p>
+            <ul class="mt-8 space-y-3 text-[13.5px] text-white/75 flex-1">
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p2.f1">Sesiones enfocadas de 1.5 hs</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p2.f2">Explicaciones paso a paso</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p2.f3">Ejercicios prácticos</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span data-i18n="plans.p2.f4">Guía
+                  personalizada</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p2.f5">Soporte de preguntas y respuestas en todo el proceso</span></li>
+            </ul>
+            <a href="#contact"
+              class="btn-ghost mt-8 inline-flex items-center justify-center text-white font-medium px-5 py-3 rounded-xl text-[14px]"
+              data-i18n="plans.cta">Comenzar ahora</a>
+            <p class="mt-4 text-center font-mono text-[10px] uppercase tracking-widest text-white/40 leading-relaxed"
+              data-i18n="plans.p2.footer">Ideal para el desarrollo enfocado de habilidades o para aprender un tema nuevo
+              eficientemente.</p>
+          </article>
+
+          <!-- 12 Sesiones (destacado) -->
+          <article
+            class="rounded-2xl border border-sunrise/40 bg-gradient-to-br from-navy-900/80 to-navy-950/80 p-7 md:p-8 flex flex-col relative overflow-hidden shadow-[0_30px_80px_-30px_rgba(255,122,0,0.4)]">
+            <div class="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-sunrise/30 blur-3xl pointer-events-none">
+            </div>
+            <div class="relative flex items-center justify-between">
+              <span class="font-mono text-[11px] uppercase tracking-widest text-sunrise" data-i18n="plans.p3.label">12
+                Sesiones</span>
+              <span class="chip" style="font-size:10px; padding:.18rem .55rem;"
+                data-i18n="plans.p3.badge">Recomendado</span>
+            </div>
+            <h3 class="relative mt-4 font-display font-bold text-white text-xl leading-tight md:min-h-[56px]"
+              data-i18n="plans.p3.title">Curso estructurado completo</h3>
+            <div class="relative mt-5">
+              <span class="stat-num text-white text-5xl md:text-6xl">$297</span>
+              <span class="font-mono text-[12px] text-white/40 ml-2" data-i18n="plans.p3.period">/ 12 sesiones</span>
+            </div>
+            <p class="relative mt-3 text-[13.5px] text-white/75 leading-relaxed flex-none md:min-h-[80px]"
+              data-i18n="plans.p3.desc">Una experiencia educativa integral en cualquier materia que ofrezcamos.</p>
+            <ul class="relative mt-8 space-y-3 text-[13.5px] text-white/85 flex-1">
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p3.f1">Sesiones integrales de 1.5 hs</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p3.f2">Progresión estructurada de fundamentos a conceptos avanzados</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p3.f3">Planificación de lecciones personalizada</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p3.f4">Tareas y ejercicios prácticos</span></li>
+              <li class="flex items-center gap-3"><span class="text-sunrise">●</span> <span
+                  data-i18n="plans.p3.f5">Feedback constante y mentoría</span></li>
+            </ul>
+            <a href="#contact"
+              class="btn-primary relative mt-8 inline-flex items-center justify-center text-white font-semibold px-5 py-3 rounded-xl text-[14px]"
+              data-i18n="plans.cta">Comenzar ahora</a>
+            <p class="relative mt-4 text-center font-mono text-[10px] uppercase tracking-widest text-white/40 leading-relaxed"
+              data-i18n="plans.p3.footer">Recomendado para estudiantes que buscan un entendimiento profundo, crecimiento
+              profesional o maestría.</p>
+          </article>
+
+        </div>
+
+        <!-- Subtitle placed under the options -->
+        <div class="mt-12 text-center reveal">
+          <p class="text-white/60 text-[14px] font-medium" data-i18n="plans.subtitle">
+            Cambiá o cancelá cuando quieras.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INSTRUCTORES ============ -->
+    <section id="instructors" class="relative panel-dark">
+      <div class="mx-auto max-w-7xl px-5 md:px-8 py-28 md:py-36">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
+          <div>
+            <span class="chip"><span class="dot"></span><span data-i18n="instructors.chip">05 · Sobre
+                nosotros</span></span>
+            <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.02]"
+              data-i18n-html="instructors.title">
+              Los <span class="text-sunrise">instructores</span> detrás del amanecer.
+            </h2>
+          </div>
+          <p class="md:max-w-sm text-white/55 text-[15px]" data-i18n="instructors.subtitle">
+            Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.
+          </p>
+        </div>
+
+        <div class="hairline mt-10"></div>
+
+        <div class="mt-12 grid sm:grid-cols-2 md:grid-cols-3 gap-5 reveal-stagger">
+
+          <!-- Instructor 1 -->
+          <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+            <div
+              class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden relative">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <radialGradient id="i1" cx="0.5" cy="0.4" r="0.6">
+                    <stop offset="0" stop-color="#FF7A00" stop-opacity="0.5" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#i1)" /><text x="100" y="115" text-anchor="middle"
+                  font-family="Satoshi" font-weight="700" font-size="64" fill="#FFB066" opacity="0.85">MV</text>
+              </svg>
+            </div>
+            <div class="mt-4">
+              <div class="font-display font-bold text-white text-[17px]">Martín Vega</div>
+              <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1"
+                data-i18n="instructors.i1.role">Director · UE5</div>
+              <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i1.bio">10 años en
+                estudios indie. Enseña Blueprints como si fuera un idioma.</p>
+            </div>
+          </div>
+
+          <!-- Instructor 2 -->
+          <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+            <div
+              class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <radialGradient id="i2" cx="0.55" cy="0.45" r="0.55">
+                    <stop offset="0" stop-color="#3DD2C0" stop-opacity="0.4" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#i2)" /><text x="100" y="115" text-anchor="middle"
+                  font-family="Satoshi" font-weight="700" font-size="64" fill="#9BE8DC">SR</text>
+              </svg>
+            </div>
+            <div class="mt-4">
+              <div class="font-display font-bold text-white text-[17px]">Sofía Ríos</div>
+              <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1"
+                data-i18n="instructors.i2.role">3D Art · Blender</div>
+              <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i2.bio">Modeladora con
+                créditos en juegos AA. Especialista en topología y retopo.</p>
+            </div>
+          </div>
+
+          <!-- Instructor 3 -->
+          <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+            <div
+              class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <radialGradient id="i3" cx="0.5" cy="0.5" r="0.6">
+                    <stop offset="0" stop-color="#FFB066" stop-opacity="0.55" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#i3)" /><text x="100" y="115" text-anchor="middle"
+                  font-family="Satoshi" font-weight="700" font-size="64" fill="#FFE0B8">JC</text>
+              </svg>
+            </div>
+            <div class="mt-4">
+              <div class="font-display font-bold text-white text-[17px]">Julián Cárdenas</div>
+              <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1"
+                data-i18n="instructors.i3.role">Programación · C++</div>
+              <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i3.bio">Gameplay
+                engineer. Cree que el mejor código es el que se borra.</p>
+            </div>
+          </div>
+
+          <!-- Instructor 4 -->
+          <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+            <div
+              class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <radialGradient id="i4" cx="0.45" cy="0.5" r="0.55">
+                    <stop offset="0" stop-color="#FF7A00" stop-opacity="0.45" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#i4)" /><text x="100" y="115" text-anchor="middle"
+                  font-family="Satoshi" font-weight="700" font-size="64" fill="#FFD9B5">EP</text>
+              </svg>
+            </div>
+            <div class="mt-4">
+              <div class="font-display font-bold text-white text-[17px]">Elena Paz</div>
+              <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1"
+                data-i18n="instructors.i4.role">Concept Art · Photoshop</div>
+              <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i4.bio">Ilustradora de
+                personajes. Pinta atmósferas que cuentan historias.</p>
+            </div>
+          </div>
+
+          <!-- Instructor 5 -->
+          <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+            <div
+              class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <radialGradient id="i5" cx="0.5" cy="0.5" r="0.55">
+                    <stop offset="0" stop-color="#FFB066" stop-opacity="0.5" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#i5)" /><text x="100" y="115" text-anchor="middle"
+                  font-family="Satoshi" font-weight="700" font-size="64" fill="#FFD9B5">LA</text>
+              </svg>
+            </div>
+            <div class="mt-4">
+              <div class="font-display font-bold text-white text-[17px]">Lucas Arce</div>
+              <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1"
+                data-i18n="instructors.i5.role">Dibujo · Anatomía</div>
+              <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i5.bio">15 años
+                dibujando. Le obsesiona el gesto y la línea de acción.</p>
+            </div>
+          </div>
+
+          <!-- Instructor 6 -->
+          <div class="rounded-2xl border border-white/10 bg-navy-900/40 p-5 hover:border-sunrise/40 transition">
+            <div
+              class="aspect-square rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-white/5 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <radialGradient id="i6" cx="0.5" cy="0.5" r="0.55">
+                    <stop offset="0" stop-color="#3DD2C0" stop-opacity="0.4" />
+                    <stop offset="1" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#i6)" /><text x="100" y="115" text-anchor="middle"
+                  font-family="Satoshi" font-weight="700" font-size="64" fill="#9BE8DC">CM</text>
+              </svg>
+            </div>
+            <div class="mt-4">
+              <div class="font-display font-bold text-white text-[17px]">Camila Molina</div>
+              <div class="font-mono text-[11px] uppercase tracking-widest text-sunrise/80 mt-1"
+                data-i18n="instructors.i6.role">Level Design</div>
+              <p class="mt-3 text-[12.5px] text-white/50 leading-relaxed" data-i18n="instructors.i6.bio">Diseña espacios
+                que enseñan a jugarlos sin un solo tutorial.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACTO + FOOTER ============ -->
+    <section id="contact" class="relative panel-dark">
+      <div class="mx-auto max-w-7xl px-5 md:px-8 pt-28 md:pt-36 pb-12">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="chip"><span class="dot"></span><span data-i18n="contact.chip">06 · Contacto</span></span>
+          <h2 class="mt-5 font-display font-bold text-white text-[clamp(2rem,5vw,4rem)] leading-[1]"
+            data-i18n="contact.title">
+            Contactanos.
+          </h2>
+          <p class="mt-6 text-white/60 text-[15px] leading-relaxed" data-i18n="contact.subtitle">
+            Dudas, propuestas o ganas de empezar. Escribínos por la vía que prefieras.
+          </p>
+        </div>
+
+        <!-- WhatsApp CTA -->
+        <div class="mt-12 flex justify-center reveal">
+          <a href="https://wa.me/5493585484891" target="_blank" rel="noopener noreferrer"
+            class="btn-primary inline-flex items-center gap-2 text-white font-semibold px-7 py-3.5 rounded-xl text-[15px]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+            </svg>
+            <span data-i18n="contact.whatsapp_cta">Escribínos por WhatsApp</span>
+          </a>
+        </div>
+
+        <!-- Redes sociales -->
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4 reveal">
+          <a href="mailto:secondsunrisestudio@gmail.com" aria-label="Email"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M3 7l9 6 9-6" />
+            </svg>
+          </a>
+          <a href="https://instagram.com/secondsunstdio" target="_blank" rel="noopener noreferrer"
+            aria-label="Instagram"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+            </svg>
+          </a>
+          <a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" aria-label="X"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z" />
+            </svg>
+          </a>
+          <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" aria-label="Discord"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-900/40 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <img src="assets/discord-white-icon.webp" alt="" class="w-[22px] h-[22px] object-contain" />
+          </a>
+        </div>
+
+        <div class="hairline my-20"></div>
+
+        <footer class="grid md:grid-cols-12 gap-8 items-start">
+          <div class="md:col-span-5">
+            <a href="#top" class="flex items-center" aria-label="Second Sunrise Studios — Inicio">
+              <span class="font-brand text-[20px] leading-none whitespace-nowrap">
+                <span class="text-white">Second</span> <span class="text-sunrise">Sunrise</span> <span
+                  class="text-white">Studios</span>
+              </span>
+            </a>
+            <p class="mt-4 text-white/50 text-[13px] max-w-sm leading-relaxed" data-i18n="footer.desc">
+              Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada
+              día.
+            </p>
+          </div>
+          <div class="md:col-span-2">
+            <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.platform">
+              Plataforma</div>
+            <ul class="mt-4 space-y-2 text-[13px] text-white/75">
+              <li><a href="#about" class="hover:text-sunrise transition" data-i18n="footer.why_us">Por qué nosotros</a>
+              </li>
+              <li><a href="#instructors" class="hover:text-sunrise transition"
+                  data-i18n="footer.instructors">Instructores</a></li>
+              <li><a href="#planes" class="hover:text-sunrise transition" data-i18n="footer.plans">Planes</a></li>
+            </ul>
+          </div>
+          <div class="md:col-span-2">
+            <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.courses_title">
+              Cursos</div>
+            <ul class="mt-4 space-y-2 text-[13px] text-white/75">
+              <li><a href="#courses" class="hover:text-sunrise transition">Unreal Engine 5</a></li>
+              <li><a href="#courses" class="hover:text-sunrise transition" data-i18n="footer.course_3d">Modelado 3D</a>
+              </li>
+              <li><a href="#courses" class="hover:text-sunrise transition">C++ Gameplay</a></li>
+              <li><a href="#courses" class="hover:text-sunrise transition">Concept Art</a></li>
+            </ul>
+          </div>
+          <div class="md:col-span-3">
+            <div class="font-mono text-[10px] uppercase tracking-widest text-white/40" data-i18n="footer.community">
+              Comunidad</div>
+            <ul class="mt-4 grid grid-cols-2 gap-2">
+              <li><a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer"
+                  class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Discord</a>
+              </li>
+              <li><a href="https://instagram.com/secondsunstdio" target="_blank" rel="noopener noreferrer"
+                  class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Instagram</a>
+              </li>
+              <li><a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer"
+                  class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">X</a>
+              </li>
+              <li><a href="mailto:secondsunrisestudio@gmail.com"
+                  class="block rounded-lg border border-white/10 hover:border-sunrise/50 hover:bg-sunrise/5 transition px-3 py-2 text-[12px] text-white/75">Email</a>
+              </li>
+            </ul>
+          </div>
+        </footer>
+
+        <div
+          class="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-widest text-white/40">
+          <span>© MMXXVI · Second Sunrise Studios · Río Cuarto, AR</span>
+          <span class="flex items-center gap-4">
+            <a href="#" class="hover:text-sunrise transition" data-i18n="footer.privacy">Privacidad</a>
+            <a href="#" class="hover:text-sunrise transition" data-i18n="footer.terms">Términos</a>
+            <span class="flex items-center gap-2"><span
+                class="w-1.5 h-1.5 rounded-full bg-sunrise sun-pulse"></span>Build · 26.05</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Tutorías -->
+    <div id="tutoring-modal"
+      class="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+      <div class="absolute inset-0 bg-navy-950/80 backdrop-blur-sm" id="tutoring-modal-bg"></div>
+      <div
+        class="relative bg-navy-900 border border-white/10 rounded-2xl p-6 md:p-8 w-full max-w-sm shadow-2xl transform scale-95 opacity-0 transition-all duration-300"
+        id="tutoring-modal-content">
+        <button type="button" class="absolute top-4 right-4 text-white/50 hover:text-white" id="tutoring-modal-close">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <h3 class="font-display font-bold text-white text-xl mb-6 text-center" data-i18n="modal.title">Contactanos por
+        </h3>
+        <div class="flex items-center justify-center gap-4">
+          <a id="modal-em" href="#"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M3 7l9 6 9-6" />
+            </svg>
+          </a>
+          <a id="modal-wa" href="#" target="_blank" rel="noopener noreferrer"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+            </svg>
+          </a>
+          <a id="modal-ig" href="#" target="_blank" rel="noopener noreferrer"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+            </svg>
+          </a>
+          <a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z" />
+            </svg>
+          </a>
+          <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer"
+            class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
+            <img src="assets/discord-white-icon.webp" alt="" class="w-[22px] h-[22px] object-contain" />
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
 
-<!-- Modal Tutorías -->
-<div id="tutoring-modal" class="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
-  <div class="absolute inset-0 bg-navy-950/80 backdrop-blur-sm" id="tutoring-modal-bg"></div>
-  <div class="relative bg-navy-900 border border-white/10 rounded-2xl p-6 md:p-8 w-full max-w-sm shadow-2xl transform scale-95 opacity-0 transition-all duration-300" id="tutoring-modal-content">
-    <button type="button" class="absolute top-4 right-4 text-white/50 hover:text-white" id="tutoring-modal-close">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-    <h3 class="font-display font-bold text-white text-xl mb-6 text-center" data-i18n="modal.title">Contactanos por</h3>
-    <div class="flex items-center justify-center gap-4">
-      <a id="modal-em" href="#" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-      </a>
-      <a id="modal-wa" href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.5-.5-.6-.5h-.6c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.1 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
-      </a>
-      <a id="modal-ig" href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-      </a>
-      <a href="https://x.com/secondsunstdio" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.67l7.73-8.835L1.254 2.25h6.82l4.713 6.231 5.457-6.231zm-2.31 17.52h1.833L7.084 4.126H5.117L15.934 19.77z"/></svg>
-      </a>
-      <a href="https://discord.gg/kGGk3tQG9x" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl border border-white/10 bg-navy-800 hover:border-sunrise/50 hover:bg-sunrise/5 transition flex items-center justify-center text-white/80 hover:text-white">
-        <img src="assets/discord-white-icon.webp" alt="" class="w-[22px] h-[22px] object-contain" />
-      </a>
-    </div>
-  </div>
-</div>
+  </main>
 
-</main>
+  <script>
+    // Navbar shrink on scroll
+    const nav = document.getElementById('nav');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > 30) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+      lastY = y;
+    }, { passive: true });
 
-<script>
-  // Navbar shrink on scroll
-  const nav = document.getElementById('nav');
-  let lastY = 0;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (y > 30) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
-    lastY = y;
-  }, { passive: true });
+    // Reveal-on-scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-  // Reveal-on-scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
+    document.querySelectorAll('.reveal, .reveal-x, .reveal-scale, .reveal-stagger').forEach(el => io.observe(el));
+
+    // Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (!id || !id.startsWith('#') || id.length <= 1) return;
+        const t = document.querySelector(id);
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-  document.querySelectorAll('.reveal, .reveal-x, .reveal-scale, .reveal-stagger').forEach(el => io.observe(el));
+    // Subtle parallax on the persistent scene
+    const sceneBg = document.querySelector('.scene-bg');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (sceneBg) sceneBg.style.transform = `translateY(${y * 0.04}px)`;
+    }, { passive: true });
 
-  // Smooth anchor scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const id = a.getAttribute('href');
-      if (!id || !id.startsWith('#') || id.length <= 1) return;
-      const t = document.querySelector(id);
-      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    });
-  });
-
-  // Subtle parallax on the persistent scene
-  const sceneBg = document.querySelector('.scene-bg');
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (sceneBg) sceneBg.style.transform = `translateY(${y * 0.04}px)`;
-  }, { passive: true });
-
-  // Background media — pick web or mobile asset based on viewport
-  const bgVideo = document.getElementById('bgVideo');
-  if (bgVideo) {
-    const variant = window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'web';
-    bgVideo.poster = `assets/image-background-${variant}.jpg`;
-    bgVideo.src = `assets/video-background-${variant}.mp4`;
-    bgVideo.play().catch(() => { /* autoplay may be blocked; poster still shows */ });
-  }
-
-  // i18n
-  const TRANSLATIONS = {
-    es: {
-      'title': 'Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo',
-      'nav.courses': 'Cursos',
-      'nav.tutoring': 'Tutorías',
-      'nav.plans': 'Planes',
-      'nav.instructors': 'Instructores',
-      'nav.contact': 'Contacto',
-      'nav.cta': 'Empezar ahora',
-      'hero.chip': 'Escuela de Gamedev · Río Cuarto AR',
-      'hero.tagline': 'Aprendé de forma <span class="text-sunrise">personalizada</span> y a tu ritmo.',
-      'hero.description_lead': 'Enseñanza directa, sin relleno.',
-      'hero.description_tail': 'Te acompañamos en tu camino para construir los proyectos que querés hacer.',
-      'hero.cta_primary': 'Explorar cursos',
-      'hero.cta_secondary': 'Conócenos',
-      'courses.chip': '01 · Catálogo',
-      'courses.title': 'Nuestros <span class="text-sunrise">cursos</span>.',
-      'courses.subtitle': 'Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.',
-      'courses.weeks_12': '12 semanas',
-      'courses.weeks_10_a': '10 semanas',
-      'courses.weeks_10_b': '10 semanas',
-      'courses.weeks_14': '14 semanas',
-      'courses.weeks_8': '8 semanas',
-      'courses.weeks_9': '9 semanas',
-      'courses.c1.tag': 'Engine',
-      'courses.c1.title': 'Fundamentos de Unreal Engine 5',
-      'courses.c1.desc': 'De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.',
-      'courses.c2.tag': '3D Art',
-      'courses.c2.title': 'Modelado 3D para videojuegos',
-      'courses.c2.desc': 'Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.',
-      'courses.c3.tag': 'Code',
-      'courses.c3.title': 'Programación gameplay en C++',
-      'courses.c3.desc': 'Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.',
-      'courses.c4.tag': 'Art',
-      'courses.c4.title': 'Pintura digital y concept art',
-      'courses.c4.desc': 'Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.',
-      'courses.c5.tag': 'Fundamentos',
-      'courses.c5.title': 'Dibujo y anatomía para juegos',
-      'courses.c5.desc': 'Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.',
-      'courses.c6.tag': 'Design',
-      'courses.c6.title': 'Level design y narrativa ambiental',
-      'courses.c6.desc': 'Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.',
-      'tutoring.chip': '02 · Tutorías 1:1',
-      'tutoring.title': 'Nuestras <span class="text-sunrise">tutorías</span> disponibles.',
-      'tutoring.subtitle': 'Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.',
-      'tutoring.t1.title': 'Dibujo / Pintura',
-      'tutoring.t1.sub': 'Fundamentos y portfolio',
-      'tutoring.t2.title': 'Unreal Engine',
-      'tutoring.t2.sub': 'Blueprints y pipeline',
-      'tutoring.t3.title': 'Programación',
-      'tutoring.t3.sub': 'Lógica y arquitectura',
-      'tutoring.t4.title': 'Photoshop',
-      'tutoring.t4.sub': 'Color y composición',
-      'tutoring.t5.title': 'Blender',
-      'tutoring.t5.sub': 'Modelado y render',
-      'tutoring.t6.title': 'C++',
-      'tutoring.t6.sub': 'Gameplay programming',
-      'why.chip': '03 · Por qué nosotros',
-      'why.title': 'Razones para <span class="text-sunrise">elegirnos</span>.',
-      'why.subtitle': 'Una metodología que aparece en cada clase, cada feedback y cada proyecto.',
-      'why.f1.title': 'Enseñanza directa',
-      'why.f1.desc': 'Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.',
-      'why.f2.title': 'Ritmo personalizado',
-      'why.f2.desc': 'Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.',
-      'why.f3.title': 'Proyectos reales',
-      'why.f3.desc': 'Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.',
-      'why.f4.title': 'Comunidad activa',
-      'why.f4.desc': 'Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.',
-      'stats.students': 'Estudiantes',
-      'stats.instructors': 'Instructores',
-      'stats.founded': 'Fundado',
-      'plans.chip': '04 · Planes',
-      'plans.title': 'Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.',
-      'plans.subtitle': 'Cambiá o cancelá cuando quieras.',
-      'plans.cta': 'Comenzar ahora',
-      'plans.refund': 'Reembolso 7 días desde la compra',
-      'plans.monthly.label': 'Mensual',
-      'plans.monthly.period': '/ mes',
-      'plans.monthly.desc': 'Sin compromiso. Pagás mes a mes.',
-      'plans.monthly.f1': 'Todo el catálogo de cursos',
-      'plans.monthly.f2': 'Retos y proyectos prácticos',
-      'plans.monthly.f3': 'Comunidad y soporte en Discord',
-      'plans.quarterly.label': 'Trimestral',
-      'plans.quarterly.period': '/ trim.',
-      'plans.quarterly.desc': 'Equivalente a $7.20 al mes. Pagás cada 3 meses.',
-      'plans.quarterly.f1': 'Todo lo del plan mensual',
-      'plans.quarterly.f2': 'Mejor precio que mes a mes',
-      'plans.quarterly.f3': 'Soporte prioritario',
-      'plans.annual.label': 'Anual · Más popular',
-      'plans.annual.period': '/ año',
-      'plans.annual.desc': 'Equivalente a $6.40 al mes. <span class="text-sunrise">Ahorrás $19.20 al año.</span>',
-      'plans.annual.f1': 'Todo lo del plan trimestral',
-      'plans.annual.f2': 'El mejor precio recurrente',
-      'plans.annual.f3': 'Acceso anticipado a nuevo contenido',
-      'instructors.chip': '05 · Sobre nosotros',
-      'instructors.title': 'Los <span class="text-sunrise">instructores</span> detrás del amanecer.',
-      'instructors.subtitle': 'Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.',
-      'instructors.i1.role': 'Director · UE5',
-      'instructors.i1.bio': '10 años en estudios indie. Enseña Blueprints como si fuera un idioma.',
-      'instructors.i2.role': '3D Art · Blender',
-      'instructors.i2.bio': 'Modeladora con créditos en juegos AA. Especialista en topología y retopo.',
-      'instructors.i3.role': 'Programación · C++',
-      'instructors.i3.bio': 'Gameplay engineer. Cree que el mejor código es el que se borra.',
-      'instructors.i4.role': 'Concept Art · Photoshop',
-      'instructors.i4.bio': 'Ilustradora de personajes. Pinta atmósferas que cuentan historias.',
-      'instructors.i5.role': 'Dibujo · Anatomía',
-      'instructors.i5.bio': '15 años dibujando. Le obsesiona el gesto y la línea de acción.',
-      'instructors.i6.role': 'Level Design',
-      'instructors.i6.bio': 'Diseña espacios que enseñan a jugarlos sin un solo tutorial.',
-      'contact.chip': '06 · Contacto',
-      'contact.title': 'Contactanos.',
-      'contact.subtitle': 'Dudas, propuestas o ganas de empezar. Escribínos por WhatsApp o seguinos en nuestras redes.',
-      'contact.whatsapp_cta': 'Escribínos por WhatsApp',
-      'footer.desc': 'Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.',
-      'footer.platform': 'Plataforma',
-      'footer.why_us': 'Por qué nosotros',
-      'footer.instructors': 'Instructores',
-      'footer.plans': 'Planes',
-      'footer.courses_title': 'Cursos',
-      'footer.course_3d': 'Modelado 3D',
-      'footer.community': 'Comunidad',
-      'footer.privacy': 'Privacidad',
-      'footer.terms': 'Términos',
-      'wa.course_template': '¡Hola! Me interesa el curso «{title}». ¿Me podrían dar más información?',
-      'wa.tutoring_template': '¡Hola! Me interesa la tutoría de «{title}». ¿Me podrían dar más información?',
-      'modal.title': 'Contactanos por'
-    },
-    en: {
-      'title': 'Second Sunrise Studios — Learn gamedev and digital art at your own pace',
-      'nav.courses': 'Courses',
-      'nav.tutoring': 'Tutoring',
-      'nav.plans': 'Plans',
-      'nav.instructors': 'Instructors',
-      'nav.contact': 'Contact',
-      'nav.cta': 'Get started',
-      'hero.chip': 'Gamedev School · Río Cuarto AR',
-      'hero.tagline': 'Learn in a <span class="text-sunrise">personalized</span> way, at your own pace.',
-      'hero.description_lead': 'Direct teaching, no filler.',
-      'hero.description_tail': 'We walk with you on your way to building the projects you actually want to make.',
-      'hero.cta_primary': 'Explore courses',
-      'hero.cta_secondary': 'About us',
-      'courses.chip': '01 · Catalog',
-      'courses.title': 'Our <span class="text-sunrise">courses</span>.',
-      'courses.subtitle': 'Six programs designed to take you from zero to portfolio. Each course, a different horizon.',
-      'courses.weeks_12': '12 weeks',
-      'courses.weeks_10_a': '10 weeks',
-      'courses.weeks_10_b': '10 weeks',
-      'courses.weeks_14': '14 weeks',
-      'courses.weeks_8': '8 weeks',
-      'courses.weeks_9': '9 weeks',
-      'courses.c1.tag': 'Engine',
-      'courses.c1.title': 'Unreal Engine 5 Fundamentals',
-      'courses.c1.desc': 'From zero to your first playable scene. Blueprints, Lumen, Nanite and a professional workflow.',
-      'courses.c2.tag': '3D Art',
-      'courses.c2.title': '3D modeling for video games',
-      'courses.c2.desc': 'Low-poly and high-poly modeling in Blender, retopo, UVs and engine-ready texturing.',
-      'courses.c3.tag': 'Code',
-      'courses.c3.title': 'Gameplay programming in C++',
-      'courses.c3.desc': 'Combat systems, basic AI and gameplay architecture with modern C++ on UE5.',
-      'courses.c4.tag': 'Art',
-      'courses.c4.title': 'Digital painting and concept art',
-      'courses.c4.desc': 'Lighting, color and composition in Photoshop. From thumbnail to final keyframe.',
-      'courses.c5.tag': 'Fundamentals',
-      'courses.c5.title': 'Drawing and anatomy for games',
-      'courses.c5.desc': 'Human figure construction, gesture and proportions applied to video game characters.',
-      'courses.c6.tag': 'Design',
-      'courses.c6.title': 'Level design and environmental storytelling',
-      'courses.c6.desc': 'Pacing, rhythm and storytelling without dialogue. Designing worlds that teach you how to play them.',
-      'tutoring.chip': '02 · 1:1 Tutoring',
-      'tutoring.title': 'Our available <span class="text-sunrise">tutoring</span> sessions.',
-      'tutoring.subtitle': 'One-on-one sessions with expert instructors. Move your project forward with real feedback.',
-      'tutoring.t1.title': 'Drawing / Painting',
-      'tutoring.t1.sub': 'Fundamentals and portfolio',
-      'tutoring.t2.title': 'Unreal Engine',
-      'tutoring.t2.sub': 'Blueprints and pipeline',
-      'tutoring.t3.title': 'Programming',
-      'tutoring.t3.sub': 'Logic and architecture',
-      'tutoring.t4.title': 'Photoshop',
-      'tutoring.t4.sub': 'Color and composition',
-      'tutoring.t5.title': 'Blender',
-      'tutoring.t5.sub': 'Modeling and render',
-      'tutoring.t6.title': 'C++',
-      'tutoring.t6.sub': 'Gameplay programming',
-      'why.chip': '03 · Why us',
-      'why.title': 'Reasons to <span class="text-sunrise">choose</span> us.',
-      'why.subtitle': 'A methodology that shows up in every class, every piece of feedback and every project.',
-      'why.f1.title': 'Direct teaching',
-      'why.f1.desc': 'No filler or endless theory. Every class is designed for you to produce something tangible from day one.',
-      'why.f2.title': 'Personalized pace',
-      'why.f2.desc': 'You move forward when you can, not when a calendar dictates. 1:1 tutoring for the moments you need a push.',
-      'why.f3.title': 'Real projects',
-      'why.f3.desc': 'You finish each course with portfolio pieces, not forgettable exercises. The sunrise always returns.',
-      'why.f4.title': 'Active community',
-      'why.f4.desc': 'Open Discord, devlogs among students and group reviews. Learning alone is slower.',
-      'stats.students': 'Students',
-      'stats.instructors': 'Instructors',
-      'stats.founded': 'Founded',
-      'plans.chip': '04 · Plans',
-      'plans.title': 'Pick the <span class="text-sunrise">plan</span> that fits you.',
-      'plans.subtitle': 'Change or cancel whenever you want.',
-      'plans.cta': 'Get started',
-      'plans.refund': '7-day refund from purchase',
-      'plans.monthly.label': 'Monthly',
-      'plans.monthly.period': '/ mo',
-      'plans.monthly.desc': 'No commitment. Pay month to month.',
-      'plans.monthly.f1': 'Full course catalog',
-      'plans.monthly.f2': 'Challenges and hands-on projects',
-      'plans.monthly.f3': 'Discord community and support',
-      'plans.quarterly.label': 'Quarterly',
-      'plans.quarterly.period': '/ qtr',
-      'plans.quarterly.desc': 'Equivalent to $7.20 a month. Pay every 3 months.',
-      'plans.quarterly.f1': 'Everything in the monthly plan',
-      'plans.quarterly.f2': 'Better price than monthly',
-      'plans.quarterly.f3': 'Priority support',
-      'plans.annual.label': 'Annual · Most popular',
-      'plans.annual.period': '/ yr',
-      'plans.annual.desc': 'Equivalent to $6.40 a month. <span class="text-sunrise">Save $19.20 a year.</span>',
-      'plans.annual.f1': 'Everything in the quarterly plan',
-      'plans.annual.f2': 'The best recurring price',
-      'plans.annual.f3': 'Early access to new content',
-      'instructors.chip': '05 · About us',
-      'instructors.title': 'The <span class="text-sunrise">instructors</span> behind the sunrise.',
-      'instructors.subtitle': 'Six professionals who live what they teach. Each one brings years of industry to every class.',
-      'instructors.i1.role': 'Director · UE5',
-      'instructors.i1.bio': '10 years in indie studios. Teaches Blueprints like a language.',
-      'instructors.i2.role': '3D Art · Blender',
-      'instructors.i2.bio': 'Modeler with credits on AA games. Specialist in topology and retopo.',
-      'instructors.i3.role': 'Programming · C++',
-      'instructors.i3.bio': 'Gameplay engineer. Believes the best code is the code you delete.',
-      'instructors.i4.role': 'Concept Art · Photoshop',
-      'instructors.i4.bio': 'Character illustrator. Paints atmospheres that tell stories.',
-      'instructors.i5.role': 'Drawing · Anatomy',
-      'instructors.i5.bio': '15 years drawing. Obsessed with gesture and line of action.',
-      'instructors.i6.role': 'Level Design',
-      'instructors.i6.bio': 'Designs spaces that teach you how to play without a single tutorial.',
-      'contact.chip': '06 · Contact',
-      'contact.title': 'Get in touch.',
-      'contact.subtitle': 'Questions, proposals or just ready to start. Message us on WhatsApp or follow us on social.',
-      'contact.whatsapp_cta': 'Message us on WhatsApp',
-      'footer.desc': 'Online school of gamedev and digital art. Learn at your own pace what an indie studio actually uses every day.',
-      'footer.platform': 'Platform',
-      'footer.why_us': 'Why us',
-      'footer.instructors': 'Instructors',
-      'footer.plans': 'Plans',
-      'footer.courses_title': 'Courses',
-      'footer.course_3d': '3D Modeling',
-      'footer.community': 'Community',
-      'footer.privacy': 'Privacy',
-      'footer.terms': 'Terms',
-      'wa.course_template': 'Hi! I\'m interested in the «{title}» course. Could you share more info?',
-      'wa.tutoring_template': 'Hi! I\'m interested in «{title}» tutoring. Could you share more info?',
-      'modal.title': 'Contact us via'
+    // Background media — pick web or mobile asset based on viewport
+    const bgVideo = document.getElementById('bgVideo');
+    if (bgVideo) {
+      const variant = window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'web';
+      bgVideo.poster = `assets/image-background-${variant}.jpg`;
+      bgVideo.src = `assets/video-background-${variant}.mp4`;
+      bgVideo.play().catch(() => { /* autoplay may be blocked; poster still shows */ });
     }
-  };
 
-  const WHATSAPP_NUMBER = '5493585484891';
-
-  const STORAGE_KEY = 'sss.lang';
-  const SUPPORTED = ['es', 'en'];
-
-  function resolveInitialLang() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && SUPPORTED.includes(saved)) return saved;
-    const browser = (navigator.language || 'es').slice(0, 2).toLowerCase();
-    return SUPPORTED.includes(browser) ? browser : 'es';
-  }
-
-  function applyLang(lang) {
-    const dict = TRANSLATIONS[lang];
-    if (!dict) return;
-
-    document.documentElement.lang = lang;
-    if (dict['title']) document.title = dict['title'];
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (dict[key] != null) el.textContent = dict[key];
-    });
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-      const key = el.getAttribute('data-i18n-html');
-      if (dict[key] != null) el.innerHTML = dict[key];
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      if (dict[key] != null) el.setAttribute('placeholder', dict[key]);
-    });
-
-    document.querySelectorAll('[data-wa-type][data-wa-key]').forEach(el => {
-      const type = el.getAttribute('data-wa-type');
-      const titleKey = el.getAttribute('data-wa-key');
-      const template = dict['wa.' + type + '_template'];
-      const title = dict[titleKey];
-      if (!template || !title) return;
-      const message = template.replace('{title}', title);
-      
-      if (type === 'tutoring') {
-        el.setAttribute('data-wa-message', message);
-        el.setAttribute('data-wa-title', title);
-        el.removeAttribute('href');
-      } else {
-        el.setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+    // i18n
+    const TRANSLATIONS = {
+      es: {
+        'title': 'Second Sunrise Studios — Aprendé gamedev y arte digital a tu ritmo',
+        'nav.courses': 'Cursos',
+        'nav.tutoring': 'Tutorías',
+        'nav.plans': 'Planes',
+        'nav.instructors': 'Instructores',
+        'nav.contact': 'Contacto',
+        'nav.cta': 'Empezar ahora',
+        'hero.chip': 'Escuela de Gamedev · Río Cuarto AR',
+        'hero.tagline': 'Aprendé de forma <span class="text-sunrise">personalizada</span> y a tu ritmo.',
+        'hero.description_lead': 'Enseñanza directa, sin relleno.',
+        'hero.description_tail': 'Te acompañamos en tu camino para construir los proyectos que querés hacer.',
+        'hero.cta_primary': 'Explorar cursos',
+        'hero.cta_secondary': 'Conócenos',
+        'courses.chip': '01 · Catálogo',
+        'courses.title': 'Nuestros <span class="text-sunrise">cursos</span>.',
+        'courses.subtitle': 'Seis programas pensados para llevarte de cero a portfolio. Cada curso, un horizonte distinto.',
+        'courses.weeks_12': '12 semanas',
+        'courses.weeks_10_a': '10 semanas',
+        'courses.weeks_10_b': '10 semanas',
+        'courses.weeks_14': '14 semanas',
+        'courses.weeks_8': '8 semanas',
+        'courses.weeks_9': '9 semanas',
+        'courses.c1.tag': 'Engine',
+        'courses.c1.title': 'Fundamentos de Unreal Engine 5',
+        'courses.c1.desc': 'De cero a tu primera escena jugable. Blueprints, Lumen, Nanite y flujo de trabajo profesional.',
+        'courses.c2.tag': '3D Art',
+        'courses.c2.title': 'Modelado 3D para videojuegos',
+        'courses.c2.desc': 'Modelado low-poly y high-poly en Blender, retopo, UVs y texturizado listo para motor.',
+        'courses.c3.tag': 'Code',
+        'courses.c3.title': 'Programación gameplay en C++',
+        'courses.c3.desc': 'Sistemas de combate, IA básica y arquitectura de gameplay con C++ moderno sobre UE5.',
+        'courses.c4.tag': 'Art',
+        'courses.c4.title': 'Pintura digital y concept art',
+        'courses.c4.desc': 'Iluminación, color y composición en Photoshop. Del thumbnail al keyframe final.',
+        'courses.c5.tag': 'Fundamentos',
+        'courses.c5.title': 'Dibujo y anatomía para juegos',
+        'courses.c5.desc': 'Construcción de figura humana, gesto y proporciones aplicadas a personajes de videojuegos.',
+        'courses.c6.tag': 'Design',
+        'courses.c6.title': 'Level design y narrativa ambiental',
+        'courses.c6.desc': 'Pacing, ritmo y storytelling sin diálogos. Diseñar mundos que enseñan a jugarlos.',
+        'tutoring.chip': '02 · Tutorías 1:1',
+        'tutoring.title': 'Nuestras <span class="text-sunrise">tutorías</span> disponibles.',
+        'tutoring.subtitle': 'Sesiones uno a uno con instructores expertos. Avanzá en tu proyecto con feedback real.',
+        'tutoring.t1.title': 'Dibujo / Pintura',
+        'tutoring.t1.sub': 'Fundamentos y portfolio',
+        'tutoring.t2.title': 'Unreal Engine',
+        'tutoring.t2.sub': 'Blueprints y pipeline',
+        'tutoring.t3.title': 'Programación',
+        'tutoring.t3.sub': 'Lógica y arquitectura',
+        'tutoring.t4.title': 'Photoshop',
+        'tutoring.t4.sub': 'Color y composición',
+        'tutoring.t5.title': 'Blender',
+        'tutoring.t5.sub': 'Modelado y render',
+        'tutoring.t6.title': 'C++',
+        'tutoring.t6.sub': 'Gameplay programming',
+        'why.chip': '03 · Por qué nosotros',
+        'why.title': 'Razones para <span class="text-sunrise">elegirnos</span>.',
+        'why.subtitle': 'Una metodología que aparece en cada clase, cada feedback y cada proyecto.',
+        'why.f1.title': 'Enseñanza directa',
+        'why.f1.desc': 'Sin relleno ni teorías eternas. Cada clase está pensada para que produzcas algo tangible desde el primer día.',
+        'why.f2.title': 'Ritmo personalizado',
+        'why.f2.desc': 'Avanzás cuando podés, no cuando un calendario lo dicta. Tutorías 1:1 para los momentos en los que necesitás un empujón.',
+        'why.f3.title': 'Proyectos reales',
+        'why.f3.desc': 'Terminás cada curso con piezas para tu portfolio, no con ejercicios olvidables. El amanecer siempre vuelve.',
+        'why.f4.title': 'Comunidad activa',
+        'why.f4.desc': 'Discord abierto, devlogs entre estudiantes y reviews colectivas. Aprender en solitario es más lento.',
+        'stats.students': 'Estudiantes',
+        'stats.instructors': 'Instructores',
+        'stats.founded': 'Fundado',
+        'plans.chip': '04 · Planes',
+        'plans.title': 'Elegí el <span class="text-sunrise">plan</span> que se ajuste a vos.',
+        'plans.subtitle': 'Cambiá o cancelá cuando quieras.',
+        'plans.cta': 'Comenzar ahora',
+        'plans.refund': 'Reembolso 7 días desde la compra',
+        'plans.p1.label': '30 Minutos',
+        'plans.p1.title': 'Sesión de resolución de problemas',
+        'plans.p1.period': '/ 30 min',
+        'plans.p1.desc': 'Ideal para estudiantes que necesitan ayuda rápida y enfocada con un problema específico.',
+        'plans.p1.f1': 'Sesión intensiva de 30 min',
+        'plans.p1.f2': 'Problemas técnicos',
+        'plans.p1.f3': 'Trabas en proyectos',
+        'plans.p1.f4': 'Clarificación de conceptos',
+        'plans.p1.f5': 'Asesoramiento artístico',
+        'plans.p1.footer': 'Una gran opción para asistencia enfocada y resolución inmediata.',
+        'plans.p2.label': '4 Sesiones',
+        'plans.p2.title': 'Paquete de aprendizaje guiado',
+        'plans.p2.period': '/ 4 sesiones',
+        'plans.p2.desc': 'Diseñado para estudiantes que quieren aprender un tema específico de manera estructurada, adaptado a su nivel actual y objetivos.',
+        'plans.p2.f1': 'Sesiones enfocadas de 1.5 hs',
+        'plans.p2.f2': 'Explicaciones paso a paso',
+        'plans.p2.f3': 'Ejercicios prácticos',
+        'plans.p2.f4': 'Guía personalizada',
+        'plans.p2.f5': 'Acompañamiento durante todo el proceso',
+        'plans.p2.footer': 'Ideal para el desarrollo enfocado de habilidades o para aprender un tema nuevo.',
+        'plans.p3.label': '12 Sesiones',
+        'plans.p3.badge': 'Recomendado',
+        'plans.p3.title': 'Curso estructurado completo',
+        'plans.p3.period': '/ 12 sesiones',
+        'plans.p3.desc': 'Una experiencia educativa integral en cualquier materia que ofrezcamos.',
+        'plans.p3.f1': 'Sesiones integrales de 1.5 hs',
+        'plans.p3.f2': 'Fundamentos a conceptos avanzados',
+        'plans.p3.f3': 'Planificación de lecciones personalizada',
+        'plans.p3.f4': 'Tareas y ejercicios prácticos',
+        'plans.p3.f5': 'Feedback constante y mentoría',
+        'plans.p3.footer': 'Recomendado para estudiantes que buscan un entendimiento profundo, crecimiento profesional o maestría.',
+        'instructors.chip': '05 · Sobre nosotros',
+        'instructors.title': 'Los <span class="text-sunrise">instructores</span> detrás del amanecer.',
+        'instructors.subtitle': 'Seis profesionales que viven de lo que enseñan. Cada uno trae años de industria a cada clase.',
+        'instructors.i1.role': 'Director · UE5',
+        'instructors.i1.bio': '10 años en estudios indie. Enseña Blueprints como si fuera un idioma.',
+        'instructors.i2.role': '3D Art · Blender',
+        'instructors.i2.bio': 'Modeladora con créditos en juegos AA. Especialista en topología y retopo.',
+        'instructors.i3.role': 'Programación · C++',
+        'instructors.i3.bio': 'Gameplay engineer. Cree que el mejor código es el que se borra.',
+        'instructors.i4.role': 'Concept Art · Photoshop',
+        'instructors.i4.bio': 'Ilustradora de personajes. Pinta atmósferas que cuentan historias.',
+        'instructors.i5.role': 'Dibujo · Anatomía',
+        'instructors.i5.bio': '15 años dibujando. Le obsesiona el gesto y la línea de acción.',
+        'instructors.i6.role': 'Level Design',
+        'instructors.i6.bio': 'Diseña espacios que enseñan a jugarlos sin un solo tutorial.',
+        'contact.chip': '06 · Contacto',
+        'contact.title': 'Contactanos.',
+        'contact.subtitle': 'Dudas, propuestas o ganas de empezar. Escribínos por WhatsApp o seguinos en nuestras redes.',
+        'contact.whatsapp_cta': 'Escribínos por WhatsApp',
+        'footer.desc': 'Escuela online de gamedev y arte digital. Aprendé a tu ritmo lo que un estudio indie realmente usa cada día.',
+        'footer.platform': 'Plataforma',
+        'footer.why_us': 'Por qué nosotros',
+        'footer.instructors': 'Instructores',
+        'footer.plans': 'Planes',
+        'footer.courses_title': 'Cursos',
+        'footer.course_3d': 'Modelado 3D',
+        'footer.community': 'Comunidad',
+        'footer.privacy': 'Privacidad',
+        'footer.terms': 'Términos',
+        'wa.course_template': '¡Hola! Me interesa el curso «{title}». ¿Me podrían dar más información?',
+        'wa.tutoring_template': '¡Hola! Me interesa la tutoría de «{title}». ¿Me podrían dar más información?',
+        'modal.title': 'Contactanos por'
+      },
+      en: {
+        'title': 'Second Sunrise Studios — Learn gamedev and digital art at your own pace',
+        'nav.courses': 'Courses',
+        'nav.tutoring': 'Tutoring',
+        'nav.plans': 'Plans',
+        'nav.instructors': 'Instructors',
+        'nav.contact': 'Contact',
+        'nav.cta': 'Get started',
+        'hero.chip': 'Gamedev School · Río Cuarto AR',
+        'hero.tagline': 'Learn in a <span class="text-sunrise">personalized</span> way, at your own pace.',
+        'hero.description_lead': 'Direct teaching, no filler.',
+        'hero.description_tail': 'We walk with you on your way to building the projects you actually want to make.',
+        'hero.cta_primary': 'Explore courses',
+        'hero.cta_secondary': 'About us',
+        'courses.chip': '01 · Catalog',
+        'courses.title': 'Our <span class="text-sunrise">courses</span>.',
+        'courses.subtitle': 'Six programs designed to take you from zero to portfolio. Each course, a different horizon.',
+        'courses.weeks_12': '12 weeks',
+        'courses.weeks_10_a': '10 weeks',
+        'courses.weeks_10_b': '10 weeks',
+        'courses.weeks_14': '14 weeks',
+        'courses.weeks_8': '8 weeks',
+        'courses.weeks_9': '9 weeks',
+        'courses.c1.tag': 'Engine',
+        'courses.c1.title': 'Unreal Engine 5 Fundamentals',
+        'courses.c1.desc': 'From zero to your first playable scene. Blueprints, Lumen, Nanite and a professional workflow.',
+        'courses.c2.tag': '3D Art',
+        'courses.c2.title': '3D modeling for video games',
+        'courses.c2.desc': 'Low-poly and high-poly modeling in Blender, retopo, UVs and engine-ready texturing.',
+        'courses.c3.tag': 'Code',
+        'courses.c3.title': 'Gameplay programming in C++',
+        'courses.c3.desc': 'Combat systems, basic AI and gameplay architecture with modern C++ on UE5.',
+        'courses.c4.tag': 'Art',
+        'courses.c4.title': 'Digital painting and concept art',
+        'courses.c4.desc': 'Lighting, color and composition in Photoshop. From thumbnail to final keyframe.',
+        'courses.c5.tag': 'Fundamentals',
+        'courses.c5.title': 'Drawing and anatomy for games',
+        'courses.c5.desc': 'Human figure construction, gesture and proportions applied to video game characters.',
+        'courses.c6.tag': 'Design',
+        'courses.c6.title': 'Level design and environmental storytelling',
+        'courses.c6.desc': 'Pacing, rhythm and storytelling without dialogue. Designing worlds that teach you how to play them.',
+        'tutoring.chip': '02 · 1:1 Tutoring',
+        'tutoring.title': 'Our available <span class="text-sunrise">tutoring</span> sessions.',
+        'tutoring.subtitle': 'One-on-one sessions with expert instructors. Move your project forward with real feedback.',
+        'tutoring.t1.title': 'Drawing / Painting',
+        'tutoring.t1.sub': 'Fundamentals and portfolio',
+        'tutoring.t2.title': 'Unreal Engine',
+        'tutoring.t2.sub': 'Blueprints and pipeline',
+        'tutoring.t3.title': 'Programming',
+        'tutoring.t3.sub': 'Logic and architecture',
+        'tutoring.t4.title': 'Photoshop',
+        'tutoring.t4.sub': 'Color and composition',
+        'tutoring.t5.title': 'Blender',
+        'tutoring.t5.sub': 'Modeling and render',
+        'tutoring.t6.title': 'C++',
+        'tutoring.t6.sub': 'Gameplay programming',
+        'why.chip': '03 · Why us',
+        'why.title': 'Reasons to <span class="text-sunrise">choose</span> us.',
+        'why.subtitle': 'A methodology that shows up in every class, every piece of feedback and every project.',
+        'why.f1.title': 'Direct teaching',
+        'why.f1.desc': 'No filler or endless theory. Every class is designed for you to produce something tangible from day one.',
+        'why.f2.title': 'Personalized pace',
+        'why.f2.desc': 'You move forward when you can, not when a calendar dictates. 1:1 tutoring for the moments you need a push.',
+        'why.f3.title': 'Real projects',
+        'why.f3.desc': 'You finish each course with portfolio pieces, not forgettable exercises. The sunrise always returns.',
+        'why.f4.title': 'Active community',
+        'why.f4.desc': 'Open Discord, devlogs among students and group reviews. Learning alone is slower.',
+        'stats.students': 'Students',
+        'stats.instructors': 'Instructors',
+        'stats.founded': 'Founded',
+        'plans.chip': '04 · Plans',
+        'plans.title': 'Pick the <span class="text-sunrise">plan</span> that fits you.',
+        'plans.subtitle': 'Change or cancel whenever you want.',
+        'plans.cta': 'Get started',
+        'plans.refund': '7-day refund from purchase',
+        'plans.p1.label': '30 Minutes',
+        'plans.p1.title': 'Problem-Solving Session',
+        'plans.p1.period': '/ 30 min',
+        'plans.p1.desc': 'Ideal for students who need quick, focused help with a specific issue.',
+        'plans.p1.f1': 'Intensive 30min session',
+        'plans.p1.f2': 'Technical problems',
+        'plans.p1.f3': 'Project roadblocks',
+        'plans.p1.f4': 'Concept clarification',
+        'plans.p1.f5': 'Artistic Advice',
+        'plans.p1.footer': 'A great option for targeted assistance and immediate problem solving.',
+        'plans.p2.label': '4 Sessions',
+        'plans.p2.title': 'Guided Learning Package',
+        'plans.p2.period': '/ 4 Sessions',
+        'plans.p2.desc': 'Designed for students who want to learn a specific topic in a structured way, tailored to their current level and goals.',
+        'plans.p2.f1': 'Focused 1.5hr sessions',
+        'plans.p2.f2': 'Step-by-step explanations',
+        'plans.p2.f3': 'Practical exercises',
+        'plans.p2.f4': 'Personalized guidance',
+        'plans.p2.f5': 'Q&A support throughout the process',
+        'plans.p2.footer': 'Best suited for focused skill development or learning a new topic efficiently.',
+        'plans.p3.label': '12 Sessions',
+        'plans.p3.badge': 'Recommended',
+        'plans.p3.title': 'Full Structured Course',
+        'plans.p3.period': '/ 12 Sessions',
+        'plans.p3.desc': 'A comprehensive educational experience in any subject we offer.',
+        'plans.p3.f1': 'Comprehensive 1.5hr sessions',
+        'plans.p3.f2': 'Fundamentals to advanced concepts',
+        'plans.p3.f3': 'Custom lesson planning',
+        'plans.p3.f4': 'Practical assignments and exercises',
+        'plans.p3.f5': 'Ongoing feedback and mentorship',
+        'plans.p3.footer': 'Recommended for students who are looking for deep understanding, professional-level growth, or mastery.',
+        'instructors.chip': '05 · About us',
+        'instructors.title': 'The <span class="text-sunrise">instructors</span> behind the sunrise.',
+        'instructors.subtitle': 'Six professionals who live what they teach. Each one brings years of industry to every class.',
+        'instructors.i1.role': 'Director · UE5',
+        'instructors.i1.bio': '10 years in indie studios. Teaches Blueprints like a language.',
+        'instructors.i2.role': '3D Art · Blender',
+        'instructors.i2.bio': 'Modeler with credits on AA games. Specialist in topology and retopo.',
+        'instructors.i3.role': 'Programming · C++',
+        'instructors.i3.bio': 'Gameplay engineer. Believes the best code is the code you delete.',
+        'instructors.i4.role': 'Concept Art · Photoshop',
+        'instructors.i4.bio': 'Character illustrator. Paints atmospheres that tell stories.',
+        'instructors.i5.role': 'Drawing · Anatomy',
+        'instructors.i5.bio': '15 years drawing. Obsessed with gesture and line of action.',
+        'instructors.i6.role': 'Level Design',
+        'instructors.i6.bio': 'Designs spaces that teach you how to play without a single tutorial.',
+        'contact.chip': '06 · Contact',
+        'contact.title': 'Get in touch.',
+        'contact.subtitle': 'Questions, proposals or just ready to start. Message us on WhatsApp or follow us on social.',
+        'contact.whatsapp_cta': 'Message us on WhatsApp',
+        'footer.desc': 'Online school of gamedev and digital art. Learn at your own pace what an indie studio actually uses every day.',
+        'footer.platform': 'Platform',
+        'footer.why_us': 'Why us',
+        'footer.instructors': 'Instructors',
+        'footer.plans': 'Plans',
+        'footer.courses_title': 'Courses',
+        'footer.course_3d': '3D Modeling',
+        'footer.community': 'Community',
+        'footer.privacy': 'Privacy',
+        'footer.terms': 'Terms',
+        'wa.course_template': 'Hi! I\'m interested in the «{title}» course. Could you share more info?',
+        'wa.tutoring_template': 'Hi! I\'m interested in «{title}» tutoring. Could you share more info?',
+        'modal.title': 'Contact us via'
       }
-    });
+    };
+
+    const WHATSAPP_NUMBER = '5493585484891';
+
+    const STORAGE_KEY = 'sss.lang';
+    const SUPPORTED = ['es', 'en'];
+
+    function resolveInitialLang() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && SUPPORTED.includes(saved)) return saved;
+      const browser = (navigator.language || 'es').slice(0, 2).toLowerCase();
+      return SUPPORTED.includes(browser) ? browser : 'es';
+    }
+
+    function applyLang(lang) {
+      const dict = TRANSLATIONS[lang];
+      if (!dict) return;
+
+      document.documentElement.lang = lang;
+      if (dict['title']) document.title = dict['title'];
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] != null) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key] != null) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key] != null) el.setAttribute('placeholder', dict[key]);
+      });
+
+      document.querySelectorAll('[data-wa-type][data-wa-key]').forEach(el => {
+        const type = el.getAttribute('data-wa-type');
+        const titleKey = el.getAttribute('data-wa-key');
+        const template = dict['wa.' + type + '_template'];
+        const title = dict[titleKey];
+        if (!template || !title) return;
+        const message = template.replace('{title}', title);
+
+        if (type === 'tutoring') {
+          el.setAttribute('data-wa-message', message);
+          el.setAttribute('data-wa-title', title);
+          el.removeAttribute('href');
+        } else {
+          el.setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+        }
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));
+      });
+
+      localStorage.setItem(STORAGE_KEY, lang);
+    }
+
+    applyLang(resolveInitialLang());
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
     });
 
-    localStorage.setItem(STORAGE_KEY, lang);
-  }
+    // Tutoring modal
+    const tModal = document.getElementById('tutoring-modal');
+    const tModalBg = document.getElementById('tutoring-modal-bg');
+    const tModalContent = document.getElementById('tutoring-modal-content');
+    const tModalClose = document.getElementById('tutoring-modal-close');
 
-  applyLang(resolveInitialLang());
+    function openTutoringModal(title, message) {
+      const lang = document.documentElement.lang || 'es';
+      const subject = lang === 'es' ? `Consulta sobre: ${title}` : `Inquiry about: ${title}`;
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
-  });
+      document.getElementById('modal-wa').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      document.getElementById('modal-em').href = `mailto:secondsunrisestudio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+      document.getElementById('modal-ig').href = `https://ig.me/m/secondsunstdio?text=${encodeURIComponent(message)}`;
 
-  // Tutoring modal
-  const tModal = document.getElementById('tutoring-modal');
-  const tModalBg = document.getElementById('tutoring-modal-bg');
-  const tModalContent = document.getElementById('tutoring-modal-content');
-  const tModalClose = document.getElementById('tutoring-modal-close');
-  
-  function openTutoringModal(title, message) {
-    const lang = document.documentElement.lang || 'es';
-    const subject = lang === 'es' ? `Consulta sobre: ${title}` : `Inquiry about: ${title}`;
-    
-    document.getElementById('modal-wa').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    document.getElementById('modal-em').href = `mailto:secondsunrisestudio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-    document.getElementById('modal-ig').href = `https://ig.me/m/secondsunstdio?text=${encodeURIComponent(message)}`;
-    
-    tModal.classList.remove('pointer-events-none', 'opacity-0');
-    tModal.classList.add('pointer-events-auto');
-    setTimeout(() => {
-      tModalContent.classList.remove('scale-95', 'opacity-0');
-    }, 10);
-  }
+      tModal.classList.remove('pointer-events-none', 'opacity-0');
+      tModal.classList.add('pointer-events-auto');
+      setTimeout(() => {
+        tModalContent.classList.remove('scale-95', 'opacity-0');
+      }, 10);
+    }
 
-  function closeTutoringModal() {
-    tModalContent.classList.add('scale-95', 'opacity-0');
-    setTimeout(() => {
-      tModal.classList.add('opacity-0');
-      tModal.classList.remove('pointer-events-auto');
-      tModal.classList.add('pointer-events-none');
-    }, 300);
-  }
+    function closeTutoringModal() {
+      tModalContent.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        tModal.classList.add('opacity-0');
+        tModal.classList.remove('pointer-events-auto');
+        tModal.classList.add('pointer-events-none');
+      }, 300);
+    }
 
-  if (tModalBg) tModalBg.addEventListener('click', closeTutoringModal);
-  if (tModalClose) tModalClose.addEventListener('click', closeTutoringModal);
-</script>
+    if (tModalBg) tModalBg.addEventListener('click', closeTutoringModal);
+    if (tModalClose) tModalClose.addEventListener('click', closeTutoringModal);
+  </script>
 </body>
+
 </html>
